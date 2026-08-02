@@ -1,16 +1,21 @@
-import app from './app.js';
+import http from 'http';
+import app from '@/app.js';
+import { env } from '@/config/env.js';
+import { initializeSocketEngine } from '@/sockets/socket.engine.js';
+import { logger } from '@/utils/logger.js';
 
-// Native process.env loading via Node's --env-file flag
-const PORT = process.env.PORT || 5000;
+const server = http.createServer(app);
 
-const server = app.listen(PORT, () => {
-  console.log(`ChowkSpot Server running in ${process.env.NODE_ENV || 'development'} mode on port ${PORT}`);
+// Initialize Socket.io Server
+initializeSocketEngine(server);
+
+server.listen(env.PORT, () => {
+  logger.info(`🚀 ChowkSpot Server running in ${env.NODE_ENV} mode on port ${env.PORT}`);
 });
 
-// Handle graceful shutdowns
 process.on('SIGTERM', () => {
-  console.log('SIGTERM signal received: closing HTTP server');
+  logger.info('SIGTERM signal received: closing HTTP server');
   server.close(() => {
-    console.log('HTTP server closed');
+    logger.info('HTTP server closed');
   });
 });

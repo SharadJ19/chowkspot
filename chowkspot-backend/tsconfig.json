@@ -37,12 +37,11 @@
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true,
 
-    /* Clean Path Aliases */
-    "baseUrl": ".",
+    /* Clean Path Aliases (No baseUrl needed in modern TS) */
     "paths": {
-      "@/*": ["src/*"],
+      "@/*": ["./src/*"],
     },
   },
   "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist", "drizzle.config.ts"],
+  "exclude": ["node_modules", "dist"],
 }
