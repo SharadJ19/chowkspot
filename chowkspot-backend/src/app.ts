@@ -1,5 +1,6 @@
 import express, { Request, Response } from 'express';
 import cors from 'cors';
+import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
 import { corsOptions } from '@/config/cors.js';
 import { globalRateLimiter, authRateLimiter } from '@/middlewares/rateLimiter.js';
@@ -14,10 +15,14 @@ import reviewRoutes from '@/modules/reviews/reviews.routes.js';
 
 const app = express();
 
-// Security Middlewares
+// Security & Body Parsing Middlewares
+app.use(helmet());
 app.use(cors(corsOptions));
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+
+// Strict Body Payload Limits (Prevents Payload Flooding & Memory Exhaustion DOS)
+app.use(express.json({ limit: '10kb' }));
+app.use(express.urlencoded({ extended: true, limit: '10kb' }));
+
 app.use(cookieParser());
 app.use(xssSanitizer);
 app.use(globalRateLimiter);
