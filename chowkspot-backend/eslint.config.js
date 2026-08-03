@@ -2,7 +2,10 @@ import js from '@eslint/js';
 import tsParser from '@typescript-eslint/parser';
 import tsPlugin from '@typescript-eslint/eslint-plugin';
 
-export default [
+// Zero-dependency flat config helper matching modern tseslint.config syntax
+const defineConfig = (...configs) => configs.flat(Infinity);
+
+export default defineConfig(
   // =========================================================================
   // 1. Global Ignores
   // Excludes build artifacts (dist), external dependencies (node_modules),
@@ -86,4 +89,4 @@ export default [
       eqeqeq: ['error', 'always'],
     },
   },
-];
+);
