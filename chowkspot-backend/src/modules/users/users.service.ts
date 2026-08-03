@@ -29,7 +29,10 @@ export class UserService {
     // 2. If user is a WORKER, include worker profile details
     let workerProfile = null;
     if (user.role === CONSTANTS.ROLES.WORKER) {
-      [workerProfile] = await db.select().from(workerProfiles).where(eq(workerProfiles.userId, userId));
+      [workerProfile] = await db
+        .select()
+        .from(workerProfiles)
+        .where(eq(workerProfiles.userId, userId));
     }
 
     return { user, workerProfile };
@@ -37,7 +40,10 @@ export class UserService {
 
   static async updateProfile(userId: string, input: UpdateProfileInput) {
     if (Object.keys(input).length === 0) {
-      throw new ApiError(CONSTANTS.HTTP_STATUS.BAD_REQUEST, 'At least one field must be provided for update');
+      throw new ApiError(
+        CONSTANTS.HTTP_STATUS.BAD_REQUEST,
+        'At least one field must be provided for update',
+      );
     }
 
     const [updatedUser] = await db

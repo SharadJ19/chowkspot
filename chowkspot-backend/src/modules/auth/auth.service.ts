@@ -2,7 +2,11 @@ import { db } from '@/db/index.js';
 import { users } from '@/db/schema/index.js';
 import { eq } from 'drizzle-orm';
 import { hashPassword, verifyPassword } from '@/utils/password.js';
-import { generateAccessToken, generateRefreshToken, verifyRefreshToken } from '@/utils/jwt.js';
+import {
+  generateAccessToken,
+  generateRefreshToken,
+  verifyRefreshToken,
+} from '@/utils/jwt.js';
 import { ApiError } from '@/utils/ApiError.js';
 import { CONSTANTS } from '@/config/constants.js';
 import { RegisterInput, LoginInput } from '@/modules/auth/auth.schema.js';
@@ -10,10 +14,16 @@ import { RegisterInput, LoginInput } from '@/modules/auth/auth.schema.js';
 export class AuthService {
   static async register(input: RegisterInput) {
     // 1. Check if user already exists
-    const [existingUser] = await db.select().from(users).where(eq(users.email, input.email));
+    const [existingUser] = await db
+      .select()
+      .from(users)
+      .where(eq(users.email, input.email));
 
     if (existingUser) {
-      throw new ApiError(CONSTANTS.HTTP_STATUS.CONFLICT, 'User with this email already exists');
+      throw new ApiError(
+        CONSTANTS.HTTP_STATUS.CONFLICT,
+        'User with this email already exists',
+      );
     }
 
     // 2. Hash Password & Create User
@@ -34,7 +44,10 @@ export class AuthService {
 
     // Guard against undefined
     if (!newUser) {
-      throw new ApiError(CONSTANTS.HTTP_STATUS.INTERNAL_SERVER_ERROR, 'Failed to create user');
+      throw new ApiError(
+        CONSTANTS.HTTP_STATUS.INTERNAL_SERVER_ERROR,
+        'Failed to create user',
+      );
     }
 
     // 3. Tokens
@@ -85,14 +98,20 @@ export class AuthService {
     try {
       payload = verifyRefreshToken(refreshToken);
     } catch (_err) {
-      throw new ApiError(CONSTANTS.HTTP_STATUS.UNAUTHORIZED, 'Invalid or expired refresh token');
+      throw new ApiError(
+        CONSTANTS.HTTP_STATUS.UNAUTHORIZED,
+        'Invalid or expired refresh token',
+      );
     }
 
     // 2. Fetch User from DB
     const [user] = await db.select().from(users).where(eq(users.id, payload.userId));
 
     if (!user || !user.refreshTokenHash) {
-      throw new ApiError(CONSTANTS.HTTP_STATUS.UNAUTHORIZED, 'Refresh token revoked or user not found');
+      throw new ApiError(
+        CONSTANTS.HTTP_STATUS.UNAUTHORIZED,
+        'Refresh token revoked or user not found',
+      );
     }
 
     // 3. Verify Refresh Token matches DB hash
@@ -106,7 +125,10 @@ export class AuthService {
     const newRefreshToken = generateRefreshToken({ userId: user.id, role: user.role });
 
     const newRefreshTokenHash = await hashPassword(newRefreshToken);
-    await db.update(users).set({ refreshTokenHash: newRefreshTokenHash }).where(eq(users.id, user.id));
+    await db
+      .update(users)
+      .set({ refreshTokenHash: newRefreshTokenHash })
+      .where(eq(users.id, user.id));
 
     return { accessToken: newAccessToken, refreshToken: newRefreshToken };
   }

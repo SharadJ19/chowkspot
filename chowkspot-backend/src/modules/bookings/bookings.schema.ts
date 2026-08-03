@@ -8,8 +8,17 @@ export const createBookingSchema = z.object({
 });
 
 export const updateBookingStatusSchema = z.object({
-  status: z.enum(['ACCEPTED', 'REJECTED', 'COUNTER_PROPOSED', 'IN_PROGRESS', 'COMPLETED', 'CANCELLED']),
-  counterDate: z.iso.datetime('Provide a valid ISO timestamp for counter date').optional(),
+  status: z.enum([
+    'ACCEPTED',
+    'REJECTED',
+    'COUNTER_PROPOSED',
+    'IN_PROGRESS',
+    'COMPLETED',
+    'CANCELLED',
+  ]),
+  counterDate: z.iso
+    .datetime('Provide a valid ISO timestamp for counter date')
+    .optional(),
 });
 
 export type CreateBookingInput = z.infer<typeof createBookingSchema>;

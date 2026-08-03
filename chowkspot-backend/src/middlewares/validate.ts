@@ -15,7 +15,13 @@ export const validateRequest = (schema: ZodType) => {
           message: err.message,
         }));
 
-        return next(new ApiError(CONSTANTS.HTTP_STATUS.BAD_REQUEST, 'Validation Failed', formattedErrors));
+        return next(
+          new ApiError(
+            CONSTANTS.HTTP_STATUS.BAD_REQUEST,
+            'Validation Failed',
+            formattedErrors,
+          ),
+        );
       }
       next(error);
     }

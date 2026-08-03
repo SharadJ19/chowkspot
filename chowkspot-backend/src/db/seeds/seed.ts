@@ -72,7 +72,9 @@ async function seed() {
       }
 
       // 4. Seed Diverse State-Machine Bookings
-      logger.info('📅 Seeding Comprehensive Regional Bookings across Lifecycle States...');
+      logger.info(
+        '📅 Seeding Comprehensive Regional Bookings across Lifecycle States...',
+      );
 
       // Workers
       const smarthWorkerId = createdWorkerMap.get('smarth.sharda@chowkspot.com')!;
@@ -204,7 +206,8 @@ async function seed() {
         {
           booking: b1,
           rating: 5,
-          comment: 'Mohit came to Parwanoo right on schedule! Very skilled carpenter and clean work.',
+          comment:
+            'Mohit came to Parwanoo right on schedule! Very skilled carpenter and clean work.',
         },
         {
           booking: b2,
@@ -214,7 +217,8 @@ async function seed() {
         {
           booking: b3,
           rating: 5,
-          comment: 'Rohan is a true expert in industrial wiring. Solved our factory panel tripping issue.',
+          comment:
+            'Rohan is a true expert in industrial wiring. Solved our factory panel tripping issue.',
         },
         {
           booking: b4,

@@ -3,7 +3,10 @@ import { bookings, workerProfiles, users } from '@/db/schema/index.js';
 import { eq } from 'drizzle-orm';
 import { ApiError } from '@/utils/ApiError.js';
 import { CONSTANTS, BookingStatus } from '@/config/constants.js';
-import { CreateBookingInput, UpdateBookingStatusInput } from '@/modules/bookings/bookings.schema.js';
+import {
+  CreateBookingInput,
+  UpdateBookingStatusInput,
+} from '@/modules/bookings/bookings.schema.js';
 import { sendRealtimeNotification } from '@/sockets/socket.engine.js';
 
 export class BookingService {
@@ -20,7 +23,10 @@ export class BookingService {
       CONSTANTS.BOOKING_STATUS.REJECTED,
       CONSTANTS.BOOKING_STATUS.CANCELLED,
     ],
-    [CONSTANTS.BOOKING_STATUS.ACCEPTED]: [CONSTANTS.BOOKING_STATUS.IN_PROGRESS, CONSTANTS.BOOKING_STATUS.CANCELLED],
+    [CONSTANTS.BOOKING_STATUS.ACCEPTED]: [
+      CONSTANTS.BOOKING_STATUS.IN_PROGRESS,
+      CONSTANTS.BOOKING_STATUS.CANCELLED,
+    ],
     [CONSTANTS.BOOKING_STATUS.IN_PROGRESS]: [CONSTANTS.BOOKING_STATUS.COMPLETED],
     [CONSTANTS.BOOKING_STATUS.COMPLETED]: [],
     [CONSTANTS.BOOKING_STATUS.REJECTED]: [],
@@ -29,7 +35,10 @@ export class BookingService {
 
   static async createBooking(userId: string, input: CreateBookingInput) {
     // 1. Verify worker profile exists
-    const [worker] = await db.select().from(workerProfiles).where(eq(workerProfiles.id, input.workerId));
+    const [worker] = await db
+      .select()
+      .from(workerProfiles)
+      .where(eq(workerProfiles.id, input.workerId));
 
     if (!worker) {
       throw new ApiError(CONSTANTS.HTTP_STATUS.NOT_FOUND, 'Worker profile not found');
@@ -37,7 +46,10 @@ export class BookingService {
 
     // 2. Prevent user from booking themselves
     if (worker.userId === userId) {
-      throw new ApiError(CONSTANTS.HTTP_STATUS.BAD_REQUEST, 'You cannot book your own service profile');
+      throw new ApiError(
+        CONSTANTS.HTTP_STATUS.BAD_REQUEST,
+        'You cannot book your own service profile',
+      );
     }
 
     // 3. Create booking
@@ -54,7 +66,10 @@ export class BookingService {
       .returning();
 
     if (!newBooking) {
-      throw new ApiError(CONSTANTS.HTTP_STATUS.INTERNAL_SERVER_ERROR, 'Failed to create booking record');
+      throw new ApiError(
+        CONSTANTS.HTTP_STATUS.INTERNAL_SERVER_ERROR,
+        'Failed to create booking record',
+      );
     }
 
     // ⚡ REALTIME NOTIFICATION: Notify the worker of new booking request
@@ -67,10 +82,18 @@ export class BookingService {
     return newBooking;
   }
 
-  static async updateBookingStatus(bookingId: string, currentUserId: string, input: UpdateBookingStatusInput) {
+  static async updateBookingStatus(
+    bookingId: string,
+    currentUserId: string,
+    input: UpdateBookingStatusInput,
+  ) {
     const updatedBooking = await db.transaction(async (tx) => {
       // Fetch booking record with pessimistic locking
-      const [existingBooking] = await tx.select().from(bookings).where(eq(bookings.id, bookingId)).for('update');
+      const [existingBooking] = await tx
+        .select()
+        .from(bookings)
+        .where(eq(bookings.id, bookingId))
+        .for('update');
 
       if (!existingBooking) {
         throw new ApiError(CONSTANTS.HTTP_STATUS.NOT_FOUND, 'Booking record not found');
@@ -88,14 +111,19 @@ export class BookingService {
       }
 
       if (input.status === 'COUNTER_PROPOSED' && !input.counterDate) {
-        throw new ApiError(CONSTANTS.HTTP_STATUS.BAD_REQUEST, 'counterDate is required when submitting a counter-proposal');
+        throw new ApiError(
+          CONSTANTS.HTTP_STATUS.BAD_REQUEST,
+          'counterDate is required when submitting a counter-proposal',
+        );
       }
 
       const [updated] = await tx
         .update(bookings)
         .set({
           status: input.status,
-          counterDate: input.counterDate ? new Date(input.counterDate) : existingBooking.counterDate,
+          counterDate: input.counterDate
+            ? new Date(input.counterDate)
+            : existingBooking.counterDate,
           updatedAt: new Date(),
         })
         .where(eq(bookings.id, bookingId))
@@ -103,7 +131,10 @@ export class BookingService {
 
       // FIX: Guard check ensures updated record exists inside transaction
       if (!updated) {
-        throw new ApiError(CONSTANTS.HTTP_STATUS.INTERNAL_SERVER_ERROR, 'Failed to update booking status');
+        throw new ApiError(
+          CONSTANTS.HTTP_STATUS.INTERNAL_SERVER_ERROR,
+          'Failed to update booking status',
+        );
       }
 
       return updated;
@@ -117,7 +148,8 @@ export class BookingService {
       .where(eq(workerProfiles.id, updatedBooking.workerId));
 
     // If current actor is the worker, notify the customer; otherwise notify the worker
-    const targetUserId = worker && currentUserId === worker.userId ? updatedBooking.userId : worker?.userId;
+    const targetUserId =
+      worker && currentUserId === worker.userId ? updatedBooking.userId : worker?.userId;
 
     if (targetUserId) {
       sendRealtimeNotification(targetUserId, 'BOOKING_STATUS_UPDATED', {
@@ -132,7 +164,10 @@ export class BookingService {
 
   static async getUserOrWorkerBookings(userId: string, role: string) {
     if (role === CONSTANTS.ROLES.WORKER) {
-      const [profile] = await db.select().from(workerProfiles).where(eq(workerProfiles.userId, userId));
+      const [profile] = await db
+        .select()
+        .from(workerProfiles)
+        .where(eq(workerProfiles.userId, userId));
 
       if (!profile) {
         return [];

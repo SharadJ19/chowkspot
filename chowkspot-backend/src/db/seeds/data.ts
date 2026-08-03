@@ -7,7 +7,8 @@ export const SEED_USERS = [
     phone: '+919876543210',
     city: 'Parwanoo',
     role: 'ADMIN' as const,
-    avatarUrl: 'https://res.cloudinary.com/demo/image/upload/v1/samples/people/boy-snow-hoodie.jpg',
+    avatarUrl:
+      'https://res.cloudinary.com/demo/image/upload/v1/samples/people/boy-snow-hoodie.jpg',
   },
 
   // --- Worker Crew (Service Providers across Himachal & Tricity) ---
@@ -18,7 +19,8 @@ export const SEED_USERS = [
     phone: '+919811111111',
     city: 'Chandigarh',
     role: 'WORKER' as const,
-    avatarUrl: 'https://res.cloudinary.com/demo/image/upload/v1/samples/people/kitchen-bar.jpg',
+    avatarUrl:
+      'https://res.cloudinary.com/demo/image/upload/v1/samples/people/kitchen-bar.jpg',
   },
   {
     name: 'Rudar Partap Singh',
@@ -27,7 +29,8 @@ export const SEED_USERS = [
     phone: '+919822222222',
     city: 'Mohali',
     role: 'WORKER' as const,
-    avatarUrl: 'https://res.cloudinary.com/demo/image/upload/v1/samples/people/smiling-man.jpg',
+    avatarUrl:
+      'https://res.cloudinary.com/demo/image/upload/v1/samples/people/smiling-man.jpg',
   },
   {
     name: 'Mohit Thakur',
@@ -36,7 +39,8 @@ export const SEED_USERS = [
     phone: '+919833333333',
     city: 'Parwanoo',
     role: 'WORKER' as const,
-    avatarUrl: 'https://res.cloudinary.com/demo/image/upload/v1/samples/people/bicycle.jpg',
+    avatarUrl:
+      'https://res.cloudinary.com/demo/image/upload/v1/samples/people/bicycle.jpg',
   },
   {
     name: 'Bipin Awasthi',
@@ -45,7 +49,8 @@ export const SEED_USERS = [
     phone: '+919844444444',
     city: 'Kalka',
     role: 'WORKER' as const,
-    avatarUrl: 'https://res.cloudinary.com/demo/image/upload/v1/samples/people/boy-snow-hoodie.jpg',
+    avatarUrl:
+      'https://res.cloudinary.com/demo/image/upload/v1/samples/people/boy-snow-hoodie.jpg',
   },
   {
     name: 'Anshul Katoch',
@@ -54,7 +59,8 @@ export const SEED_USERS = [
     phone: '+919855555555',
     city: 'Shimla',
     role: 'WORKER' as const,
-    avatarUrl: 'https://res.cloudinary.com/demo/image/upload/v1/samples/people/smiling-man.jpg',
+    avatarUrl:
+      'https://res.cloudinary.com/demo/image/upload/v1/samples/people/smiling-man.jpg',
   },
   {
     name: 'Anshul Thakur',
@@ -63,7 +69,8 @@ export const SEED_USERS = [
     phone: '+919866666666',
     city: 'Solan',
     role: 'WORKER' as const,
-    avatarUrl: 'https://res.cloudinary.com/demo/image/upload/v1/samples/people/kitchen-bar.jpg',
+    avatarUrl:
+      'https://res.cloudinary.com/demo/image/upload/v1/samples/people/kitchen-bar.jpg',
   },
   {
     name: 'Rohan Chandel',
@@ -72,7 +79,8 @@ export const SEED_USERS = [
     phone: '+919812121212',
     city: 'Baddi',
     role: 'WORKER' as const,
-    avatarUrl: 'https://res.cloudinary.com/demo/image/upload/v1/samples/people/smiling-man.jpg',
+    avatarUrl:
+      'https://res.cloudinary.com/demo/image/upload/v1/samples/people/smiling-man.jpg',
   },
   {
     name: 'Kartik Kumar',
@@ -81,7 +89,8 @@ export const SEED_USERS = [
     phone: '+919834343434',
     city: 'Parwanoo',
     role: 'WORKER' as const,
-    avatarUrl: 'https://res.cloudinary.com/demo/image/upload/v1/samples/people/bicycle.jpg',
+    avatarUrl:
+      'https://res.cloudinary.com/demo/image/upload/v1/samples/people/bicycle.jpg',
   },
   {
     name: 'Eshant Monga',
@@ -90,7 +99,8 @@ export const SEED_USERS = [
     phone: '+919856565656',
     city: 'Chandigarh',
     role: 'WORKER' as const,
-    avatarUrl: 'https://res.cloudinary.com/demo/image/upload/v1/samples/people/boy-snow-hoodie.jpg',
+    avatarUrl:
+      'https://res.cloudinary.com/demo/image/upload/v1/samples/people/boy-snow-hoodie.jpg',
   },
   {
     name: 'Sahil Vashisht',
@@ -99,7 +109,8 @@ export const SEED_USERS = [
     phone: '+919878787878',
     city: 'Solan',
     role: 'WORKER' as const,
-    avatarUrl: 'https://res.cloudinary.com/demo/image/upload/v1/samples/people/kitchen-bar.jpg',
+    avatarUrl:
+      'https://res.cloudinary.com/demo/image/upload/v1/samples/people/kitchen-bar.jpg',
   },
   {
     name: 'Sahil Akhtar',
@@ -108,7 +119,8 @@ export const SEED_USERS = [
     phone: '+919890909090',
     city: 'Panchkula',
     role: 'WORKER' as const,
-    avatarUrl: 'https://res.cloudinary.com/demo/image/upload/v1/samples/people/smiling-man.jpg',
+    avatarUrl:
+      'https://res.cloudinary.com/demo/image/upload/v1/samples/people/smiling-man.jpg',
   },
   {
     name: 'Tarun Kumawat',
@@ -117,7 +129,8 @@ export const SEED_USERS = [
     phone: '+919712121212',
     city: 'Baddi',
     role: 'WORKER' as const,
-    avatarUrl: 'https://res.cloudinary.com/demo/image/upload/v1/samples/people/bicycle.jpg',
+    avatarUrl:
+      'https://res.cloudinary.com/demo/image/upload/v1/samples/people/bicycle.jpg',
   },
   {
     name: 'Gagan Bansal',
@@ -126,7 +139,8 @@ export const SEED_USERS = [
     phone: '+919734343434',
     city: 'Kalka',
     role: 'WORKER' as const,
-    avatarUrl: 'https://res.cloudinary.com/demo/image/upload/v1/samples/people/boy-snow-hoodie.jpg',
+    avatarUrl:
+      'https://res.cloudinary.com/demo/image/upload/v1/samples/people/boy-snow-hoodie.jpg',
   },
 
   // --- Customers / Regular Users ---
@@ -137,7 +151,8 @@ export const SEED_USERS = [
     phone: '+919877777777',
     city: 'Chandigarh',
     role: 'USER' as const,
-    avatarUrl: 'https://res.cloudinary.com/demo/image/upload/v1/samples/people/bicycle.jpg',
+    avatarUrl:
+      'https://res.cloudinary.com/demo/image/upload/v1/samples/people/bicycle.jpg',
   },
   {
     name: 'Safal Varadhan',
@@ -146,7 +161,8 @@ export const SEED_USERS = [
     phone: '+919888888888',
     city: 'Mohali',
     role: 'USER' as const,
-    avatarUrl: 'https://res.cloudinary.com/demo/image/upload/v1/samples/people/smiling-man.jpg',
+    avatarUrl:
+      'https://res.cloudinary.com/demo/image/upload/v1/samples/people/smiling-man.jpg',
   },
   {
     name: 'Sachin Kumar Thakur',
@@ -155,7 +171,8 @@ export const SEED_USERS = [
     phone: '+919899999999',
     city: 'Panchkula',
     role: 'USER' as const,
-    avatarUrl: 'https://res.cloudinary.com/demo/image/upload/v1/samples/people/kitchen-bar.jpg',
+    avatarUrl:
+      'https://res.cloudinary.com/demo/image/upload/v1/samples/people/kitchen-bar.jpg',
   },
   {
     name: 'Shaiv Sood',
@@ -164,7 +181,8 @@ export const SEED_USERS = [
     phone: '+919800000000',
     city: 'Parwanoo',
     role: 'USER' as const,
-    avatarUrl: 'https://res.cloudinary.com/demo/image/upload/v1/samples/people/boy-snow-hoodie.jpg',
+    avatarUrl:
+      'https://res.cloudinary.com/demo/image/upload/v1/samples/people/boy-snow-hoodie.jpg',
   },
   {
     name: 'Rudar Attri',
@@ -173,7 +191,8 @@ export const SEED_USERS = [
     phone: '+919711111111',
     city: 'Solan',
     role: 'USER' as const,
-    avatarUrl: 'https://res.cloudinary.com/demo/image/upload/v1/samples/people/bicycle.jpg',
+    avatarUrl:
+      'https://res.cloudinary.com/demo/image/upload/v1/samples/people/bicycle.jpg',
   },
   {
     name: 'Tushar Karwal',
@@ -182,7 +201,8 @@ export const SEED_USERS = [
     phone: '+919722222222',
     city: 'Shimla',
     role: 'USER' as const,
-    avatarUrl: 'https://res.cloudinary.com/demo/image/upload/v1/samples/people/smiling-man.jpg',
+    avatarUrl:
+      'https://res.cloudinary.com/demo/image/upload/v1/samples/people/smiling-man.jpg',
   },
   {
     name: 'Shivani Vedwall',
@@ -191,7 +211,8 @@ export const SEED_USERS = [
     phone: '+919823232323',
     city: 'Chandigarh',
     role: 'USER' as const,
-    avatarUrl: 'https://res.cloudinary.com/demo/image/upload/v1/samples/people/woman-a.jpg',
+    avatarUrl:
+      'https://res.cloudinary.com/demo/image/upload/v1/samples/people/woman-a.jpg',
   },
   {
     name: 'Anju Rani',
@@ -200,7 +221,8 @@ export const SEED_USERS = [
     phone: '+919845454545',
     city: 'Parwanoo',
     role: 'USER' as const,
-    avatarUrl: 'https://res.cloudinary.com/demo/image/upload/v1/samples/people/woman-a.jpg',
+    avatarUrl:
+      'https://res.cloudinary.com/demo/image/upload/v1/samples/people/woman-a.jpg',
   },
   {
     name: 'Shashank Rajput',
@@ -209,7 +231,8 @@ export const SEED_USERS = [
     phone: '+919867676767',
     city: 'Kalka',
     role: 'USER' as const,
-    avatarUrl: 'https://res.cloudinary.com/demo/image/upload/v1/samples/people/smiling-man.jpg',
+    avatarUrl:
+      'https://res.cloudinary.com/demo/image/upload/v1/samples/people/smiling-man.jpg',
   },
   {
     name: 'Vivek Dhiman',
@@ -218,7 +241,8 @@ export const SEED_USERS = [
     phone: '+919889898989',
     city: 'Baddi',
     role: 'USER' as const,
-    avatarUrl: 'https://res.cloudinary.com/demo/image/upload/v1/samples/people/kitchen-bar.jpg',
+    avatarUrl:
+      'https://res.cloudinary.com/demo/image/upload/v1/samples/people/kitchen-bar.jpg',
   },
   {
     name: 'Sumit Chhalotre',
@@ -227,7 +251,8 @@ export const SEED_USERS = [
     phone: '+919723232323',
     city: 'Nalagarh',
     role: 'USER' as const,
-    avatarUrl: 'https://res.cloudinary.com/demo/image/upload/v1/samples/people/bicycle.jpg',
+    avatarUrl:
+      'https://res.cloudinary.com/demo/image/upload/v1/samples/people/bicycle.jpg',
   },
   {
     name: 'Vansh Vadhwa',
@@ -236,7 +261,8 @@ export const SEED_USERS = [
     phone: '+919745454545',
     city: 'Chandigarh',
     role: 'USER' as const,
-    avatarUrl: 'https://res.cloudinary.com/demo/image/upload/v1/samples/people/smiling-man.jpg',
+    avatarUrl:
+      'https://res.cloudinary.com/demo/image/upload/v1/samples/people/smiling-man.jpg',
   },
   {
     name: 'Shamb',
@@ -245,7 +271,8 @@ export const SEED_USERS = [
     phone: '+919756565656',
     city: 'Mohali',
     role: 'USER' as const,
-    avatarUrl: 'https://res.cloudinary.com/demo/image/upload/v1/samples/people/boy-snow-hoodie.jpg',
+    avatarUrl:
+      'https://res.cloudinary.com/demo/image/upload/v1/samples/people/boy-snow-hoodie.jpg',
   },
   {
     name: 'Jashan Sharma',
@@ -254,7 +281,8 @@ export const SEED_USERS = [
     phone: '+919767676767',
     city: 'Parwanoo',
     role: 'USER' as const,
-    avatarUrl: 'https://res.cloudinary.com/demo/image/upload/v1/samples/people/kitchen-bar.jpg',
+    avatarUrl:
+      'https://res.cloudinary.com/demo/image/upload/v1/samples/people/kitchen-bar.jpg',
   },
   {
     name: 'Shruti Kumari',
@@ -263,7 +291,8 @@ export const SEED_USERS = [
     phone: '+919778787878',
     city: 'Solan',
     role: 'USER' as const,
-    avatarUrl: 'https://res.cloudinary.com/demo/image/upload/v1/samples/people/woman-a.jpg',
+    avatarUrl:
+      'https://res.cloudinary.com/demo/image/upload/v1/samples/people/woman-a.jpg',
   },
   {
     name: 'Harkiran Kaur',
@@ -272,7 +301,8 @@ export const SEED_USERS = [
     phone: '+919789898989',
     city: 'Mohali',
     role: 'USER' as const,
-    avatarUrl: 'https://res.cloudinary.com/demo/image/upload/v1/samples/people/woman-a.jpg',
+    avatarUrl:
+      'https://res.cloudinary.com/demo/image/upload/v1/samples/people/woman-a.jpg',
   },
   {
     name: 'Ashu Singla',
@@ -281,7 +311,8 @@ export const SEED_USERS = [
     phone: '+919790909090',
     city: 'Panchkula',
     role: 'USER' as const,
-    avatarUrl: 'https://res.cloudinary.com/demo/image/upload/v1/samples/people/smiling-man.jpg',
+    avatarUrl:
+      'https://res.cloudinary.com/demo/image/upload/v1/samples/people/smiling-man.jpg',
   },
 ];
 

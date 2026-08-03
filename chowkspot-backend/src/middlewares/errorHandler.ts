@@ -9,7 +9,12 @@ interface ExpressPayloadError extends Error {
   status?: number;
 }
 
-export const globalErrorHandler = (err: unknown, _req: Request, res: Response, _next: NextFunction) => {
+export const globalErrorHandler = (
+  err: unknown,
+  _req: Request,
+  res: Response,
+  _next: NextFunction,
+) => {
   if (err instanceof ApiError) {
     return res.status(err.statusCode).json({
       success: false,

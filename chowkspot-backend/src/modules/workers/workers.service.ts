@@ -13,7 +13,10 @@ export class WorkerService {
     }
 
     // 2. Insert or update worker profile
-    const [existingProfile] = await db.select().from(workerProfiles).where(eq(workerProfiles.userId, userId));
+    const [existingProfile] = await db
+      .select()
+      .from(workerProfiles)
+      .where(eq(workerProfiles.userId, userId));
 
     if (existingProfile) {
       const [updated] = await db
@@ -25,7 +28,10 @@ export class WorkerService {
     }
 
     // First time setup - update user role to WORKER
-    await db.update(users).set({ role: CONSTANTS.ROLES.WORKER }).where(eq(users.id, userId));
+    await db
+      .update(users)
+      .set({ role: CONSTANTS.ROLES.WORKER })
+      .where(eq(users.id, userId));
 
     const [newProfile] = await db
       .insert(workerProfiles)
@@ -39,7 +45,11 @@ export class WorkerService {
   }
 
   static async toggleAvailability(userId: string, isAvailable: boolean) {
-    const [updated] = await db.update(workerProfiles).set({ isAvailable }).where(eq(workerProfiles.userId, userId)).returning();
+    const [updated] = await db
+      .update(workerProfiles)
+      .set({ isAvailable })
+      .where(eq(workerProfiles.userId, userId))
+      .returning();
 
     if (!updated) {
       throw new ApiError(CONSTANTS.HTTP_STATUS.NOT_FOUND, 'Worker profile not found');

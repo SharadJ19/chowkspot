@@ -15,18 +15,30 @@ export class ReviewService {
         .where(and(eq(bookings.id, input.bookingId), eq(bookings.userId, userId)));
 
       if (!booking) {
-        throw new ApiError(CONSTANTS.HTTP_STATUS.NOT_FOUND, 'Booking not found or access denied');
+        throw new ApiError(
+          CONSTANTS.HTTP_STATUS.NOT_FOUND,
+          'Booking not found or access denied',
+        );
       }
 
       if (booking.status !== CONSTANTS.BOOKING_STATUS.COMPLETED) {
-        throw new ApiError(CONSTANTS.HTTP_STATUS.BAD_REQUEST, 'Reviews can only be submitted for COMPLETED bookings');
+        throw new ApiError(
+          CONSTANTS.HTTP_STATUS.BAD_REQUEST,
+          'Reviews can only be submitted for COMPLETED bookings',
+        );
       }
 
       // 2. Check if a review already exists for this booking
-      const [existingReview] = await tx.select().from(reviews).where(eq(reviews.bookingId, input.bookingId));
+      const [existingReview] = await tx
+        .select()
+        .from(reviews)
+        .where(eq(reviews.bookingId, input.bookingId));
 
       if (existingReview) {
-        throw new ApiError(CONSTANTS.HTTP_STATUS.BAD_REQUEST, 'A review has already been submitted for this booking');
+        throw new ApiError(
+          CONSTANTS.HTTP_STATUS.BAD_REQUEST,
+          'A review has already been submitted for this booking',
+        );
       }
 
       // 3. Insert review

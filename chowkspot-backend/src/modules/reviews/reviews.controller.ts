@@ -15,10 +15,15 @@ export class ReviewController {
 
   static async getByWorker(req: Request, res: Response, next: NextFunction) {
     try {
-      const workerId = Array.isArray(req.params.workerId) ? req.params.workerId[0] : req.params.workerId;
+      const workerId = Array.isArray(req.params.workerId)
+        ? req.params.workerId[0]
+        : req.params.workerId;
 
       if (!workerId) {
-        throw new ApiError(CONSTANTS.HTTP_STATUS.BAD_REQUEST, 'Worker ID parameter is required');
+        throw new ApiError(
+          CONSTANTS.HTTP_STATUS.BAD_REQUEST,
+          'Worker ID parameter is required',
+        );
       }
 
       const results = await ReviewService.getWorkerReviews(workerId);

@@ -63,5 +63,6 @@ export const CONSTANTS = {
 } as const;
 
 export type Role = (typeof CONSTANTS.ROLES)[keyof typeof CONSTANTS.ROLES];
-export type BookingStatus = (typeof CONSTANTS.BOOKING_STATUS)[keyof typeof CONSTANTS.BOOKING_STATUS];
+export type BookingStatus =
+  (typeof CONSTANTS.BOOKING_STATUS)[keyof typeof CONSTANTS.BOOKING_STATUS];
 export type RateType = (typeof CONSTANTS.RATE_TYPES)[keyof typeof CONSTANTS.RATE_TYPES];

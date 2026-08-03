@@ -52,7 +52,9 @@ export class AuthController {
         await AuthService.logout(req.user.userId);
       }
       res.clearCookie(CONSTANTS.JWT.COOKIE_NAME);
-      res.status(CONSTANTS.HTTP_STATUS.OK).json({ success: true, message: 'Logged out successfully' });
+      res
+        .status(CONSTANTS.HTTP_STATUS.OK)
+        .json({ success: true, message: 'Logged out successfully' });
     } catch (err) {
       next(err);
     }
@@ -62,7 +64,10 @@ export class AuthController {
     try {
       const tokenCookie = req.cookies[CONSTANTS.JWT.COOKIE_NAME];
       if (!tokenCookie) {
-        throw new ApiError(CONSTANTS.HTTP_STATUS.UNAUTHORIZED, 'Refresh token cookie missing');
+        throw new ApiError(
+          CONSTANTS.HTTP_STATUS.UNAUTHORIZED,
+          'Refresh token cookie missing',
+        );
       }
 
       const { accessToken, refreshToken } = await AuthService.refreshTokens(tokenCookie);

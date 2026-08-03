@@ -9,7 +9,12 @@ export const globalRateLimiter = rateLimit({
   standardHeaders: true,
   legacyHeaders: false,
   handler: (_req, _res, next, _options) => {
-    next(new ApiError(CONSTANTS.HTTP_STATUS.TOO_MANY_REQUESTS, 'Too many requests from this IP. Please try again after 15 minutes.'));
+    next(
+      new ApiError(
+        CONSTANTS.HTTP_STATUS.TOO_MANY_REQUESTS,
+        'Too many requests from this IP. Please try again after 15 minutes.',
+      ),
+    );
   },
 });
 
@@ -20,6 +25,11 @@ export const authRateLimiter = rateLimit({
   standardHeaders: true,
   legacyHeaders: false,
   handler: (_req, _res, next, _options) => {
-    next(new ApiError(CONSTANTS.HTTP_STATUS.TOO_MANY_REQUESTS, 'Too many login/registration attempts. Please try again after 15 minutes.'));
+    next(
+      new ApiError(
+        CONSTANTS.HTTP_STATUS.TOO_MANY_REQUESTS,
+        'Too many login/registration attempts. Please try again after 15 minutes.',
+      ),
+    );
   },
 });

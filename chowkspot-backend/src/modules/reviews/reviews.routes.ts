@@ -10,6 +10,11 @@ const router = Router();
 router.get('/worker/:workerId', ReviewController.getByWorker);
 
 // Authenticated route to post a review
-router.post('/', authenticate, validateRequest(createReviewSchema), ReviewController.create);
+router.post(
+  '/',
+  authenticate,
+  validateRequest(createReviewSchema),
+  ReviewController.create,
+);
 
 export default router;

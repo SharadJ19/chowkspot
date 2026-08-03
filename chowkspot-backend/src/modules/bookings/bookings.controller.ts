@@ -18,10 +18,17 @@ export class BookingController {
       const id = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
 
       if (!id) {
-        throw new ApiError(CONSTANTS.HTTP_STATUS.BAD_REQUEST, 'Booking ID parameter is required');
+        throw new ApiError(
+          CONSTANTS.HTTP_STATUS.BAD_REQUEST,
+          'Booking ID parameter is required',
+        );
       }
 
-      const updatedBooking = await BookingService.updateBookingStatus(id, req.user!.userId, req.body);
+      const updatedBooking = await BookingService.updateBookingStatus(
+        id,
+        req.user!.userId,
+        req.body,
+      );
       res.status(CONSTANTS.HTTP_STATUS.OK).json({ success: true, data: updatedBooking });
     } catch (err) {
       next(err);
@@ -30,7 +37,10 @@ export class BookingController {
 
   static async getMyBookings(req: Request, res: Response, next: NextFunction) {
     try {
-      const results = await BookingService.getUserOrWorkerBookings(req.user!.userId, req.user!.role);
+      const results = await BookingService.getUserOrWorkerBookings(
+        req.user!.userId,
+        req.user!.role,
+      );
       res.status(CONSTANTS.HTTP_STATUS.OK).json({ success: true, data: results });
     } catch (err) {
       next(err);

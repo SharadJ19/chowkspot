@@ -16,5 +16,8 @@ export const users = pgTable(
     createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
     updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow().notNull(),
   },
-  (table) => [index('users_city_idx').on(table.city), index('users_email_idx').on(table.email)],
+  (table) => [
+    index('users_city_idx').on(table.city),
+    index('users_email_idx').on(table.email),
+  ],
 );

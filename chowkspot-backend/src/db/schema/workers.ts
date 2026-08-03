@@ -1,4 +1,12 @@
-import { pgTable, uuid, text, integer, decimal, boolean, index } from 'drizzle-orm/pg-core';
+import {
+  pgTable,
+  uuid,
+  text,
+  integer,
+  decimal,
+  boolean,
+  index,
+} from 'drizzle-orm/pg-core';
 import { users } from '@/db/schema/users.js';
 import { rateTypeEnum } from '@/db/schema/enums.js';
 import { sql } from 'drizzle-orm';
@@ -19,7 +27,9 @@ export const workerProfiles = pgTable(
     isAvailable: boolean('is_available').default(true).notNull(),
     serviceCities: text('service_cities').array().notNull(), // Array of Indian cities
     paymentIdentifier: text('payment_identifier'), // // UPI ID (e.g., worker@upi)
-    avgRating: decimal('avg_rating', { precision: 3, scale: 2 }).default('0.00').notNull(),
+    avgRating: decimal('avg_rating', { precision: 3, scale: 2 })
+      .default('0.00')
+      .notNull(),
     totalReviews: integer('total_reviews').default(0).notNull(),
   },
   (table) => [

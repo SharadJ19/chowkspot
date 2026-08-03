@@ -49,7 +49,11 @@ export const initializeSocketEngine = (server: HTTPServer) => {
   });
 };
 
-export const sendRealtimeNotification = (targetUserId: string, event: string, payload: unknown) => {
+export const sendRealtimeNotification = (
+  targetUserId: string,
+  event: string,
+  payload: unknown,
+) => {
   if (io) {
     io.to(`user:${targetUserId}`).emit(event, payload);
   }
