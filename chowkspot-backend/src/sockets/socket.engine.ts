@@ -27,7 +27,7 @@ export const initializeSocketEngine = (server: HTTPServer) => {
       const decoded = verifyAccessToken(token);
       socket.data.user = decoded;
       next();
-    } catch (err) {
+    } catch (_err) {
       next(new Error('Authentication error: Invalid or expired token'));
     }
   });
@@ -49,7 +49,7 @@ export const initializeSocketEngine = (server: HTTPServer) => {
   });
 };
 
-export const sendRealtimeNotification = (targetUserId: string, event: string, payload: any) => {
+export const sendRealtimeNotification = (targetUserId: string, event: string, payload: unknown) => {
   if (io) {
     io.to(`user:${targetUserId}`).emit(event, payload);
   }

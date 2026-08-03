@@ -49,7 +49,7 @@ export class WorkerService {
   }
 
   static async searchWorkers(category?: string, city?: string, availableOnly?: boolean) {
-    let query = db
+    const query = db
       .select({
         id: workerProfiles.id,
         category: workerProfiles.category,

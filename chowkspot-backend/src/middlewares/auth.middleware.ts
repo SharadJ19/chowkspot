@@ -26,7 +26,7 @@ export const authenticate = (req: Request, _res: Response, next: NextFunction) =
     const decoded = verifyAccessToken(token);
     req.user = decoded;
     next();
-  } catch (err) {
+  } catch (_err) {
     throw new ApiError(CONSTANTS.HTTP_STATUS.UNAUTHORIZED, 'Invalid or expired access token');
   }
 };

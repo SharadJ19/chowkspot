@@ -84,7 +84,7 @@ export class AuthService {
     let payload;
     try {
       payload = verifyRefreshToken(refreshToken);
-    } catch (err) {
+    } catch (_err) {
       throw new ApiError(CONSTANTS.HTTP_STATUS.UNAUTHORIZED, 'Invalid or expired refresh token');
     }
 
