@@ -1,4 +1,7 @@
 import express, { Request, Response } from 'express';
+import { sql } from 'drizzle-orm';
+import { db } from '@/config/database.js';
+import { CONSTANTS } from '@/config/constants.js';
 import cors from 'cors';
 import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
@@ -28,12 +31,24 @@ app.use(xssSanitizer);
 app.use(globalRateLimiter);
 
 // Health check endpoint
-app.get('/health', (_req: Request, res: Response) => {
-  res.status(200).json({
-    status: 'healthy',
-    uptime: process.uptime(),
-    timestamp: new Date().toISOString(),
-  });
+app.get('/health', async (_req: Request, res: Response) => {
+  try {
+    // Ping DB with a 1-second timeout query
+    await db.execute(sql`SELECT 1`);
+
+    res.status(CONSTANTS.HTTP_STATUS.OK).json({
+      status: 'healthy',
+      database: 'connected',
+      uptime: process.uptime(),
+      timestamp: new Date().toISOString(),
+    });
+  } catch (err) {
+    res.status(CONSTANTS.HTTP_STATUS.INTERNAL_SERVER_ERROR).json({
+      status: 'unhealthy',
+      database: 'disconnected',
+      error: (err as Error).message,
+    });
+  }
 });
 
 // API Routes
