@@ -1,6 +1,13 @@
 import React from 'react';
 
-export const LogoFull: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
+export interface LogoSvgProps extends React.SVGProps<SVGSVGElement> {
+  color?: string;
+}
+
+export const LogoFull: React.FC<LogoSvgProps> = ({
+  color = 'currentColor',
+  ...props
+}) => (
   <svg
     xmlns='http://www.w3.org/2000/svg'
     viewBox='0 0 540 120'
@@ -50,7 +57,7 @@ export const LogoFull: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
         fontWeight='800'
         fontSize='54'
         letterSpacing='-2'
-        fill='#0f172a'
+        fill={color}
       >
         chowk
       </text>
@@ -61,7 +68,7 @@ export const LogoFull: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
         fontWeight='300'
         fontSize='54'
         letterSpacing='-2'
-        fill='#0f172a'
+        fill={color}
       >
         spot
       </text>

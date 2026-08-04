@@ -11,7 +11,7 @@ export const Footer: React.FC = () => {
         <div className={styles.topRow}>
           <div>
             <div className={styles.brand}>
-              <Logo variant='wordmark' size='md' />
+              <Logo variant='wordmark' size='md' color='var(--color-slate-100)' />
             </div>
             <p className={styles.subtitle}>
               Zero-commission local marketplace connecting skilled workers across India.

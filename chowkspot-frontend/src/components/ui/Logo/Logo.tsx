@@ -10,10 +10,14 @@ export type LogoSize = 'sm' | 'md' | 'lg';
 export interface LogoProps extends React.HTMLAttributes<HTMLDivElement> {
   variant?: LogoVariant;
   size?: LogoSize;
+  color?: string;
   className?: string;
 }
 
-const LOGO_COMPONENTS: Record<LogoVariant, React.FC<React.SVGProps<SVGSVGElement>>> = {
+const LOGO_COMPONENTS: Record<
+  LogoVariant,
+  React.FC<{ color?: string } & React.SVGProps<SVGSVGElement>>
+> = {
   full: LogoFull,
   icon: LogoIcon,
   wordmark: LogoWordmark,
@@ -22,6 +26,7 @@ const LOGO_COMPONENTS: Record<LogoVariant, React.FC<React.SVGProps<SVGSVGElement
 export const Logo: React.FC<LogoProps> = ({
   variant = 'full',
   size = 'md',
+  color,
   className = '',
   ...props
 }) => {
@@ -32,7 +37,7 @@ export const Logo: React.FC<LogoProps> = ({
 
   return (
     <div className={combinedClasses} {...props}>
-      <Component />
+      <Component color={color} />
     </div>
   );
 };
