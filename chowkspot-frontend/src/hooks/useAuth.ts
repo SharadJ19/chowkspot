@@ -1,1 +1,1 @@
- // Hook to consume AuthContext easily
+// Hook to consume AuthContext easily
