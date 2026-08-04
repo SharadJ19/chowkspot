@@ -1,1 +1,65 @@
 /* Primary, secondary, status, surface colors */
+
+:root {
+  /* --- Brand Primary (Emerald) --- */
+  --color-primary-50: #ecfdf5;
+  --color-primary-100: #d1fae5;
+  --color-primary-200: #a7f3d0;
+  --color-primary-300: #6ee7b7;
+  --color-primary-400: #34d399;
+  --color-primary-500: #10b981;
+  --color-primary-600: #059669;
+  --color-primary-700: #047857;
+  --color-primary-800: #065f46;
+  --color-primary-900: #064e3b;
+
+  /* --- Slate Neutrals --- */
+  --color-slate-50: #f8fafc;
+  --color-slate-100: #f1f5f9;
+  --color-slate-200: #e2e8f0;
+  --color-slate-300: #cbd5e1;
+  --color-slate-400: #94a3b8;
+  --color-slate-500: #64748b;
+  --color-slate-600: #475569;
+  --color-slate-700: #334155;
+  --color-slate-800: #1e293b;
+  --color-slate-900: #0f172a;
+  --color-slate-950: #020617;
+
+  /* --- Semantic Surfaces --- */
+  --color-bg-app: var(--color-slate-50);
+  --color-bg-surface: #ffffff;
+  --color-bg-surface-hover: var(--color-slate-100);
+  --color-border: var(--color-slate-200);
+  --color-border-strong: var(--color-slate-300);
+
+  /* --- Semantic Typography --- */
+  --color-text-main: var(--color-slate-900);
+  --color-text-muted: var(--color-slate-500);
+  --color-text-inverse: #ffffff;
+
+  /* --- Booking State Machine Tokens --- */
+  --color-status-pending-bg: #fef9c3;
+  --color-status-pending-text: #854d0e;
+
+  --color-status-accepted-bg: #dbeafe;
+  --color-status-accepted-text: #1e40af;
+
+  --color-status-counter-bg: #f3e8ff;
+  --color-status-counter-text: #6b21a8;
+
+  --color-status-in-progress-bg: #e0f2fe;
+  --color-status-in-progress-text: #075985;
+
+  --color-status-completed-bg: #dcfce7;
+  --color-status-completed-text: #166534;
+
+  --color-status-rejected-bg: #fee2e2;
+  --color-status-rejected-text: #991b1b;
+
+  /* --- Operational Alerts --- */
+  --color-error: #ef4444;
+  --color-warning: #f59e0b;
+  --color-success: #10b981;
+  --color-info: #3b82f6;
+}
