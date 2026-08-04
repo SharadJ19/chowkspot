@@ -1,0 +1,1 @@
+// Booking state machine types
