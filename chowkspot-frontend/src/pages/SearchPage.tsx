@@ -34,12 +34,16 @@ export const SearchPage: React.FC = () => {
     if (!selectedWorker) return;
 
     try {
+      // Convert local datetime input string to ISO 8601 timestamp
+      const formattedIsoDate = new Date(requestedDate).toISOString();
+
       await createBookingMutation.mutateAsync({
         workerId: selectedWorker.id,
-        requestedDate,
+        requestedDate: formattedIsoDate,
         address,
         notes,
       });
+
       setSelectedWorker(null);
       setRequestedDate('');
       setAddress('');

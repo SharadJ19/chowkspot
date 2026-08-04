@@ -20,7 +20,7 @@ export const Navbar: React.FC = () => {
     <header className={styles.navbar}>
       <div className={`container ${styles.container}`}>
         <Link to='/' className={styles.brand} aria-label='ChowkSpot Home'>
-          <Logo variant='full' size='md' />
+          <Logo variant='full' size='lg' />
         </Link>
 
         <nav className={styles.navLinks}>
