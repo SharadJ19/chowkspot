@@ -27,15 +27,15 @@
   --color-slate-950: #020617;
 
   /* --- Semantic Surfaces --- */
-  --color-bg-app: var(--color-slate-50);
+  --color-bg-app: #f6f8fa;
   --color-bg-surface: #ffffff;
-  --color-bg-surface-hover: var(--color-slate-100);
-  --color-border: var(--color-slate-200);
-  --color-border-strong: var(--color-slate-300);
+  --color-bg-surface-hover: #f1f5f9;
+  --color-border: #e2e8f0;
+  --color-border-strong: #cbd5e1;
 
   /* --- Semantic Typography --- */
-  --color-text-main: var(--color-slate-900);
-  --color-text-muted: var(--color-slate-500);
+  --color-text-main: #0f172a;
+  --color-text-muted: #64748b;
   --color-text-inverse: #ffffff;
 
   /* --- Booking State Machine Tokens --- */

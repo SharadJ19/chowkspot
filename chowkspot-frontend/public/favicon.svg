@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100%" height="100%" aria-label="ChowkSpot Icon">
+  <defs>
+    <!-- Ultra-modern Emerald Gradient -->
+    <linearGradient id="emeraldIcon" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#10b981" />
+      <stop offset="100%" stop-color="#047857" />
+    </linearGradient>
+
+    <!-- Sleek Dark Accent -->
+    <linearGradient id="darkSlateIcon" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#334155" />
+      <stop offset="100%" stop-color="#0f172a" />
+    </linearGradient>
+  </defs>
+
+  <!-- MINIMALIST ICON: THE INTERSECTING 'CHOWK' LOOP -->
+  <g transform="translate(0, 0)">
+    <!-- Left Loop (User/Community node) -->
+    <path d="M 50 15
+             C 25 15, 15 35, 15 50
+             C 15 72, 38 88, 50 95"
+          fill="none"
+          stroke="url(#darkSlateIcon)"
+          stroke-width="7"
+          stroke-linecap="round" />
+
+    <!-- Right Continuous Loop (Worker/Destination pin) -->
+    <path d="M 50 15
+             C 75 15, 85 35, 85 50
+             C 85 72, 62 88, 50 95"
+          fill="none"
+          stroke="url(#emeraldIcon)"
+          stroke-width="7"
+          stroke-linecap="round" />
+
+    <!-- Pure Minimal Center Spot (Direct Connection) -->
+    <circle cx="50" cy="45" r="7" fill="url(#emeraldIcon)" />
+  </g>
+</svg>

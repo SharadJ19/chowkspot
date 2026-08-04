@@ -1,0 +1,74 @@
+import React from 'react';
+import { useNavigate } from 'react-router';
+import { MapPin, Calendar, ArrowRight } from 'lucide-react';
+import type { WorkerSearchResult } from '@/types';
+import { Avatar } from '@/components/ui/Avatar/Avatar';
+import { Badge } from '@/components/ui/Badge/Badge';
+import { RatingStars } from '@/components/ui/RatingStars/RatingStars';
+import { Button } from '@/components/ui/Button/Button';
+import { formatCurrency } from '@/utils/formatCurrency';
+import styles from './WorkerCard.module.css';
+
+export interface WorkerCardProps {
+  worker: WorkerSearchResult;
+  onBookClick?: (worker: WorkerSearchResult) => void;
+}
+
+export const WorkerCard: React.FC<WorkerCardProps> = ({ worker, onBookClick }) => {
+  const navigate = useNavigate();
+
+  return (
+    <div className={styles.card}>
+      <div className={styles.header}>
+        <Avatar name={worker.user.name} src={worker.user.avatarUrl} size='lg' />
+        <div className={styles.info}>
+          <div className={styles.topLine}>
+            <span className={styles.name}>{worker.user.name}</span>
+            <Badge variant={worker.isAvailable ? 'success' : 'muted'}>
+              {worker.isAvailable ? 'Available' : 'Busy'}
+            </Badge>
+          </div>
+          <span className={styles.category}>{worker.category}</span>
+          <span className={styles.cities}>
+            <MapPin size={12} />
+            <span>{worker.serviceCities.join(', ')}</span>
+          </span>
+        </div>
+      </div>
+
+      <p className={styles.bio}>
+        {worker.bio || 'Experienced skilled professional available for local hire.'}
+      </p>
+
+      <div className={styles.ratingRow}>
+        <RatingStars rating={parseFloat(worker.avgRating)} showValue />
+        <span className={styles.reviewCount}>({worker.totalReviews} reviews)</span>
+      </div>
+
+      <div className={styles.footer}>
+        <div>
+          <span className={styles.rate}>{formatCurrency(worker.baseRate)}</span>
+          <span className={styles.rateType}>/ {worker.rateType}</span>
+        </div>
+        <div className={styles.actionGroup}>
+          <Button
+            variant='outline'
+            size='sm'
+            onClick={() => navigate(`/worker/${worker.id}`)}
+          >
+            Profile
+          </Button>
+          <Button
+            variant='primary'
+            size='sm'
+            onClick={() => onBookClick?.(worker)}
+            disabled={!worker.isAvailable}
+          >
+            <Calendar size={14} />
+            <span>Book Now</span>
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+};

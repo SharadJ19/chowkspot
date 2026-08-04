@@ -1,0 +1,47 @@
+.container {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.starsWrapper {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.starBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  background: none;
+  border: none;
+  cursor: default;
+}
+
+.interactive {
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.interactive:hover .starIcon {
+  transform: scale(1.15);
+}
+
+.starIcon {
+  color: var(--color-slate-300);
+  fill: transparent;
+  transition: var(--transition-fast);
+}
+
+.starIcon.filled {
+  color: #f59e0b;
+  fill: #f59e0b;
+}
+
+.valueText {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-slate-700);
+}

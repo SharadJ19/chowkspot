@@ -1,0 +1,51 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-3xs);
+  padding: 0.25rem 0.625rem;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  line-height: 1;
+  border-radius: var(--radius-full);
+  white-space: nowrap;
+}
+
+.primary {
+  background-color: var(--color-primary-100);
+  color: var(--color-primary-800);
+}
+
+.secondary {
+  background-color: var(--color-slate-200);
+  color: var(--color-slate-800);
+}
+
+.success {
+  background-color: var(--color-status-completed-bg);
+  color: var(--color-status-completed-text);
+}
+
+.warning {
+  background-color: var(--color-status-pending-bg);
+  color: var(--color-status-pending-text);
+}
+
+.danger {
+  background-color: var(--color-status-rejected-bg);
+  color: var(--color-status-rejected-text);
+}
+
+.info {
+  background-color: var(--color-status-accepted-bg);
+  color: var(--color-status-accepted-text);
+}
+
+.purple {
+  background-color: var(--color-status-counter-bg);
+  color: var(--color-status-counter-text);
+}
+
+.muted {
+  background-color: var(--color-slate-100);
+  color: var(--color-slate-600);
+}

@@ -1,11 +1,21 @@
-import './App.module.css';
+import { BrowserRouter } from 'react-router';
+import { QueryClientProvider } from '@tanstack/react-query';
+import { queryClient } from '@/lib/queryClient';
+import { AuthProvider } from '@/context/AuthContext';
+import { SocketProvider } from '@/context/SocketContext';
+import { AppRouter } from '@/routes';
+import '@/styles/index.css';
 
-function App() {
+export default function App() {
   return (
-    <>
-      <h1>Hello Chowkspot</h1>
-    </>
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
+        <SocketProvider>
+          <BrowserRouter>
+            <AppRouter />
+          </BrowserRouter>
+        </SocketProvider>
+      </AuthProvider>
+    </QueryClientProvider>
   );
 }
-
-export default App;

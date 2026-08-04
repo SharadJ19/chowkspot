@@ -1,0 +1,24 @@
+.logo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.logo svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* Common preset sizes */
+.sm {
+  height: 24px;
+}
+
+.md {
+  height: 36px;
+}
+
+.lg {
+  height: 48px;
+}
