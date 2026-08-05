@@ -1,9 +1,7 @@
-// Deep-link UPI URI builder (upi://pay?pa=...)
-
 interface UpiPaymentParams {
   upiId: string;
   payeeName: string;
-  amount?: string | number;
+  amount?: string | number | undefined;
   transactionNote?: string;
 }
 
@@ -18,7 +16,7 @@ export const buildUpiUri = ({
 
   let uri = `upi://pay?pa=${upiId}&pn=${encodedName}&tn=${encodedNote}&cu=INR`;
 
-  if (amount) {
+  if (amount !== undefined) {
     const formattedAmount = typeof amount === 'number' ? amount.toFixed(2) : amount;
     uri += `&am=${formattedAmount}`;
   }

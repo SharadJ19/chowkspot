@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router';
-import { MapPin, Calendar, ArrowRight } from 'lucide-react';
+import { MapPin, Calendar } from 'lucide-react';
 import type { WorkerSearchResult } from '@/types';
 import { Avatar } from '@/components/ui/Avatar/Avatar';
 import { Badge } from '@/components/ui/Badge/Badge';

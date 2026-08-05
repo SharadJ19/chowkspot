@@ -9,7 +9,7 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
   // Derive initial socket state safely instead of setting inside effect body
   const activeSocket = isAuthenticated ? getSocket() : null;
-  const [socket, setSocket] = useState<Socket | null>(activeSocket);
+  const [socket, _setSocket] = useState<Socket | null>(activeSocket);
   const [isConnected, setIsConnected] = useState<boolean>(
     activeSocket?.connected ?? false,
   );

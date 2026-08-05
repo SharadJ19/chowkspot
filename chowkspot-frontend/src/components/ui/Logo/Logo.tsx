@@ -37,7 +37,7 @@ export const Logo: React.FC<LogoProps> = ({
 
   return (
     <div className={combinedClasses} {...props}>
-      <Component color={color} />
+      <Component {...(color !== undefined ? { color } : {})} />
     </div>
   );
 };

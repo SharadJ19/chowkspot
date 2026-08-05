@@ -5,7 +5,7 @@ export const useUpiPayment = () => {
   const [activePayment, setActivePayment] = useState<{
     upiId: string;
     payeeName: string;
-    amount?: number;
+    amount?: number | undefined;
     uri: string;
   } | null>(null);
 

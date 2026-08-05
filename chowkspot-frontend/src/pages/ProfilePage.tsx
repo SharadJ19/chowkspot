@@ -77,6 +77,21 @@ export const ProfilePage: React.FC = () => {
             </select>
           </div>
 
+          <div className={styles.formArea}>
+            <label className={styles.formLabel}>Rate Type</label>
+            <select
+              value={rateType}
+              onChange={(e) =>
+                setRateType(e.target.value as 'HOURLY' | 'FIXED' | 'INSPECTION_FIRST')
+              }
+              className={styles.textareaInput}
+            >
+              <option value='FIXED'>Fixed Rate</option>
+              <option value='HOURLY'>Hourly Rate</option>
+              <option value='INSPECTION_FIRST'>Inspection First</option>
+            </select>
+          </div>
+
           <Input
             label='Experience (Years)'
             type='number'
