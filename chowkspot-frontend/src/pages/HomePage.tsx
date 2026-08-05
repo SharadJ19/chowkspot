@@ -15,7 +15,6 @@ import {
   ArrowRight,
   Search,
   UserPlus,
-  Wrench,
   ShieldCheck,
   CreditCard,
   CheckCircle2,
@@ -39,7 +38,7 @@ import { CATEGORY_IMAGES } from '@/assets/images/categories';
 import styles from './Pages.module.css';
 
 // ---------------------------------------------------------------------------
-// 2. Category Media Map
+// 2. Category Media Map (Mapped to available local asset images)
 // ---------------------------------------------------------------------------
 const CATEGORY_MEDIA: Record<string, { icon: React.ReactNode; image: string }> = {
   Electrician: {
@@ -54,7 +53,7 @@ const CATEGORY_MEDIA: Record<string, { icon: React.ReactNode; image: string }> =
     icon: <Hammer size={18} />,
     image: CATEGORY_IMAGES.carpenter,
   },
-  'AC & Appliance Technician': {
+  'HVAC & AC Service': {
     icon: <Wind size={18} />,
     image: CATEGORY_IMAGES.acAppliance,
   },
@@ -62,35 +61,40 @@ const CATEGORY_MEDIA: Record<string, { icon: React.ReactNode; image: string }> =
     icon: <Paintbrush size={18} />,
     image: CATEGORY_IMAGES.painter,
   },
-  'Mechanic & Auto Expert': {
+  'Car Mechanic': {
     icon: <Car size={18} />,
     image: CATEGORY_IMAGES.autoMechanic,
   },
-  'Industrial Electrician': {
+  'Generator Mechanic': {
     icon: <Zap size={18} />,
     image: CATEGORY_IMAGES.industrialElec,
   },
-  'CCTV & Security Specialist': {
+  'CCTV & Security Tech': {
     icon: <Shield size={18} />,
     image: CATEGORY_IMAGES.cctvSecurity,
   },
-  'Solar & Inverter Technician': {
+  'Solar Panel Installer': {
     icon: <Sun size={18} />,
     image: CATEGORY_IMAGES.solarInverter,
   },
-  'Home Cleaning & Pest Control': {
+  'Home Cleaning': {
     icon: <Sparkles size={18} />,
     image: CATEGORY_IMAGES.homeCleaning,
   },
-  'Welder & Fabrication Expert': {
+  'Welder & Fabricator': {
     icon: <Flame size={18} />,
     image: CATEGORY_IMAGES.welder,
   },
-  'Mason & Tiler': {
+  'Flooring & Tiling': {
     icon: <LayoutGrid size={18} />,
     image: CATEGORY_IMAGES.tiler,
   },
 };
+
+// Filter out any global categories that do not have dedicated asset images
+const DISPLAY_CATEGORIES = APP_CONSTANTS.CATEGORIES.filter(
+  (cat) => cat in CATEGORY_MEDIA,
+);
 
 // ---------------------------------------------------------------------------
 // 3. Featured Worker Data
@@ -133,7 +137,11 @@ export const HomePage: React.FC = () => {
               <Search size={18} />
               <span>Find Workers Now</span>
             </Button>
-            <Button size='lg' variant='outline' onClick={() => navigate('/register')}>
+            <Button
+              size='lg'
+              variant='outline'
+              onClick={() => navigate('/register?role=WORKER')}
+            >
               <UserPlus size={18} />
               <span>Join as a Worker</span>
             </Button>
@@ -214,7 +222,7 @@ export const HomePage: React.FC = () => {
           </div>
           <div className={styles.statDivider} />
           <div className={styles.statBox}>
-            <span className={styles.statNumber}>12+</span>
+            <span className={styles.statNumber}>80+</span>
             <span className={styles.statLabel}>Cities Across Regional Belt</span>
           </div>
           <div className={styles.statDivider} />
@@ -224,8 +232,8 @@ export const HomePage: React.FC = () => {
           </div>
           <div className={styles.statDivider} />
           <div className={styles.statBox}>
-            <span className={styles.statNumber}>10+</span>
-            <span className={styles.statLabel}>Core Trade Domains</span>
+            <span className={styles.statNumber}>80+</span>
+            <span className={styles.statLabel}>Unique Service Skills</span>
           </div>
         </div>
       </section>
@@ -240,11 +248,9 @@ export const HomePage: React.FC = () => {
         </div>
 
         <div className={styles.categoryGrid}>
-          {APP_CONSTANTS.CATEGORIES.map((cat) => {
-            const media = CATEGORY_MEDIA[cat] || {
-              icon: <Wrench size={18} />,
-              image: CATEGORY_IMAGES.default,
-            };
+          {DISPLAY_CATEGORIES.map((cat) => {
+            const media = CATEGORY_MEDIA[cat];
+            if (!media) return null;
 
             return (
               <div
@@ -276,7 +282,7 @@ export const HomePage: React.FC = () => {
         </div>
       </section>
 
-      {/* ==================== 4. HOW IT WORKS ==================== */}
+      {/* ==================== 4. HOW IT WORKS & VALUE PROPOSITION ==================== */}
       <section className={styles.howItWorksSection}>
         <div className={`container ${styles.sectionBlock}`}>
           <div className={styles.sectionHeader}>
@@ -290,7 +296,7 @@ export const HomePage: React.FC = () => {
             <div className={styles.stepCard}>
               <div className={styles.stepNumberBadge}>01</div>
               <div className={styles.stepIconWrapper}>
-                <Search size={24} />
+                <Search size={22} />
               </div>
               <h3 className={styles.stepTitle}>Discover Providers</h3>
               <p className={styles.stepDescription}>
@@ -302,7 +308,7 @@ export const HomePage: React.FC = () => {
             <div className={styles.stepCard}>
               <div className={styles.stepNumberBadge}>02</div>
               <div className={styles.stepIconWrapper}>
-                <CalendarCheck size={24} />
+                <CalendarCheck size={22} />
               </div>
               <h3 className={styles.stepTitle}>Direct Booking Request</h3>
               <p className={styles.stepDescription}>
@@ -314,7 +320,7 @@ export const HomePage: React.FC = () => {
             <div className={styles.stepCard}>
               <div className={styles.stepNumberBadge}>03</div>
               <div className={styles.stepIconWrapper}>
-                <CreditCard size={24} />
+                <CreditCard size={22} />
               </div>
               <h3 className={styles.stepTitle}>Fee-Free Direct UPI Pay</h3>
               <p className={styles.stepDescription}>
@@ -323,37 +329,41 @@ export const HomePage: React.FC = () => {
               </p>
             </div>
           </div>
-        </div>
-      </section>
 
-      {/* ==================== 5. VALUE PROPOSITION ==================== */}
-      <section className={`container ${styles.sectionBlock}`}>
-        <div className={styles.valueGrid}>
-          <div className={styles.valueCard}>
-            <ShieldCheck size={28} className={styles.valueIcon} />
-            <h3 className={styles.valueTitle}>100% Direct P2P Payments</h3>
-            <p className={styles.valueDesc}>
-              No intermediate escrow holds or platform deductions. Money transfers
-              straight to the worker's bank UPI.
-            </p>
-          </div>
+          {/* Value Highlights Bar */}
+          <div className={styles.valueGrid}>
+            <div className={styles.valueCard}>
+              <ShieldCheck size={24} className={styles.valueIcon} />
+              <div>
+                <h3 className={styles.valueTitle}>100% Direct P2P Settlement</h3>
+                <p className={styles.valueDesc}>
+                  Zero escrow holds or platform cuts. Payments transfer straight to the
+                  worker.
+                </p>
+              </div>
+            </div>
 
-          <div className={styles.valueCard}>
-            <Clock size={28} className={styles.valueIcon} />
-            <h3 className={styles.valueTitle}>Real-time Socket Updates</h3>
-            <p className={styles.valueDesc}>
-              Stay updated instantly when workers accept requests, counter-propose
-              schedules, or complete jobs.
-            </p>
-          </div>
+            <div className={styles.valueCard}>
+              <Clock size={24} className={styles.valueIcon} />
+              <div>
+                <h3 className={styles.valueTitle}>Real-time Socket Updates</h3>
+                <p className={styles.valueDesc}>
+                  Instant live notifications when workers accept, counter-offer, or
+                  complete jobs.
+                </p>
+              </div>
+            </div>
 
-          <div className={styles.valueCard}>
-            <CheckCircle2 size={28} className={styles.valueIcon} />
-            <h3 className={styles.valueTitle}>Verified Customer Reviews</h3>
-            <p className={styles.valueDesc}>
-              Ratings and written feedback can only be posted for completed booking
-              records, ensuring authentic trust.
-            </p>
+            <div className={styles.valueCard}>
+              <CheckCircle2 size={24} className={styles.valueIcon} />
+              <div>
+                <h3 className={styles.valueTitle}>Verified Customer Reviews</h3>
+                <p className={styles.valueDesc}>
+                  Ratings can only be posted for completed booking records, guaranteeing
+                  real feedback.
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -370,7 +380,7 @@ export const HomePage: React.FC = () => {
               customers and keep 100% of your earnings.
             </p>
           </div>
-          <Button size='lg' onClick={() => navigate('/register')}>
+          <Button size='lg' onClick={() => navigate('/register?role=WORKER')}>
             <UserPlus size={18} />
             <span>Create Worker Profile</span>
           </Button>

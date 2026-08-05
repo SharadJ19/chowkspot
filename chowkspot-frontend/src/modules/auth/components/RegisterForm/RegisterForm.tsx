@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router';
+import { useNavigate, useSearchParams, Link } from 'react-router';
 import { AlertCircle, User, Wrench } from 'lucide-react';
 import { useAuthMutations } from '../../hooks/useAuthMutations';
 import { Input } from '@/components/ui/Input/Input';
@@ -10,7 +10,11 @@ import styles from '../LoginForm/LoginForm.module.css';
 
 export const RegisterForm: React.FC = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { registerMutation } = useAuthMutations();
+
+  // Read initial role from query param ?role=WORKER
+  const initialRole = searchParams.get('role') === 'WORKER' ? 'WORKER' : 'USER';
 
   const [formData, setFormData] = useState<{
     name: string;
@@ -25,7 +29,7 @@ export const RegisterForm: React.FC = () => {
     password: '',
     phone: '',
     city: APP_CONSTANTS.CITIES[0],
-    role: 'USER',
+    role: initialRole,
   });
 
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});

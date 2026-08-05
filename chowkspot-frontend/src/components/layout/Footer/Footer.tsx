@@ -5,11 +5,12 @@ import {
   Mail,
   Phone,
   MapPin,
-  Heart,
   Zap,
   HelpCircle,
   FileText,
   Lock,
+  Globe,
+  Clock,
 } from 'lucide-react';
 import { Logo } from '@/components/ui/Logo/Logo';
 import { APP_CONSTANTS } from '@/config/constants';
@@ -19,49 +20,76 @@ export const Footer: React.FC = () => {
   return (
     <footer className={styles.footer}>
       <div className={`container ${styles.container}`}>
-        {/* Top Feature Highlights Bar */}
+        {/* ==================== 1. TOP HIGHLIGHTS BAR ==================== */}
         <div className={styles.featureBar}>
           <div className={styles.featureItem}>
-            <Zap className={styles.featureIcon} size={20} />
+            <div className={styles.featureIconWrapper}>
+              <Zap size={20} />
+            </div>
             <div>
-              <h4 className={styles.featureTitle}>Zero Platform Fees</h4>
+              <h4 className={styles.featureTitle}>0% Platform Commission</h4>
               <p className={styles.featureDesc}>
-                100% direct transactions via peer-to-peer UPI or Cash
+                100% direct peer-to-peer settlement via UPI or Cash
               </p>
             </div>
           </div>
+
           <div className={styles.featureItem}>
-            <ShieldCheck className={styles.featureIcon} size={20} />
+            <div className={styles.featureIconWrapper}>
+              <ShieldCheck size={20} />
+            </div>
             <div>
-              <h4 className={styles.featureTitle}>Verified Reviews</h4>
+              <h4 className={styles.featureTitle}>Verified Pro Reviews</h4>
               <p className={styles.featureDesc}>
-                Ratings only from users with completed booking records
+                Feedback submitted strictly for completed booking records
               </p>
             </div>
           </div>
+
           <div className={styles.featureItem}>
-            <Heart className={styles.featureIcon} size={20} />
+            <div className={styles.featureIconWrapper}>
+              <Clock size={20} />
+            </div>
             <div>
-              <h4 className={styles.featureTitle}>Community First</h4>
+              <h4 className={styles.featureTitle}>Real-time Socket Dispatch</h4>
               <p className={styles.featureDesc}>
-                Empowering independent local workers and tradespeople
+                Instant booking notifications and live status tracking
+              </p>
+            </div>
+          </div>
+
+          <div className={styles.featureItem}>
+            <div className={styles.featureIconWrapper}>
+              <Globe size={20} />
+            </div>
+            <div>
+              <h4 className={styles.featureTitle}>85+ Cities Covered</h4>
+              <p className={styles.featureDesc}>
+                Active skilled trades across Himachal Pradesh & Tricity belt
               </p>
             </div>
           </div>
         </div>
 
-        {/* Main Content Grid */}
+        {/* ==================== 2. MAIN CONTENT GRID ==================== */}
         <div className={styles.mainGrid}>
-          {/* Brand Info Column */}
+          {/* Brand & Live Network Status Column */}
           <div className={styles.brandColumn}>
             <Link to='/' className={styles.brandLogo} aria-label='ChowkSpot Home'>
               <Logo variant='wordmark' size='md' color='var(--color-slate-100)' />
             </Link>
+
             <p className={styles.brandDesc}>
               ChowkSpot is an open, zero-commission service marketplace connecting
-              residents directly with local skilled professionals across Himachal Pradesh
-              and the Tricity region.
+              residents directly with local skilled professionals across Himachal Pradesh,
+              Tricity, and North India.
             </p>
+
+            <div className={styles.liveStatusBadge}>
+              <span className={styles.pulseDot} />
+              <span>ChowkSpot Network Active • 85+ Regional Hubs</span>
+            </div>
+
             <div className={styles.contactList}>
               <div className={styles.contactItem}>
                 <MapPin size={14} className={styles.contactIcon} />
@@ -78,11 +106,11 @@ export const Footer: React.FC = () => {
             </div>
           </div>
 
-          {/* Service Domains Column */}
+          {/* Popular Services Column */}
           <div className={styles.linkColumn}>
-            <h3 className={styles.columnTitle}>Popular Services</h3>
+            <h3 className={styles.columnTitle}>Popular Trades</h3>
             <ul className={styles.linkList}>
-              {APP_CONSTANTS.CATEGORIES.slice(0, 6).map((category) => (
+              {APP_CONSTANTS.CATEGORIES.slice(0, 7).map((category) => (
                 <li key={category}>
                   <Link
                     to={`/search?category=${encodeURIComponent(category)}`}
@@ -95,23 +123,40 @@ export const Footer: React.FC = () => {
             </ul>
           </div>
 
-          {/* Quick Navigation Column */}
+          {/* More Skilled Services Column */}
+          <div className={styles.linkColumn}>
+            <h3 className={styles.columnTitle}>More Services</h3>
+            <ul className={styles.linkList}>
+              {APP_CONSTANTS.CATEGORIES.slice(7, 14).map((category) => (
+                <li key={category}>
+                  <Link
+                    to={`/search?category=${encodeURIComponent(category)}`}
+                    className={styles.footerLink}
+                  >
+                    {category}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Marketplace Quick Navigation Column */}
           <div className={styles.linkColumn}>
             <h3 className={styles.columnTitle}>Marketplace</h3>
             <ul className={styles.linkList}>
               <li>
                 <Link to='/search' className={styles.footerLink}>
-                  Find Workers
+                  Find Skilled Workers
                 </Link>
               </li>
               <li>
-                <Link to='/register' className={styles.footerLink}>
+                <Link to='/register?role=WORKER' className={styles.footerLink}>
                   Join as Skilled Worker
                 </Link>
               </li>
               <li>
                 <Link to='/bookings' className={styles.footerLink}>
-                  My Bookings
+                  My Service Bookings
                 </Link>
               </li>
               <li>
@@ -119,31 +164,20 @@ export const Footer: React.FC = () => {
                   Account Login
                 </Link>
               </li>
-            </ul>
-          </div>
-
-          {/* Region Network Column */}
-          <div className={styles.linkColumn}>
-            <h3 className={styles.columnTitle}>Service Regions</h3>
-            <p className={styles.regionDesc}>Active regional coverage across:</p>
-            <div className={styles.tagCloud}>
-              {APP_CONSTANTS.CITIES.slice(0, 8).map((city) => (
-                <Link
-                  key={city}
-                  to={`/search?city=${encodeURIComponent(city)}`}
-                  className={styles.regionTag}
-                >
-                  {city}
+              <li>
+                <Link to='/register' className={styles.footerLink}>
+                  Create Free Account
                 </Link>
-              ))}
-            </div>
+              </li>
+            </ul>
           </div>
         </div>
 
-        {/* Bottom Bar with Links & Copyright */}
+        {/* ==================== 3. BOTTOM LEGAL BAR ==================== */}
         <div className={styles.bottomRow}>
           <p className={styles.copyright}>
-            &copy; {new Date().getFullYear()} ChowkSpot Marketplace. All rights reserved.
+            &copy; {new Date().getFullYear()} ChowkSpot Service Marketplace. All rights
+            reserved.
           </p>
 
           <div className={styles.legalLinks}>

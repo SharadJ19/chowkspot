@@ -495,51 +495,63 @@
   transform: translateX(4px);
 }
 
-/* --- 4. How It Works Section --- */
+/* --- 4. How It Works & Value Section --- */
 .howItWorksSection {
-  background-color: var(--color-slate-50);
-  padding: var(--spacing-3xl) 0;
+  background-color: var(--color-bg-surface);
+  border-top: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+  padding: var(--spacing-2xl) 0;
 }
 
 .stepsGrid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: var(--spacing-lg);
+  gap: var(--spacing-md);
 }
 
 .stepCard {
   position: relative;
-  padding: var(--spacing-xl) var(--spacing-lg);
-  background-color: var(--color-bg-surface);
+  padding: var(--spacing-lg);
+  background-color: var(--color-bg-app);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-2xl);
-  box-shadow: var(--shadow-xs);
+  border-radius: var(--radius-xl);
   display: flex;
   flex-direction: column;
-  align-items: center;
-  text-align: center;
+  align-items: flex-start;
+  text-align: left;
   gap: var(--spacing-xs);
+  transition: var(--transition-fast);
+}
+
+.stepCard:hover {
+  border-color: var(--color-primary-300);
+  background-color: var(--color-bg-surface);
+  box-shadow: var(--shadow-sm);
+  transform: translateY(-2px);
 }
 
 .stepNumberBadge {
   position: absolute;
   top: var(--spacing-md);
   right: var(--spacing-md);
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-xs);
   font-weight: 800;
-  color: var(--color-slate-300);
+  color: var(--color-slate-400);
+  background: var(--color-slate-100);
+  padding: 0.15rem 0.5rem;
+  border-radius: var(--radius-full);
 }
 
 .stepIconWrapper {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 56px;
-  height: 56px;
-  background-color: var(--color-primary-50);
-  color: var(--color-primary-600);
-  border-radius: var(--radius-xl);
-  margin-bottom: var(--spacing-2xs);
+  width: 44px;
+  height: 44px;
+  background-color: var(--color-primary-100);
+  color: var(--color-primary-700);
+  border-radius: var(--radius-lg);
+  margin-bottom: var(--spacing-3xs);
 }
 
 .stepTitle {
@@ -551,40 +563,46 @@
 .stepDescription {
   font-size: var(--font-size-xs);
   color: var(--color-text-muted);
-  line-height: var(--line-height-normal);
+  line-height: var(--line-height-relaxed);
 }
 
-/* --- 5. Value Proposition Grid --- */
+/* --- 5. Value Proposition Strip --- */
 .valueGrid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: var(--spacing-lg);
+  gap: var(--spacing-md);
+  margin-top: var(--spacing-md);
+  padding-top: var(--spacing-lg);
+  border-top: 1px dashed var(--color-border-strong);
 }
 
 .valueCard {
-  padding: var(--spacing-lg);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-2xl);
-  background-color: var(--color-bg-surface);
+  padding: var(--spacing-md);
+  border-radius: var(--radius-lg);
+  background-color: var(--color-primary-50);
+  border: 1px solid var(--color-primary-200);
   display: flex;
-  flex-direction: column;
-  gap: var(--spacing-xs);
+  align-items: flex-start;
+  gap: var(--spacing-sm);
 }
 
 .valueIcon {
   color: var(--color-primary-600);
+  flex-shrink: 0;
+  margin-top: 2px;
 }
 
 .valueTitle {
-  font-size: var(--font-size-base);
+  font-size: var(--font-size-sm);
   font-weight: 700;
   color: var(--color-slate-900);
 }
 
 .valueDesc {
   font-size: var(--font-size-xs);
-  color: var(--color-text-muted);
+  color: var(--color-slate-600);
   line-height: var(--line-height-normal);
+  margin-top: 2px;
 }
 
 /* --- 6. CTA Banner --- */
