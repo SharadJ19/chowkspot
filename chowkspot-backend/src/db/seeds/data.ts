@@ -1,5 +1,200 @@
+export const SEED_CITIES = [
+  // --- Loved Immediate Hubs (Parwanoo & Regional Belt) ---
+  'Parwanoo',
+  'Chandigarh',
+  'Mohali',
+  'Panchkula',
+  'Kalka',
+  'Pinjore',
+  'Baddi',
+  'Shimla',
+
+  // --- Himachal Pradesh Belt ---
+  'Solan',
+  'Nalagarh',
+  'Dharampur',
+  'Kandaghat',
+  'Barotiwala',
+  'Waknaghat',
+  'Subathu',
+  'Dagshai',
+  'Kasauli',
+  'Chail',
+  'Bilaspur',
+  'Mandi',
+  'Kullu',
+  'Manali',
+  'Dharamshala',
+  'Kangra',
+  'Palampur',
+  'Hamirpur',
+  'Una',
+  'Nahan',
+  'Paonta Sahib',
+  'Sundernagar',
+  'Chamba',
+
+  // --- Tricity Satellites & Punjab Belt ---
+  'Zirakpur',
+  'Dera Bassi',
+  'Kharar',
+  'Landran',
+  'New Chandigarh',
+  'Kurali',
+  'Ropar (Rupnagar)',
+  'Patiala',
+  'Ludhiana',
+  'Jalandhar',
+  'Amritsar',
+  'Bathinda',
+  'Pathankot',
+  'Hoshiarpur',
+  'Phagwara',
+  'Rajpura',
+  'Fatehgarh Sahib',
+  'Mandi Gobindgarh',
+  'Khanna',
+
+  // --- Haryana Belt ---
+  'Ambala Cantt',
+  'Ambala City',
+  'Yamunanagar',
+  'Jagadhri',
+  'Kurukshetra',
+  'Karnal',
+  'Panipat',
+  'Sonipat',
+  'Rohtak',
+  'Hisar',
+  'Sirsa',
+  'Gurugram',
+  'Faridabad',
+  'Rewari',
+  'Bahadurgarh',
+
+  // --- Uttarakhand Belt ---
+  'Dehradun',
+  'Haridwar',
+  'Rishikesh',
+  'Roorkee',
+  'Haldwani',
+  'Rudrapur',
+  'Kashipur',
+  'Mussoorie',
+
+  // --- Jammu & NCR North ---
+  'Jammu',
+  'Samba',
+  'Kathua',
+  'Udhampur',
+  'Noida',
+  'Greater Noida',
+  'Ghaziabad',
+] as const;
+
+export const SEED_CATEGORIES = [
+  // --- Everyday Local Trades & Skilled Services ---
+  'Electrician',
+  'Plumber',
+  'Carpenter',
+  'Painter',
+  'Masonry & Brickwork',
+  'Welder & Fabricator',
+  'Key Maker & Locksmith',
+  'Cobbler & Shoe Repair',
+  'Tailor & Alterations',
+  'Ironing & Pressing',
+  'Handyman & Odd Jobs',
+  'Glass & Window Repair',
+  'Roofing & Waterproofing',
+  'Flooring & Tiling',
+  'Furniture Renovation',
+  'Gutter & Drain Cleaner',
+
+  // --- Daily Essentials, Utilities & Supplies ---
+  'Milk Delivery Service',
+  'Water Tanker Supplier',
+  'Gas Cylinder Delivery',
+  'Gas Stove Mechanic',
+  'Newspaper Vendor',
+  'Grocery Delivery Boy',
+  'Vegetable & Fruit Vendor',
+  'Tiffin & Home Food Service',
+  'Waste & Scrap Collector (Raddiwalas)',
+
+  // --- Home Maintenance, Appliance & Tech ---
+  'Home Appliance Repair',
+  'Bike & Scooter Mechanic',
+  'Car Mechanic',
+  'Car Wash & Detailing',
+  'Cycle Mechanic',
+  'Home Automation Tech',
+  'Generator Mechanic',
+  'HVAC & AC Service',
+  'Mobile & Tablet Repair',
+  'IT & Computer Support',
+  'CCTV & Security Tech',
+  'Solar Panel Installer',
+  'Drone Operator & Tech',
+  'Fire Safety Tech',
+  'Web Development',
+  'Graphic Design',
+  'Social Media Helper',
+
+  // --- Cleaning, Hygiene & Facility Services ---
+  'Home Cleaning',
+  'Carpet Cleaning',
+  'Sofa Cleaning',
+  'Curtain Cleaning',
+  'Window Cleaning',
+  'Water Tank Cleaning',
+  'Pest Control Specialist',
+  'Pressure Washing Specialist',
+  'Laundry & Dry Cleaning',
+
+  // --- Gardening, Landscaping & Agriculture ---
+  'Gardener & Plant Care',
+  'Landscaping Specialist',
+  'Tree Pruning & Cutting',
+  'Rooftop Garden Setup',
+
+  // --- Caregiving, Wellness & Personal Grooming ---
+  'Child Care & Nanny',
+  'Elderly Care Assistant',
+  'Pet Sitting & Dog Walker',
+  'Pet Grooming Specialist',
+  'Veterinary Assistant',
+  'Fitness Trainer',
+  'Yoga Instructor',
+  'Dietician & Nutritionist',
+  'Ayurveda Practitioner',
+  'Massage Therapist',
+  'Makeup Artist & Beautician',
+  'Mehndi Artist',
+
+  // --- Events, Ceremonies & Traditional Services ---
+  'Pandit & Puja Specialist',
+  'Vastu Consultant',
+  'Astrologer',
+  'Tent House Provider',
+  'Catering Service',
+  'Event Decorator',
+  'Party & DJ Manager',
+  'Wedding Planner Helper',
+  'Photographer',
+  'Videographer',
+
+  // --- Education, Advisory & Moving ---
+  'Home Tutor',
+  'Career Counselor',
+  'Legal Advisor',
+  'Tax & GST Accountant',
+  'Packers & Movers',
+  'Car Transport Helper',
+] as const;
+
 export const SEED_USERS = [
-  // --- Core / Admin ---
+  // --- Admin ---
   {
     name: 'Sharad Chandel',
     email: 'sharad@chowkspot.com',
@@ -11,7 +206,7 @@ export const SEED_USERS = [
       'https://res.cloudinary.com/demo/image/upload/v1/samples/people/boy-snow-hoodie.jpg',
   },
 
-  // --- Worker Crew (Service Providers across Himachal & Tricity) ---
+  // --- Base Crew Service Providers ---
   {
     name: 'Smarth Sharda',
     email: 'smarth.sharda@chowkspot.com',
@@ -143,7 +338,7 @@ export const SEED_USERS = [
       'https://res.cloudinary.com/demo/image/upload/v1/samples/people/boy-snow-hoodie.jpg',
   },
 
-  // --- Customers / Regular Users ---
+  // --- Base Customers ---
   {
     name: 'Sachit Rajpal',
     email: 'sachit.rajpal@gmail.com',
@@ -352,8 +547,8 @@ export const SEED_WORKER_PROFILES = [
   },
   {
     email: 'bipin.awasthi@chowkspot.com',
-    category: 'AC & Appliance Technician',
-    bio: 'Foam jet AC servicing, PCB repairs, gas leak charging, and washing machine motor replacement.',
+    category: 'Home Appliance Repair',
+    bio: 'Washing machine motor replacement, microwave PCB fixes, and refrigerator gas charging.',
     experienceYears: 7,
     rateType: 'FIXED' as const,
     baseRate: '750.00',
@@ -374,8 +569,8 @@ export const SEED_WORKER_PROFILES = [
   },
   {
     email: 'anshul.thakur@chowkspot.com',
-    category: 'Mechanic & Auto Expert',
-    bio: 'On-demand 2-wheeler & car emergency repairs, battery jumpstart, brake service, and oil changes.',
+    category: 'Car Mechanic',
+    bio: 'On-demand 4-wheeler & car emergency repairs, battery jumpstart, brake service, and oil changes.',
     experienceYears: 6,
     rateType: 'HOURLY' as const,
     baseRate: '500.00',
@@ -385,8 +580,8 @@ export const SEED_WORKER_PROFILES = [
   },
   {
     email: 'rohan.chandel@chowkspot.com',
-    category: 'Industrial Electrician',
-    bio: 'Heavy industrial electrical wiring, motor starter repairs, factory panel wiring, and generator setups.',
+    category: 'Generator Mechanic',
+    bio: 'Heavy industrial generator maintenance, motor starter repairs, and factory backup wiring.',
     experienceYears: 6,
     rateType: 'HOURLY' as const,
     baseRate: '650.00',
@@ -396,7 +591,7 @@ export const SEED_WORKER_PROFILES = [
   },
   {
     email: 'kartik.kumar@chowkspot.com',
-    category: 'CCTV & Security Specialist',
+    category: 'CCTV & Security Tech',
     bio: 'IP camera installation, biometric access systems, DVR/NVR configuration, and video doorbell setups.',
     experienceYears: 4,
     rateType: 'FIXED' as const,
@@ -407,7 +602,7 @@ export const SEED_WORKER_PROFILES = [
   },
   {
     email: 'eshant.monga@chowkspot.com',
-    category: 'Solar & Inverter Technician',
+    category: 'Solar Panel Installer',
     bio: 'Rooftop solar panel installation, hybrid inverter setup, tubular battery maintenance, and fault testing.',
     experienceYears: 5,
     rateType: 'INSPECTION_FIRST' as const,
@@ -429,7 +624,7 @@ export const SEED_WORKER_PROFILES = [
   },
   {
     email: 'sahil.akhtar@chowkspot.com',
-    category: 'Home Cleaning & Pest Control',
+    category: 'Pest Control Specialist',
     bio: 'Deep home sofa shampooing, full kitchen degreasing, termite treatment, and cockroach control.',
     experienceYears: 4,
     rateType: 'FIXED' as const,
@@ -440,7 +635,7 @@ export const SEED_WORKER_PROFILES = [
   },
   {
     email: 'tarun.kumawat@chowkspot.com',
-    category: 'Welder & Fabrication Expert',
+    category: 'Welder & Fabricator',
     bio: 'Main gate welding, safety grill fabrication, tin shed creation, and balcony railing repairs.',
     experienceYears: 7,
     rateType: 'INSPECTION_FIRST' as const,
@@ -451,7 +646,7 @@ export const SEED_WORKER_PROFILES = [
   },
   {
     email: 'gagan.bansal@chowkspot.com',
-    category: 'Mason & Tiler',
+    category: 'Masonry & Brickwork',
     bio: 'Granite countertop fitting, bathroom tile replacement, plastering, and brickwork maintenance.',
     experienceYears: 8,
     rateType: 'HOURLY' as const,

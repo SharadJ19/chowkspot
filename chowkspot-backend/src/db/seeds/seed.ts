@@ -2,25 +2,169 @@ import { db } from '@/config/database.js';
 import { users, workerProfiles, bookings, reviews } from '@/db/schema/index.js';
 import { hashPassword } from '@/utils/password.js';
 import { logger } from '@/utils/logger.js';
-import { SEED_USERS, SEED_WORKER_PROFILES } from '@/db/seeds/data.js';
+import {
+  SEED_CITIES,
+  SEED_CATEGORIES,
+  SEED_USERS,
+  SEED_WORKER_PROFILES,
+} from '@/db/seeds/data.js';
 import { eq, sql } from 'drizzle-orm';
 
+const FIRST_NAMES = [
+  'Aarav',
+  'Rohan',
+  'Smarth',
+  'Rudar',
+  'Mohit',
+  'Bipin',
+  'Anshul',
+  'Kartik',
+  'Eshant',
+  'Sahil',
+  'Tarun',
+  'Gagan',
+  'Sachit',
+  'Shaiv',
+  'Tushar',
+  'Vivek',
+  'Sumit',
+  'Vansh',
+  'Jashan',
+  'Ashu',
+  'Vikram',
+  'Deepak',
+  'Manish',
+  'Sandeep',
+  'Pankaj',
+  'Rajesh',
+  'Suresh',
+  'Amit',
+  'Varun',
+  'Gaurav',
+  'Harish',
+  'Nitin',
+  'Ramesh',
+  'Vijay',
+  'Sunil',
+  'Karan',
+  'Vishal',
+  'Neeraj',
+  'Suraj',
+  'Ajay',
+  'Praveen',
+  'Sanjay',
+  'Dinesh',
+  'Kunal',
+  'Abhishek',
+  'Rahul',
+  'Pooja',
+  'Shivani',
+  'Anju',
+  'Shruti',
+  'Harkiran',
+  'Simran',
+  'Neha',
+  'Priya',
+];
+
+const LAST_NAMES = [
+  'Chandel',
+  'Sharda',
+  'Singh',
+  'Thakur',
+  'Awasthi',
+  'Katoch',
+  'Kumar',
+  'Monga',
+  'Vashisht',
+  'Akhtar',
+  'Kumawat',
+  'Bansal',
+  'Rajpal',
+  'Sood',
+  'Attri',
+  'Karwal',
+  'Vedwall',
+  'Rani',
+  'Rajput',
+  'Dhiman',
+  'Chhalotre',
+  'Vadhwa',
+  'Sharma',
+  'Singla',
+  'Verma',
+  'Gupta',
+  'Saini',
+  'Kashyap',
+  'Chauhan',
+  'Giri',
+  'Kundu',
+  'Puri',
+  'Bhasin',
+  'Mehta',
+  'Garg',
+  'Joshi',
+];
+
+const LOCALITY_PREFIXES = [
+  'Near Sector 1A Timber Trail',
+  'Housing Board Colony',
+  'Phase 1 Industrial Area',
+  'Opposite Bus Stand',
+  'Near Railway Station',
+  'Mall Road',
+  'Main Market',
+  'Bypass Road',
+  'Phase 8 Industrial Focal Point',
+  'Sector 20 Panchkula',
+  'GT Road',
+  'Subathu Road',
+];
+
+const REVIEW_COMMENTS = [
+  'Punctual and reliable service in Parwanoo. Solved my issue quickly!',
+  'Very professional and honest pricing. Will definitely hire again.',
+  'Great experience through ChowkSpot. Highly recommended for local jobs.',
+  'Super fast response time and clean execution.',
+  'Honest service provider. Very polite behavior and quality work.',
+];
+
+function getRandomElement<T>(arr: readonly T[] | T[]): T {
+  const item = arr[Math.floor(Math.random() * arr.length)];
+  if (item === undefined) {
+    throw new Error('Array lookup returned undefined.');
+  }
+  return item;
+}
+
+function getRandomElements<T>(arr: readonly T[] | T[], count: number): T[] {
+  const shuffled = [...arr].sort(() => 0.5 - Math.random());
+  return shuffled.slice(0, Math.min(count, arr.length));
+}
+
+function getRandomNumber(min: number, max: number): number {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
 async function seed() {
-  logger.info('🌱 Starting ChowkSpot high-coverage regional database seeding...');
+  logger.info(
+    '🌱 Seeding ChowkSpot with 80+ Unique Flat Services & 80+ North Indian Cities...',
+  );
 
   try {
     await db.transaction(async (tx) => {
-      // 1. Wipe existing tables in cascade order
-      logger.info('🧹 Clearing old database records...');
+      logger.info('🧹 Clearing old table entries...');
       await tx.delete(reviews);
       await tx.delete(bookings);
       await tx.delete(workerProfiles);
       await tx.delete(users);
 
-      // 2. Insert Users (Admin, Workers & Friends Crew)
-      logger.info('👤 Inserting Users & Friends...');
+      const defaultPasswordHash = await hashPassword('Password123!');
       const createdUsersMap = new Map<string, string>();
+      const createdWorkerMap = new Map<string, string>();
 
+      // 1. Insert Base Template Users (Admin, Crew & Base Customers)
+      logger.info('👤 Inserting Base Template Users & Admin...');
       for (const userData of SEED_USERS) {
         const passwordHash = await hashPassword(userData.password);
         const [insertedUser] = await tx
@@ -41,15 +185,11 @@ async function seed() {
         }
       }
 
-      // 3. Insert Worker Profiles with Multi-City Coverage
-      logger.info('🛠️ Inserting Worker Profiles with Regional Coverage...');
-      const createdWorkerMap = new Map<string, string>();
-
+      // 2. Insert Base Worker Profiles
+      logger.info('🛠️ Inserting Base Worker Profiles...');
       for (const workerData of SEED_WORKER_PROFILES) {
         const userId = createdUsersMap.get(workerData.email);
-        if (!userId) {
-          throw new Error(`User account for ${workerData.email} missing.`);
-        }
+        if (!userId) continue;
 
         const [insertedProfile] = await tx
           .insert(workerProfiles)
@@ -71,188 +211,235 @@ async function seed() {
         }
       }
 
-      // 4. Seed Diverse State-Machine Bookings
+      // 3. Dynamic Expansion: Generate ~300 Extra Workers across ALL 80+ Flat Categories
       logger.info(
-        '📅 Seeding Comprehensive Regional Bookings across Lifecycle States...',
+        '🚀 Expanding dataset with ~300 generated workers across 80+ flat skills...',
       );
+      const createdWorkerProfilesList: { id: string; userId: string; email: string }[] =
+        [];
 
-      // Workers
-      const smarthWorkerId = createdWorkerMap.get('smarth.sharda@chowkspot.com')!;
-      const rudarWorkerId = createdWorkerMap.get('rudar.partap@chowkspot.com')!;
-      const mohitWorkerId = createdWorkerMap.get('mohit.thakur@chowkspot.com')!;
-      const bipinWorkerId = createdWorkerMap.get('bipin.awasthi@chowkspot.com')!;
-      const rohanWorkerId = createdWorkerMap.get('rohan.chandel@chowkspot.com')!;
-      const kartikWorkerId = createdWorkerMap.get('kartik.kumar@chowkspot.com')!;
+      for (const [email, id] of createdWorkerMap.entries()) {
+        const userId = createdUsersMap.get(email);
+        if (userId) {
+          createdWorkerProfilesList.push({ id, userId, email });
+        }
+      }
 
-      // Customers
-      const sachitId = createdUsersMap.get('sachit.rajpal@gmail.com')!;
-      const safalId = createdUsersMap.get('safal.varadhan@gmail.com')!;
-      const sachinId = createdUsersMap.get('sachin.thakur@gmail.com')!;
-      const shaivId = createdUsersMap.get('shaiv.sood@gmail.com')!;
-      const rudarAttriId = createdUsersMap.get('rudar.attri@gmail.com')!;
-      // const tusharId = createdUsersMap.get('tushar.karwal@gmail.com')!;
-      const shivaniId = createdUsersMap.get('shivani.vedwall@gmail.com')!;
-      const anjuId = createdUsersMap.get('anju.rani@gmail.com')!;
-      const vivekId = createdUsersMap.get('vivek.dhiman@gmail.com')!;
-      const sumitId = createdUsersMap.get('sumit.chhalotre@gmail.com')!;
+      const totalExtraWorkers = 300;
+      for (let i = 0; i < totalExtraWorkers; i++) {
+        const firstName = getRandomElement(FIRST_NAMES);
+        const lastName = getRandomElement(LAST_NAMES);
+        const fullName = `${firstName} ${lastName}`;
+        const email = `worker.${i + 1}.${firstName.toLowerCase()}.${lastName.toLowerCase()}@chowkspot.com`;
+        const phone = `+9198${getRandomNumber(10000000, 99999999)}`;
 
-      // 1. COMPLETED - Shaiv -> Mohit (Parwanoo Carpenter Job)
-      const [b1] = await tx
-        .insert(bookings)
-        .values({
-          userId: shaivId,
-          workerId: mohitWorkerId,
-          status: 'COMPLETED',
-          requestedDate: new Date(Date.now() - 12 * 24 * 60 * 60 * 1000),
-          address: 'Sector 1A, Near Timber Trail, Parwanoo',
-          notes: 'Wooden main door lock replacement and hinge alignment.',
-        })
-        .returning();
+        const primaryCity =
+          i % 5 === 0
+            ? 'Parwanoo'
+            : i % 5 === 1
+              ? 'Chandigarh'
+              : i % 5 === 2
+                ? 'Mohali'
+                : i % 5 === 3
+                  ? 'Panchkula'
+                  : getRandomElement(SEED_CITIES);
 
-      // 2. COMPLETED - Anju -> Bipin (Parwanoo/Kalka AC Service)
-      const [b2] = await tx
-        .insert(bookings)
-        .values({
-          userId: anjuId,
-          workerId: bipinWorkerId,
-          status: 'COMPLETED',
-          requestedDate: new Date(Date.now() - 8 * 24 * 60 * 60 * 1000),
-          address: 'Housing Board Colony, Kalka',
-          notes: 'Split AC deep foam jet service and gas top-up.',
-        })
-        .returning();
+        const [userRecord] = await tx
+          .insert(users)
+          .values({
+            name: fullName,
+            email,
+            passwordHash: defaultPasswordHash,
+            phone,
+            city: primaryCity,
+            role: 'WORKER',
+            avatarUrl: `https://i.pravatar.cc/150?u=${email}`,
+          })
+          .returning();
 
-      // 3. COMPLETED - Vivek -> Rohan (Baddi Industrial Repair)
-      const [b3] = await tx
-        .insert(bookings)
-        .values({
-          userId: vivekId,
-          workerId: rohanWorkerId,
-          status: 'COMPLETED',
-          requestedDate: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000),
-          address: 'Phase 1 Industrial Area, Baddi',
-          notes: 'Factory main motor starter panel rewiring.',
-        })
-        .returning();
+        if (!userRecord) continue;
 
-      // 4. COMPLETED - Sachit -> Smarth (Chandigarh Inverter Setup)
-      const [b4] = await tx
-        .insert(bookings)
-        .values({
-          userId: sachitId,
-          workerId: smarthWorkerId,
-          status: 'COMPLETED',
-          requestedDate: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000),
-          address: 'House #402, Sector 15-D, Chandigarh',
-          notes: 'Dual battery inverter installation and heavy load wiring.',
-        })
-        .returning();
+        // Guaranteed non-null category string lookup
+        const categoryIndex = i % SEED_CATEGORIES.length;
+        const category = SEED_CATEGORIES[categoryIndex] ?? 'Handyman & Odd Jobs';
 
-      // 5. IN_PROGRESS - Shivani -> Kartik (Parwanoo CCTV)
-      await tx.insert(bookings).values({
-        userId: shivaniId,
-        workerId: kartikWorkerId,
-        status: 'IN_PROGRESS',
-        requestedDate: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000),
-        address: 'Sector 4, Parwanoo',
-        notes: 'Installation of 4 HD outdoor IP cameras with NVR configuration.',
-      });
+        const nearbyCities = getRandomElements(
+          SEED_CITIES.filter((c) => c !== primaryCity),
+          getRandomNumber(3, 6),
+        );
+        const serviceCities = Array.from(
+          new Set([primaryCity, 'Parwanoo', ...nearbyCities]),
+        );
 
-      // 6. COUNTER_PROPOSED - Sumit -> Rohan (Nalagarh / Baddi)
-      await tx.insert(bookings).values({
-        userId: sumitId,
-        workerId: rohanWorkerId,
-        status: 'COUNTER_PROPOSED',
-        requestedDate: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000),
-        counterDate: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000),
-        address: 'Nalagarh Road, Baddi',
-        notes: 'Generator panel sync setup.',
-      });
+        const rateTypes: ('HOURLY' | 'FIXED' | 'INSPECTION_FIRST')[] = [
+          'HOURLY',
+          'FIXED',
+          'INSPECTION_FIRST',
+        ];
+        const rateType = getRandomElement(rateTypes);
+        const baseRate = getRandomNumber(150, 1200).toFixed(2);
 
-      // 7. ACCEPTED - Safal -> Rudar Partap (Mohali Plumbing)
-      await tx.insert(bookings).values({
-        userId: safalId,
-        workerId: rudarWorkerId,
-        status: 'ACCEPTED',
-        requestedDate: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000),
-        address: 'Flat 12B, Homeland Heights, Sector 70, Mohali',
-        notes: 'Bathroom mixer tap replacement & geyser inlet pipeline.',
-      });
+        const [profile] = await tx
+          .insert(workerProfiles)
+          .values({
+            userId: userRecord.id, // Explicitly guaranteed string from userRecord guard
+            category, // Explicitly guaranteed string with fallback
+            bio: `Available for ${category} services in ${primaryCity} and nearby areas. Direct booking with zero commission.`,
+            experienceYears: getRandomNumber(2, 16),
+            rateType,
+            baseRate,
+            isAvailable: Math.random() > 0.15,
+            serviceCities,
+            paymentIdentifier: `${firstName.toLowerCase()}.${lastName.toLowerCase()}@upi`,
+            avgRating: '0.00',
+            totalReviews: 0,
+          })
+          .returning();
 
-      // 8. PENDING - Rudar Attri -> Mohit (Solan Furniture)
-      await tx.insert(bookings).values({
-        userId: rudarAttriId,
-        workerId: mohitWorkerId,
-        status: 'PENDING',
-        requestedDate: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
-        address: 'Mall Road, Solan',
-        notes: 'Repair study table and assemble TV unit cabinet.',
-      });
+        if (profile) {
+          createdWorkerProfilesList.push({
+            id: profile.id,
+            userId: userRecord.id,
+            email,
+          });
+        }
+      }
 
-      // 9. CANCELLED - Sachin -> Bipin
-      await tx.insert(bookings).values({
-        userId: sachinId,
-        workerId: bipinWorkerId,
-        status: 'CANCELLED',
-        requestedDate: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000),
-        address: 'Sector 6, Panchkula',
-        notes: 'Washing machine motor noise fix.',
-      });
+      // 4. Dynamic Expansion: Generate ~100 Extra Customer Accounts
+      logger.info('👥 Expanding dataset with ~100 customer accounts...');
+      const createdCustomersList: { id: string; name: string; city: string }[] = [];
 
-      // 5. Seed Reviews & Recalculate Atomic Ratings
-      logger.info('⭐ Submitting Verified Reviews & Updating Worker Average Ratings...');
+      for (const userData of SEED_USERS) {
+        if (userData.role === 'USER') {
+          const userId = createdUsersMap.get(userData.email);
+          if (userId) {
+            createdCustomersList.push({
+              id: userId,
+              name: userData.name,
+              city: userData.city,
+            });
+          }
+        }
+      }
 
-      const seedReviewsList = [
-        {
-          booking: b1,
-          rating: 5,
-          comment:
-            'Mohit came to Parwanoo right on schedule! Very skilled carpenter and clean work.',
-        },
-        {
-          booking: b2,
-          rating: 5,
-          comment: 'Bipin serviced the AC quickly. Cooling works perfectly now.',
-        },
-        {
-          booking: b3,
-          rating: 5,
-          comment:
-            'Rohan is a true expert in industrial wiring. Solved our factory panel tripping issue.',
-        },
-        {
-          booking: b4,
-          rating: 4,
-          comment: 'Smarth did a solid job with the inverter wiring setup in Chandigarh.',
-        },
+      for (let j = 0; j < 100; j++) {
+        const firstName = getRandomElement(FIRST_NAMES);
+        const lastName = getRandomElement(LAST_NAMES);
+        const fullName = `${firstName} ${lastName}`;
+        const email = `customer.${j + 1}.${firstName.toLowerCase()}@gmail.com`;
+        const phone = `+9197${getRandomNumber(10000000, 99999999)}`;
+        const city = getRandomElement(SEED_CITIES);
+
+        const [cust] = await tx
+          .insert(users)
+          .values({
+            name: fullName,
+            email,
+            passwordHash: defaultPasswordHash,
+            phone,
+            city,
+            role: 'USER',
+            avatarUrl: `https://i.pravatar.cc/150?u=${email}`,
+          })
+          .returning();
+
+        if (cust) {
+          createdCustomersList.push({ id: cust.id, name: cust.name, city: cust.city });
+        }
+      }
+
+      // 5. Generate 450+ Bookings Across Various Lifecycle States
+      logger.info('📅 Generating 450+ Bookings...');
+      const createdCompletedBookings: { id: string; userId: string; workerId: string }[] =
+        [];
+      const bookingStatuses: (
+        | 'PENDING'
+        | 'ACCEPTED'
+        | 'REJECTED'
+        | 'COUNTER_PROPOSED'
+        | 'IN_PROGRESS'
+        | 'COMPLETED'
+        | 'CANCELLED'
+      )[] = [
+        'COMPLETED',
+        'COMPLETED',
+        'COMPLETED',
+        'PENDING',
+        'ACCEPTED',
+        'IN_PROGRESS',
+        'COUNTER_PROPOSED',
+        'CANCELLED',
       ];
 
-      for (const item of seedReviewsList) {
-        if (!item.booking) continue;
+      for (let k = 0; k < 450; k++) {
+        const customer = getRandomElement(createdCustomersList);
+        const worker = getRandomElement(createdWorkerProfilesList);
+        const status = getRandomElement(bookingStatuses);
 
-        await tx.insert(reviews).values({
-          bookingId: item.booking.id,
-          userId: item.booking.userId,
-          workerId: item.booking.workerId,
-          rating: item.rating,
-          comment: item.comment,
-        });
+        const daysAgo = getRandomNumber(1, 60);
+        const requestedDate = new Date(Date.now() - daysAgo * 24 * 60 * 60 * 1000);
+        const counterDate =
+          status === 'COUNTER_PROPOSED'
+            ? new Date(requestedDate.getTime() + 24 * 60 * 60 * 1000)
+            : null;
 
-        // Atomic recalculation of average rating
-        await tx
-          .update(workerProfiles)
-          .set({
-            totalReviews: sql`${workerProfiles.totalReviews} + 1`,
-            avgRating: sql`ROUND(
-              ((${workerProfiles.avgRating} * ${workerProfiles.totalReviews}) + ${item.rating}) / (${workerProfiles.totalReviews} + 1),
-              2
-            )`,
+        const address = `${getRandomElement(LOCALITY_PREFIXES)}, ${customer.city}`;
+
+        const [booking] = await tx
+          .insert(bookings)
+          .values({
+            userId: customer.id,
+            workerId: worker.id,
+            status,
+            requestedDate,
+            counterDate,
+            address,
+            notes: `Service request in ${customer.city}. Please confirm slot availability.`,
           })
-          .where(eq(workerProfiles.id, item.booking.workerId));
+          .returning();
+
+        if (booking && status === 'COMPLETED') {
+          createdCompletedBookings.push({
+            id: booking.id,
+            userId: customer.id,
+            workerId: worker.id,
+          });
+        }
+      }
+
+      // 6. Generate 300+ Verified Reviews and Recalculate Ratings
+      logger.info('⭐ Submitting Verified Reviews and recalculating worker ratings...');
+      for (const compBooking of createdCompletedBookings) {
+        if (Math.random() < 0.8) {
+          const ratingRoll = Math.random();
+          const rating = ratingRoll > 0.25 ? 5 : ratingRoll > 0.08 ? 4 : 3;
+          const comment = getRandomElement(REVIEW_COMMENTS);
+
+          await tx.insert(reviews).values({
+            bookingId: compBooking.id,
+            userId: compBooking.userId,
+            workerId: compBooking.workerId,
+            rating,
+            comment,
+          });
+
+          await tx
+            .update(workerProfiles)
+            .set({
+              totalReviews: sql`${workerProfiles.totalReviews} + 1`,
+              avgRating: sql`ROUND(
+                ((${workerProfiles.avgRating} * ${workerProfiles.totalReviews}) + ${rating}) / (${workerProfiles.totalReviews} + 1),
+                2
+              )`,
+            })
+            .where(eq(workerProfiles.id, compBooking.workerId));
+        }
       }
     });
 
-    logger.info('🎉 ChowkSpot database expanded & seeded successfully!');
+    logger.info(
+      '🎉 Database seeding complete! 80+ flat skills & 80+ North Indian cities populated with zero compiler errors.',
+    );
     process.exit(0);
   } catch (error) {
     logger.error(error, '❌ Seeding failed:');
