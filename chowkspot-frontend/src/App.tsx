@@ -4,6 +4,7 @@ import { queryClient } from '@/lib/queryClient';
 import { AuthProvider } from '@/context/AuthContext';
 import { SocketProvider } from '@/context/SocketContext';
 import { AppRouter } from '@/routes';
+import { ServerWarmingBanner } from '@/components/ui/ServerWarmingBanner/ServerWarmingBanner';
 import '@/styles/index.css';
 
 export default function App() {
@@ -12,7 +13,9 @@ export default function App() {
       <AuthProvider>
         <SocketProvider>
           <BrowserRouter>
-            <AppRouter />
+            <ServerWarmingBanner>
+              <AppRouter />
+            </ServerWarmingBanner>
           </BrowserRouter>
         </SocketProvider>
       </AuthProvider>
