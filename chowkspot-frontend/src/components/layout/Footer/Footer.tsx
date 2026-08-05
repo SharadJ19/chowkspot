@@ -93,7 +93,7 @@ export const Footer: React.FC = () => {
             <div className={styles.contactList}>
               <div className={styles.contactItem}>
                 <MapPin size={14} className={styles.contactIcon} />
-                <span>Parwanoo, Himachal Pradesh 173220</span>
+                <span>Plot 42, Sector 17-E, Chandigarh Tech Enclave, UT 160017</span>
               </div>
               <div className={styles.contactItem}>
                 <Mail size={14} className={styles.contactIcon} />
@@ -101,7 +101,7 @@ export const Footer: React.FC = () => {
               </div>
               <div className={styles.contactItem}>
                 <Phone size={14} className={styles.contactIcon} />
-                <a href='tel:+919876543210'>+91 98765 43210</a>
+                <a href='tel:+917590889608'>+91 75908 89608</a>
               </div>
             </div>
           </div>
