@@ -1,0 +1,24 @@
+version: '1'
+services:
+  - type: web
+    name: chowkspot-backend
+    runtime: docker
+    region: singapore # Free tier region closest to India
+    plan: free
+    rootDir: chowkspot-backend # Path to your backend directory
+    dockerfilePath: Dockerfile
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 5000
+      - key: CLIENT_ORIGIN
+        sync: false # Set your Vercel/Netlify frontend URL in Render dashboard
+      - key: DATABASE_URL
+        sync: false # Set your Neon DB connection string in Render dashboard
+      - key: JWT_ACCESS_SECRET
+        generateValue: true # Generates base64 256-bit secret automatically
+      - key: JWT_REFRESH_SECRET
+        generateValue: true
