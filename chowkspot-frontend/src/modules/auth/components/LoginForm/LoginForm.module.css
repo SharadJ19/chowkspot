@@ -1,7 +1,7 @@
 .form {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-md);
+  gap: var(--spacing-sm);
   width: 100%;
 }
 
@@ -17,21 +17,25 @@
   font-weight: var(--font-weight-medium);
 }
 
-.footerText {
-  text-align: center;
-  font-size: var(--font-size-xs);
-  color: var(--color-text-muted);
+.passwordWrapper {
+  position: relative;
+  width: 100%;
 }
 
-.link {
-  color: var(--color-primary-600);
-  font-weight: var(--font-weight-semibold);
+.eyeBtn {
+  position: absolute;
+  right: 0.875rem;
+  top: 2rem;
+  color: var(--color-slate-400);
   transition: var(--transition-fast);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.link:hover {
-  color: var(--color-primary-700);
-  text-decoration: underline;
+.eyeBtn:hover {
+  color: var(--color-primary-600);
 }
 
 .fieldGroup {
@@ -74,5 +78,23 @@
 }
 
 .submitBtn {
-  margin-top: var(--spacing-xs);
+  margin-top: var(--spacing-2xs);
+}
+
+.footerText {
+  text-align: center;
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  margin-top: var(--spacing-2xs);
+}
+
+.link {
+  color: var(--color-primary-600);
+  font-weight: var(--font-weight-semibold);
+  transition: var(--transition-fast);
+}
+
+.link:hover {
+  color: var(--color-primary-700);
+  text-decoration: underline;
 }

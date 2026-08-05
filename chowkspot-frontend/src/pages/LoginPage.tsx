@@ -1,14 +1,14 @@
 import React from 'react';
+import { AuthLayout } from '@/modules/auth/components/AuthLayout/AuthLayout';
 import { LoginForm } from '@/modules/auth/components/LoginForm/LoginForm';
-import styles from './Pages.module.css';
 
 export const LoginPage: React.FC = () => {
   return (
-    <div className='container flex-center' style={{ minHeight: 'calc(100vh - 220px)' }}>
-      <div className={styles.authCard}>
-        <h2 className={styles.authTitle}>Welcome Back</h2>
-        <LoginForm />
-      </div>
-    </div>
+    <AuthLayout
+      title='Welcome Back'
+      subtitle='Log in to manage your active bookings, direct UPI settlements, and service requests.'
+    >
+      <LoginForm />
+    </AuthLayout>
   );
 };

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router';
-import { AlertCircle } from 'lucide-react';
+import { AlertCircle, Eye, EyeOff } from 'lucide-react';
 import { useAuthMutations } from '../../hooks/useAuthMutations';
 import { Input } from '@/components/ui/Input/Input';
 import { Button } from '@/components/ui/Button/Button';
@@ -13,6 +13,7 @@ export const LoginForm: React.FC = () => {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [fieldErrors, setFieldErrors] = useState<{ email?: string; password?: string }>(
     {},
   );
@@ -60,16 +61,32 @@ export const LoginForm: React.FC = () => {
         error={fieldErrors.email}
       />
 
-      <Input
-        label='Password'
-        type='password'
-        placeholder='••••••••'
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        error={fieldErrors.password}
-      />
+      <div className={styles.passwordWrapper}>
+        <Input
+          label='Password'
+          type={showPassword ? 'text' : 'password'}
+          placeholder='••••••••'
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          error={fieldErrors.password}
+        />
+        <button
+          type='button'
+          className={styles.eyeBtn}
+          onClick={() => setShowPassword(!showPassword)}
+          tabIndex={-1}
+          aria-label='Toggle password visibility'
+        >
+          {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+        </button>
+      </div>
 
-      <Button type='submit' isLoading={loginMutation.isPending} fullWidth>
+      <Button
+        type='submit'
+        isLoading={loginMutation.isPending}
+        fullWidth
+        className={styles.submitBtn}
+      >
         Log In
       </Button>
 

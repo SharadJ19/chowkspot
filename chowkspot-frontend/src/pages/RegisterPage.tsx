@@ -1,14 +1,14 @@
 import React from 'react';
+import { AuthLayout } from '@/modules/auth/components/AuthLayout/AuthLayout';
 import { RegisterForm } from '@/modules/auth/components/RegisterForm/RegisterForm';
-import styles from './Pages.module.css';
 
 export const RegisterPage: React.FC = () => {
   return (
-    <div className='container flex-center' style={{ minHeight: 'calc(100vh - 220px)' }}>
-      <div className={styles.authCard}>
-        <h2 className={styles.authTitle}>Create Account</h2>
-        <RegisterForm />
-      </div>
-    </div>
+    <AuthLayout
+      title='Create an Account'
+      subtitle='Join ChowkSpot today to connect directly with verified skilled professionals or start offering your services with zero platform fees.'
+    >
+      <RegisterForm />
+    </AuthLayout>
   );
 };

@@ -1,0 +1,199 @@
+.authContainer {
+  display: grid;
+  grid-template-columns: minmax(360px, 440px) 1fr;
+  height: calc(100vh - var(--navbar-height));
+  background-color: var(--color-bg-surface);
+  overflow: hidden;
+}
+
+@media (max-width: 900px) {
+  .authContainer {
+    grid-template-columns: 1fr;
+    height: auto;
+    min-height: calc(100vh - var(--navbar-height));
+  }
+}
+
+/* ==================== LEFT: BRANDING HERO CANVAS ==================== */
+.heroCanvas {
+  position: relative;
+  background-color: var(--color-slate-900);
+  color: var(--color-text-inverse);
+  padding: var(--spacing-2xl) var(--spacing-xl);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: var(--spacing-xl);
+  border-right: 1px solid var(--color-slate-800);
+}
+
+@media (max-width: 900px) {
+  .heroCanvas {
+    display: none;
+  }
+}
+
+.brandHeader {
+  display: flex;
+  flex-direction: column;
+}
+
+.tagline {
+  font-size: 0.7rem;
+  color: var(--color-primary-400);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+/* --- Highlight Card --- */
+.highlightCard {
+  background-color: var(--color-slate-800);
+  border: 1px solid var(--color-slate-700);
+  border-radius: var(--radius-xl);
+  padding: var(--spacing-md) var(--spacing-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  box-shadow: var(--shadow-sm);
+}
+
+.cardBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-2xs);
+  font-size: 0.7rem;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-primary-400);
+  background-color: rgba(16, 185, 129, 0.1);
+  padding: var(--spacing-3xs) var(--spacing-xs);
+  border-radius: var(--radius-full);
+  width: fit-content;
+}
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.avatarImg {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-full);
+  object-fit: cover;
+  border: 2px solid var(--color-primary-500);
+}
+
+.workerName {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-slate-100);
+}
+
+.workerRole {
+  font-size: var(--font-size-xs);
+  color: var(--color-primary-400);
+  font-weight: var(--font-weight-medium);
+}
+
+.workerMeta {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  font-size: 0.72rem;
+  color: var(--color-slate-400);
+  margin-top: 2px;
+}
+
+.location,
+.rating {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.rating {
+  color: #f59e0b;
+}
+
+.quote {
+  font-size: 0.75rem;
+  color: var(--color-slate-300);
+  line-height: var(--line-height-normal);
+  font-style: italic;
+}
+
+/* --- Perks List --- */
+.perksList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.perkItem {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-sm);
+}
+
+.perkIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background-color: var(--color-slate-800);
+  border: 1px solid var(--color-slate-700);
+  color: var(--color-primary-400);
+  border-radius: var(--radius-md);
+  flex-shrink: 0;
+}
+
+.perkItem h5 {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-slate-100);
+}
+
+.perkItem p {
+  font-size: 0.72rem;
+  color: var(--color-slate-400);
+  margin-top: 2px;
+  line-height: var(--line-height-normal);
+}
+
+/* ==================== RIGHT: FORM CONTAINER ==================== */
+.formContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: var(--spacing-2xl) var(--spacing-xl);
+  background-color: var(--color-bg-surface);
+  overflow-y: auto;
+}
+
+.formHeader {
+  width: 100%;
+  max-width: 380px;
+  margin-bottom: var(--spacing-md);
+}
+
+.formTitle {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-main);
+}
+
+.formSubtitle {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  margin-top: var(--spacing-3xs);
+  line-height: var(--line-height-normal);
+}
+
+.formWrapper {
+  width: 100%;
+  max-width: 380px;
+}
