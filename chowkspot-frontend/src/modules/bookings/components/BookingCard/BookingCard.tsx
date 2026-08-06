@@ -1,17 +1,20 @@
 import React from 'react';
 import {
   MapPin,
-  FileText,
   Calendar,
   Clock,
+  Phone,
   CreditCard,
   Star,
   Check,
   X,
   Play,
+  FileText,
+  UserCheck,
 } from 'lucide-react';
 import type { CustomerBookingItem, WorkerBookingItem, BookingStatus } from '@/types';
 import { BookingStatusBadge } from '../BookingStatusBadge/BookingStatusBadge';
+import { Avatar } from '@/components/ui/Avatar/Avatar';
 import { Button } from '@/components/ui/Button/Button';
 import { formatDateTime } from '@/utils/formatDate';
 import styles from './BookingCard.module.css';
@@ -24,8 +27,9 @@ export interface BookingCardProps {
     status: BookingStatus,
     counterDate?: string,
   ) => void;
-  onPayClick?: (upiId: string, payeeName: string) => void;
+  onPayClick?: (upiId: string, payeeName: string, amount?: number) => void;
   onReviewClick?: (bookingId: string) => void;
+  onViewDetails?: (item: CustomerBookingItem | WorkerBookingItem) => void;
 }
 
 export const BookingCard: React.FC<BookingCardProps> = ({
@@ -34,134 +38,183 @@ export const BookingCard: React.FC<BookingCardProps> = ({
   onStatusChange,
   onPayClick,
   onReviewClick,
+  onViewDetails,
 }) => {
   const { booking } = item;
   const isCustomer = !isWorkerRole;
 
-  const targetName = isCustomer
-    ? (item as CustomerBookingItem).workerProfile?.category || 'Worker'
-    : (item as WorkerBookingItem).user?.name || 'Customer';
+  // Extract counterpart information based on viewer role
+  const workerProf = (item as CustomerBookingItem).workerProfile;
+  const customerUser = (item as WorkerBookingItem).user;
 
-  const upiId = isCustomer
-    ? (item as CustomerBookingItem).workerProfile?.paymentIdentifier
-    : null;
+  const title = isCustomer
+    ? workerProf?.category || 'Professional Service'
+    : customerUser?.name || 'Customer';
+  const subtitle = isCustomer
+    ? workerProf?.rateType
+      ? `${workerProf.rateType} Service`
+      : 'Verified Pro'
+    : `Customer in ${customerUser?.city || 'Local'}`;
+  const avatarSrc = isCustomer ? undefined : customerUser?.avatarUrl;
+  const contactPhone = isCustomer ? undefined : customerUser?.phone;
+  const upiId = isCustomer ? workerProf?.paymentIdentifier : undefined;
 
   return (
     <div className={styles.card} data-status={booking.status}>
-      <div className={styles.header}>
-        <div>
-          <h4 className={styles.title}>{targetName}</h4>
-          <span className={styles.date}>
-            <Calendar size={13} />
-            <span>Requested: {formatDateTime(booking.requestedDate)}</span>
-          </span>
-          {booking.counterDate && (
-            <span className={styles.counterDate}>
-              <Clock size={13} />
-              <span>Counter: {formatDateTime(booking.counterDate)}</span>
-            </span>
-          )}
+      {/* Top Header Row */}
+      <div className={styles.topRow}>
+        <div className={styles.participantInfo}>
+          <Avatar name={title} src={avatarSrc} size='lg' />
+          <div className={styles.detailsGroup}>
+            <h4 className={styles.targetName}>{title}</h4>
+            <span className={styles.categoryOrRole}>{subtitle}</span>
+          </div>
         </div>
         <BookingStatusBadge status={booking.status} />
       </div>
 
-      <div className={styles.body}>
-        <div className={styles.detailRow}>
-          <MapPin size={14} className={styles.detailIcon} />
-          <span className={styles.detailText}>
-            <strong>Address:</strong> {booking.address}
-          </span>
+      {/* Information Grid Container */}
+      <div className={styles.metaGrid}>
+        <div className={styles.metaItem}>
+          <Calendar size={14} className={styles.metaIcon} />
+          <div className={styles.metaText}>
+            <strong>Requested Slot</strong>
+            <span>{formatDateTime(booking.requestedDate)}</span>
+          </div>
         </div>
-        {booking.notes && (
-          <div className={styles.detailRow}>
-            <FileText size={14} className={styles.detailIcon} />
-            <span className={styles.detailText}>
-              <strong>Notes:</strong> {booking.notes}
-            </span>
+
+        {booking.counterDate && (
+          <div
+            className={styles.metaItem}
+            style={{ color: 'var(--color-status-counter-text)' }}
+          >
+            <Clock size={14} className={styles.metaIcon} />
+            <div className={styles.metaText}>
+              <strong>Counter-Proposed Slot</strong>
+              <span>{formatDateTime(booking.counterDate)}</span>
+            </div>
+          </div>
+        )}
+
+        <div className={styles.metaItem}>
+          <MapPin size={14} className={styles.metaIcon} />
+          <div className={styles.metaText}>
+            <strong>Service Location</strong>
+            <span>{booking.address}</span>
+          </div>
+        </div>
+
+        {contactPhone && (
+          <div className={styles.metaItem}>
+            <Phone size={14} className={styles.metaIcon} />
+            <div className={styles.metaText}>
+              <strong>Contact Phone</strong>
+              <a
+                href={`tel:${contactPhone}`}
+                style={{ color: 'var(--color-primary-600)' }}
+              >
+                {contactPhone}
+              </a>
+            </div>
           </div>
         )}
       </div>
 
-      <div className={styles.actions}>
-        {/* Worker Actions */}
-        {isWorkerRole && booking.status === 'PENDING' && (
-          <>
-            <Button
-              size='sm'
-              variant='primary'
-              onClick={() => onStatusChange(booking.id, 'ACCEPTED')}
-            >
-              <Check size={14} />
-              <span>Accept</span>
-            </Button>
-            <Button
-              size='sm'
-              variant='danger'
-              onClick={() => onStatusChange(booking.id, 'REJECTED')}
-            >
-              <X size={14} />
-              <span>Reject</span>
-            </Button>
-          </>
-        )}
+      {booking.notes && (
+        <div className={styles.notesBox}>
+          <FileText size={13} style={{ display: 'inline', marginRight: 4 }} />
+          <strong>Notes:</strong> {booking.notes}
+        </div>
+      )}
 
-        {isWorkerRole && booking.status === 'ACCEPTED' && (
-          <Button
-            size='sm'
-            variant='secondary'
-            onClick={() => onStatusChange(booking.id, 'IN_PROGRESS')}
-          >
-            <Play size={14} />
-            <span>Start Work</span>
-          </Button>
-        )}
+      {/* Actions & Detail Expansion Row */}
+      <div className={styles.actionsRow}>
+        <Button variant='ghost' size='sm' onClick={() => onViewDetails?.(item)}>
+          <UserCheck size={14} />
+          <span>View Full Summary</span>
+        </Button>
 
-        {isWorkerRole && booking.status === 'IN_PROGRESS' && (
-          <Button
-            size='sm'
-            variant='primary'
-            onClick={() => onStatusChange(booking.id, 'COMPLETED')}
-          >
-            <Check size={14} />
-            <span>Complete Job</span>
-          </Button>
-        )}
-
-        {/* Customer Actions */}
-        {isCustomer &&
-          (booking.status === 'PENDING' || booking.status === 'ACCEPTED') && (
-            <Button
-              size='sm'
-              variant='outline'
-              onClick={() => onStatusChange(booking.id, 'CANCELLED')}
-            >
-              <X size={14} />
-              <span>Cancel Request</span>
-            </Button>
-          )}
-
-        {isCustomer && booking.status === 'COMPLETED' && (
-          <>
-            {upiId && (
+        <div className={styles.actionButtonGroup}>
+          {/* Worker State Machine Triggers */}
+          {isWorkerRole && booking.status === 'PENDING' && (
+            <>
               <Button
                 size='sm'
                 variant='primary'
-                onClick={() => onPayClick?.(upiId, targetName)}
+                onClick={() => onStatusChange(booking.id, 'ACCEPTED')}
               >
-                <CreditCard size={14} />
-                <span>Pay via UPI</span>
+                <Check size={14} />
+                <span>Accept Job</span>
               </Button>
-            )}
+              <Button
+                size='sm'
+                variant='danger'
+                onClick={() => onStatusChange(booking.id, 'REJECTED')}
+              >
+                <X size={14} />
+                <span>Decline</span>
+              </Button>
+            </>
+          )}
+
+          {isWorkerRole && booking.status === 'ACCEPTED' && (
             <Button
               size='sm'
-              variant='outline'
-              onClick={() => onReviewClick?.(booking.id)}
+              variant='secondary'
+              onClick={() => onStatusChange(booking.id, 'IN_PROGRESS')}
             >
-              <Star size={14} />
-              <span>Leave Review</span>
+              <Play size={14} />
+              <span>Start Work</span>
             </Button>
-          </>
-        )}
+          )}
+
+          {isWorkerRole && booking.status === 'IN_PROGRESS' && (
+            <Button
+              size='sm'
+              variant='primary'
+              onClick={() => onStatusChange(booking.id, 'COMPLETED')}
+            >
+              <Check size={14} />
+              <span>Mark Complete</span>
+            </Button>
+          )}
+
+          {/* Customer State Machine Triggers */}
+          {isCustomer &&
+            (booking.status === 'PENDING' || booking.status === 'ACCEPTED') && (
+              <Button
+                size='sm'
+                variant='outline'
+                onClick={() => onStatusChange(booking.id, 'CANCELLED')}
+              >
+                <X size={14} />
+                <span>Cancel Request</span>
+              </Button>
+            )}
+
+          {isCustomer && booking.status === 'COMPLETED' && (
+            <>
+              {upiId && (
+                <Button
+                  size='sm'
+                  variant='primary'
+                  onClick={() => onPayClick?.(upiId, title)}
+                >
+                  <CreditCard size={14} />
+                  <span>Pay via UPI</span>
+                </Button>
+              )}
+              <Button
+                size='sm'
+                variant='outline'
+                onClick={() => onReviewClick?.(booking.id)}
+              >
+                <Star size={14} />
+                <span>Leave Review</span>
+              </Button>
+            </>
+          )}
+        </div>
       </div>
     </div>
   );

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { useBookingQueries } from '@/modules/bookings/hooks/useBookingQueries';
 import { BookingCard } from '@/modules/bookings/components/BookingCard/BookingCard';
@@ -8,8 +8,10 @@ import { useUpiPayment } from '@/modules/payments/hooks/useUpiPayment';
 import { Modal } from '@/components/ui/Modal/Modal';
 import { RatingStars } from '@/components/ui/RatingStars/RatingStars';
 import { Button } from '@/components/ui/Button/Button';
+import { Badge } from '@/components/ui/Badge/Badge';
 import { useReviewQueries } from '@/modules/reviews/hooks/useReviewQueries';
-import type { BookingStatus } from '@/types';
+import type { BookingStatus, CustomerBookingItem, WorkerBookingItem } from '@/types';
+import { formatDateTime } from '@/utils/formatDate';
 import styles from './Pages.module.css';
 
 export const BookingsPage: React.FC = () => {
@@ -20,9 +22,21 @@ export const BookingsPage: React.FC = () => {
   const { activePayment, initiatePayment, clearPayment } = useUpiPayment();
   const { createReviewMutation } = useReviewQueries();
 
+  const [activeTab, setActiveTab] = useState<string>('ALL');
   const [reviewBookingId, setReviewBookingId] = useState<string | null>(null);
+  const [selectedDetailItem, setSelectedDetailItem] = useState<
+    CustomerBookingItem | WorkerBookingItem | null
+  >(null);
   const [rating, setRating] = useState(5);
   const [comment, setComment] = useState('');
+
+  const items = bookingsQuery.data || [];
+
+  // Filter items by status tab
+  const filteredItems = useMemo(() => {
+    if (activeTab === 'ALL') return items;
+    return items.filter((item) => item.booking.status === activeTab);
+  }, [items, activeTab]);
 
   const handleStatusChange = (
     bookingId: string,
@@ -52,26 +66,55 @@ export const BookingsPage: React.FC = () => {
     );
   }
 
-  const items = bookingsQuery.data || [];
-
   return (
     <div className={`container ${styles.pageContainer}`}>
-      <div>
-        <h1 className={styles.sectionTitle}>
-          {isWorkerRole ? 'Incoming Job Requests' : 'My Service Bookings'}
-        </h1>
-        <p className={styles.sectionSubtitle}>
-          Track and manage active booking lifecycles
-        </p>
+      <div className={styles.flexBetween} style={{ flexWrap: 'wrap', gap: '1rem' }}>
+        <div>
+          <h1 className={styles.sectionTitle}>
+            {isWorkerRole
+              ? 'Incoming Job Requests Command Center'
+              : 'My Service Bookings'}
+          </h1>
+          <p className={styles.sectionSubtitle}>
+            Manage job lifecycles, direct P2P payments, and service tracking
+          </p>
+        </div>
+        <Badge variant='primary'>
+          <span>Total Records: {items.length}</span>
+        </Badge>
       </div>
 
-      {items.length === 0 ? (
-        <p className={styles.emptyMessage}>No booking records found.</p>
+      {/* Filter Tabs Bar */}
+      <div
+        style={{ display: 'flex', gap: '8px', overflowX: 'auto', paddingBottom: '4px' }}
+      >
+        {['ALL', 'PENDING', 'ACCEPTED', 'IN_PROGRESS', 'COMPLETED', 'CANCELLED'].map(
+          (tab) => {
+            const count =
+              tab === 'ALL'
+                ? items.length
+                : items.filter((i) => i.booking.status === tab).length;
+            return (
+              <Button
+                key={tab}
+                size='sm'
+                variant={activeTab === tab ? 'primary' : 'outline'}
+                onClick={() => setActiveTab(tab)}
+              >
+                {tab.replace('_', ' ')} ({count})
+              </Button>
+            );
+          },
+        )}
+      </div>
+
+      {filteredItems.length === 0 ? (
+        <p className={styles.emptyMessage}>No booking records found for this filter.</p>
       ) : (
         <div
           style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-md)' }}
         >
-          {items.map((item) => (
+          {filteredItems.map((item) => (
             <BookingCard
               key={item.booking.id}
               item={item}
@@ -79,11 +122,13 @@ export const BookingsPage: React.FC = () => {
               onStatusChange={handleStatusChange}
               onPayClick={(upiId, payeeName) => initiatePayment(upiId, payeeName)}
               onReviewClick={(id) => setReviewBookingId(id)}
+              onViewDetails={(it) => setSelectedDetailItem(it)}
             />
           ))}
         </div>
       )}
 
+      {/* UPI Payment Modal */}
       {activePayment && (
         <UpiQrModal
           isOpen={!!activePayment}
@@ -94,6 +139,7 @@ export const BookingsPage: React.FC = () => {
         />
       )}
 
+      {/* Review Submission Modal */}
       <Modal
         isOpen={!!reviewBookingId}
         onClose={() => setReviewBookingId(null)}
@@ -133,6 +179,75 @@ export const BookingsPage: React.FC = () => {
             Submit Review
           </Button>
         </div>
+      </Modal>
+
+      {/* Detailed Booking Summary Modal */}
+      <Modal
+        isOpen={!!selectedDetailItem}
+        onClose={() => setSelectedDetailItem(null)}
+        title='Booking Full Summary & Audit'
+      >
+        {selectedDetailItem && (
+          <div
+            style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-md)' }}
+          >
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+              }}
+            >
+              <strong>Status:</strong>
+              <Badge variant='success'>{selectedDetailItem.booking.status}</Badge>
+            </div>
+            <div>
+              <strong>Service Address:</strong>
+              <p
+                style={{
+                  color: 'var(--color-slate-600)',
+                  fontSize: '14px',
+                  marginTop: '2px',
+                }}
+              >
+                {selectedDetailItem.booking.address}
+              </p>
+            </div>
+            <div>
+              <strong>Requested Slot Timestamp:</strong>
+              <p
+                style={{
+                  color: 'var(--color-slate-600)',
+                  fontSize: '14px',
+                  marginTop: '2px',
+                }}
+              >
+                {formatDateTime(selectedDetailItem.booking.requestedDate)}
+              </p>
+            </div>
+            {selectedDetailItem.booking.notes && (
+              <div>
+                <strong>Task Instructions / Notes:</strong>
+                <p
+                  style={{
+                    color: 'var(--color-slate-600)',
+                    fontSize: '14px',
+                    marginTop: '2px',
+                  }}
+                >
+                  {selectedDetailItem.booking.notes}
+                </p>
+              </div>
+            )}
+            <div
+              style={{ paddingTop: '12px', borderTop: '1px solid var(--color-border)' }}
+            >
+              <span style={{ fontSize: '12px', color: 'var(--color-text-muted)' }}>
+                Booking ID: {selectedDetailItem.booking.id}
+              </span>
+            </div>
+          </div>
+        )}
       </Modal>
     </div>
   );
