@@ -19,36 +19,41 @@ export const WorkerCard: React.FC<WorkerCardProps> = ({ worker, onBookClick }) =
 
   return (
     <div className={styles.card}>
-      <div className={styles.header}>
-        <Avatar name={worker.user.name} src={worker.user.avatarUrl} size='lg' />
-        <div className={styles.info}>
-          <div className={styles.topLine}>
-            <span className={styles.name}>{worker.user.name}</span>
-            <Badge variant={worker.isAvailable ? 'success' : 'muted'}>
-              {worker.isAvailable ? 'Available' : 'Busy'}
-            </Badge>
+      <div>
+        <div className={styles.header}>
+          <Avatar name={worker.user.name} src={worker.user.avatarUrl} size='lg' />
+          <div className={styles.info}>
+            <div className={styles.topLine}>
+              <span className={styles.name}>{worker.user.name}</span>
+              <Badge variant={worker.isAvailable ? 'success' : 'muted'}>
+                {worker.isAvailable ? 'Available' : 'Busy'}
+              </Badge>
+            </div>
+            <span className={styles.category}>{worker.category}</span>
+            <span className={styles.cities}>
+              <MapPin size={12} style={{ marginTop: 2, flexShrink: 0 }} />
+              <span>{worker.serviceCities.join(', ')}</span>
+            </span>
           </div>
-          <span className={styles.category}>{worker.category}</span>
-          <span className={styles.cities}>
-            <MapPin size={12} />
-            <span>{worker.serviceCities.join(', ')}</span>
-          </span>
+        </div>
+
+        <p className={styles.bio}>
+          {worker.bio ||
+            'Experienced skilled professional available for immediate local hire.'}
+        </p>
+
+        <div className={styles.middleSection}>
+          <div className={styles.ratingRow}>
+            <RatingStars rating={parseFloat(worker.avgRating)} showValue />
+            <span className={styles.reviewCount}>({worker.totalReviews})</span>
+          </div>
         </div>
       </div>
 
-      <p className={styles.bio}>
-        {worker.bio || 'Experienced skilled professional available for local hire.'}
-      </p>
-
-      <div className={styles.ratingRow}>
-        <RatingStars rating={parseFloat(worker.avgRating)} showValue />
-        <span className={styles.reviewCount}>({worker.totalReviews} reviews)</span>
-      </div>
-
       <div className={styles.footer}>
-        <div>
+        <div className={styles.rateWrapper}>
           <span className={styles.rate}>{formatCurrency(worker.baseRate)}</span>
-          <span className={styles.rateType}>/ {worker.rateType}</span>
+          <span className={styles.rateType}>{worker.rateType}</span>
         </div>
         <div className={styles.actionGroup}>
           <Button
@@ -64,8 +69,8 @@ export const WorkerCard: React.FC<WorkerCardProps> = ({ worker, onBookClick }) =
             onClick={() => onBookClick?.(worker)}
             disabled={!worker.isAvailable}
           >
-            <Calendar size={14} />
-            <span>Book Now</span>
+            <Calendar size={13} />
+            <span>Book</span>
           </Button>
         </div>
       </div>
