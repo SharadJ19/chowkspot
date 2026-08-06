@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { CheckCircle2, Shield, Wrench, Upload } from 'lucide-react';
+import { CheckCircle2, Shield, Wrench } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { usersApi } from '@/modules/users/api/users.api';
 import { Input } from '@/components/ui/Input/Input';
 import { Button } from '@/components/ui/Button/Button';
-import { Avatar } from '@/components/ui/Avatar/Avatar';
 import { Badge } from '@/components/ui/Badge/Badge';
+import { AvatarUploader } from '@/components/ui/AvatarUploader/AvatarUploader';
 import { APP_CONSTANTS } from '@/config/constants';
-import { uploadToCloudinary } from '@/utils/cloudinary';
 import type { AuthUser, WorkerProfile, ApiResponse } from '@/types';
 import styles from './ProfilePage.module.css';
 
@@ -20,7 +19,7 @@ export const ProfilePage: React.FC = () => {
   const [city, setCity] = useState<string>(user?.city || APP_CONSTANTS.CITIES[0]);
   const [avatarUrl, setAvatarUrl] = useState(user?.avatarUrl || '');
 
-  // Worker specific fields with explicit string typing
+  // Worker specific fields
   const [category, setCategory] = useState<string>(APP_CONSTANTS.CATEGORIES[0]);
   const [bio, setBio] = useState('');
   const [experienceYears, setExperienceYears] = useState(2);
@@ -30,7 +29,6 @@ export const ProfilePage: React.FC = () => {
   const [baseRate, setBaseRate] = useState('500.00');
   const [paymentIdentifier, setPaymentIdentifier] = useState('');
 
-  const [isUploading, setIsUploading] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
@@ -57,21 +55,6 @@ export const ProfilePage: React.FC = () => {
         },
       );
   }, []);
-
-  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    try {
-      setIsUploading(true);
-      const secureUrl = await uploadToCloudinary(file);
-      setAvatarUrl(secureUrl);
-    } catch (err) {
-      console.error('Image upload failed', err);
-    } finally {
-      setIsUploading(false);
-    }
-  };
 
   const handleProfileSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -108,48 +91,30 @@ export const ProfilePage: React.FC = () => {
 
   return (
     <div className={`container ${styles.profileContainer}`}>
-      <div className={styles.profileHeader}>
-        <div style={{ position: 'relative' }}>
-          <Avatar name={name || 'User'} src={avatarUrl} size='xl' />
-          <label
-            style={{
-              position: 'absolute',
-              bottom: 0,
-              right: 0,
-              backgroundColor: 'var(--color-primary-600)',
-              color: '#fff',
-              borderRadius: '50%',
-              padding: '6px',
-              cursor: 'pointer',
-              boxShadow: 'var(--shadow-sm)',
-            }}
-            title='Upload Avatar'
-          >
-            <Upload size={14} />
-            <input
-              type='file'
-              accept='image/*'
-              onChange={handleImageUpload}
-              style={{ display: 'none' }}
-            />
-          </label>
-        </div>
-        <div className={styles.userInfo}>
-          <h1 className={styles.userName}>{name}</h1>
-          <p className={styles.userMeta}>
-            {user?.email} • {phone} • {city}
-          </p>
-          <div className={styles.roleBadgeWrapper}>
-            <Badge variant={isWorker ? 'primary' : 'secondary'}>
-              {isWorker ? <Wrench size={12} /> : <Shield size={12} />}
-              <span>Role: {user?.role}</span>
-            </Badge>
-          </div>
-        </div>
-      </div>
-
       <form onSubmit={handleProfileSubmit} className={styles.profileForm}>
-        <h3 className={styles.formTitle}>General Account Information</h3>
+        <div className={styles.flexBetween} style={{ alignItems: 'flex-start' }}>
+          <div>
+            <h2
+              className={styles.formTitle}
+              style={{ borderBottom: 'none', paddingBottom: 0 }}
+            >
+              Account Profile
+            </h2>
+            <p
+              style={{
+                fontSize: 'var(--font-size-xs)',
+                color: 'var(--color-text-muted)',
+                marginTop: 2,
+              }}
+            >
+              Manage your personal details and avatar settings
+            </p>
+          </div>
+          <Badge variant={isWorker ? 'primary' : 'secondary'}>
+            {isWorker ? <Wrench size={12} /> : <Shield size={12} />}
+            <span>Role: {user?.role}</span>
+          </Badge>
+        </div>
 
         {successMessage && (
           <div className={styles.successBanner}>
@@ -157,6 +122,16 @@ export const ProfilePage: React.FC = () => {
             <span>{successMessage}</span>
           </div>
         )}
+
+        {/* Modern Cloudinary Avatar Uploader UI */}
+        <div className={styles.formArea}>
+          <label className={styles.formLabel}>Profile Photo / Avatar</label>
+          <AvatarUploader
+            currentAvatarUrl={avatarUrl}
+            name={name || 'User'}
+            onAvatarChange={(url) => setAvatarUrl(url)}
+          />
+        </div>
 
         <Input
           label='Full Name'
@@ -186,14 +161,6 @@ export const ProfilePage: React.FC = () => {
             ))}
           </select>
         </div>
-
-        {isUploading && (
-          <p
-            style={{ fontSize: 'var(--font-size-xs)', color: 'var(--color-primary-600)' }}
-          >
-            Uploading avatar image to Cloudinary...
-          </p>
-        )}
 
         {/* Worker Specific Configuration Fields */}
         {isWorker && (
@@ -267,7 +234,7 @@ export const ProfilePage: React.FC = () => {
           </>
         )}
 
-        <Button type='submit' isLoading={isSaving || isUploading} fullWidth>
+        <Button type='submit' isLoading={isSaving} fullWidth>
           Save All Changes
         </Button>
       </form>
