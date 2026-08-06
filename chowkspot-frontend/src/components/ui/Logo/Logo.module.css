@@ -3,22 +3,24 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  width: auto; /* Allow auto scaling based on height */
 }
 
 .logo svg {
-  width: 100%;
+  width: auto;
   height: 100%;
+  display: block;
 }
 
 /* Common preset sizes */
 .sm {
-  height: 24px;
+  height: 28px;
 }
 
 .md {
-  height: 36px;
+  height: 40px;
 }
 
 .lg {
-  height: 48px;
+  height: 54px; /* Significantly increased so ChowkSpot text matches nav link scale */
 }
