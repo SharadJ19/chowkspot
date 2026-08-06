@@ -10,6 +10,7 @@ import { globalRateLimiter, authRateLimiter } from '@/middlewares/rateLimiter.js
 import { xssSanitizer } from '@/middlewares/sanitize.js';
 import { globalErrorHandler } from '@/middlewares/errorHandler.js';
 
+import adminRoutes from '@/modules/admin/admin.routes.js';
 import authRoutes from '@/modules/auth/auth.routes.js';
 import userRoutes from '@/modules/users/users.routes.js';
 import workerRoutes from '@/modules/workers/workers.routes.js';
@@ -57,6 +58,7 @@ app.use('/api/users', userRoutes);
 app.use('/api/workers', workerRoutes);
 app.use('/api/bookings', bookingRoutes);
 app.use('/api/reviews', reviewRoutes);
+app.use('/api/admin', adminRoutes);
 
 // Global Error Handler
 app.use(globalErrorHandler);
