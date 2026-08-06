@@ -10,6 +10,8 @@ const envSchema = z.object({
   DATABASE_URL: z.url({
     message: 'DATABASE_URL must be a valid PostgreSQL connection string',
   }),
+  MAIL_USER: z.email().default('shradchandele2005@gmail.com'),
+  MAIL_PASS: z.string().min(16, 'App password must be 16 characters'),
   JWT_ACCESS_SECRET: z
     .string()
     .min(16, 'JWT_ACCESS_SECRET must be at least 16 characters'),

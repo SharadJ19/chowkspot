@@ -54,3 +54,21 @@
   color: var(--color-primary-700);
   text-decoration: underline;
 }
+
+.forgotPasswordRow {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: -4px;
+  margin-bottom: 2px;
+}
+
+.forgotPasswordLink {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  transition: var(--transition-fast);
+}
+
+.forgotPasswordLink:hover {
+  color: var(--color-primary-600);
+  text-decoration: underline;
+}

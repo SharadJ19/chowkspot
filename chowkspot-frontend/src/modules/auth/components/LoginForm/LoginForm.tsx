@@ -81,6 +81,13 @@ export const LoginForm: React.FC = () => {
         }
       />
 
+      {/* Forgot Password Link Row */}
+      <div className={styles.forgotPasswordRow}>
+        <Link to='/forgot-password' className={styles.forgotPasswordLink}>
+          Forgot password?
+        </Link>
+      </div>
+
       <Button
         type='submit'
         isLoading={loginMutation.isPending}

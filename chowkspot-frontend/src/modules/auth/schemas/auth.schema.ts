@@ -15,6 +15,15 @@ export const registerSchema = z.object({
   role: z.enum([APP_CONSTANTS.ROLES.USER, APP_CONSTANTS.ROLES.WORKER]).default('USER'),
   avatarUrl: z.url('Invalid image URL').optional().or(z.literal('')),
 });
+export const forgotPasswordSchema = z.object({
+  email: z.email('Invalid email address'),
+});
+
+export const resetPasswordSchema = z.object({
+  newPassword: z.string().min(8, 'Password must be at least 8 characters'),
+});
 
 export type LoginSchemaType = z.infer<typeof loginSchema>;
 export type RegisterSchemaType = z.infer<typeof registerSchema>;
+export type ForgotPasswordSchemaType = z.infer<typeof forgotPasswordSchema>;
+export type ResetPasswordSchemaType = z.infer<typeof resetPasswordSchema>;

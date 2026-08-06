@@ -12,6 +12,9 @@ import { ProfilePage } from '@/pages/ProfilePage';
 import { AdminPage } from '@/pages/AdminPage';
 import { LoginPage } from '@/pages/LoginPage';
 import { RegisterPage } from '@/pages/RegisterPage';
+import { VerifyEmailPage } from '@/pages/VerifyEmailPage';
+import { ForgotPasswordPage } from '@/pages/ForgotPasswordPage';
+import { ResetPasswordPage } from '@/pages/ResetPasswordPage';
 import { NotFoundPage } from '@/pages/NotFoundPage';
 
 export const AppRouter = () => {
@@ -24,7 +27,10 @@ export const AppRouter = () => {
         <Route path='/worker/:id' element={<WorkerDetailPage />} />
         <Route path='/login' element={<LoginPage />} />
         <Route path='/register' element={<RegisterPage />} />
-
+        // Inside AppRouter in src/routes/index.tsx
+        <Route path='/verify-email' element={<VerifyEmailPage />} />
+        <Route path='/forgot-password' element={<ForgotPasswordPage />} />
+        <Route path='/reset-password' element={<ResetPasswordPage />} />
         {/* Protected Authenticated Routes */}
         <Route element={<ProtectedRoute />}>
           <Route path='/bookings' element={<BookingsPage />} />
@@ -35,7 +41,6 @@ export const AppRouter = () => {
             <Route path='/admin' element={<AdminPage />} />
           </Route>
         </Route>
-
         {/* 404 Fallback */}
         <Route path='*' element={<NotFoundPage />} />
       </Route>
