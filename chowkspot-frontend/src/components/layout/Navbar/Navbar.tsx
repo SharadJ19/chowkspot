@@ -18,11 +18,13 @@ export const Navbar: React.FC = () => {
 
   return (
     <header className={styles.navbar}>
-      <div className={`container ${styles.container}`}>
+      <div className={styles.container}>
+        {/* Brand Logo with proper lg scale */}
         <Link to='/' className={styles.brand} aria-label='ChowkSpot Home'>
           <Logo variant='full' size='lg' />
         </Link>
 
+        {/* Central Navigation Links */}
         <nav className={styles.navLinks}>
           <NavLink
             to='/'
@@ -55,6 +57,7 @@ export const Navbar: React.FC = () => {
           )}
         </nav>
 
+        {/* Right Authentication / User Profile Group */}
         <div className={styles.authGroup}>
           {isAuthenticated && user ? (
             <div className={styles.authGroup}>
