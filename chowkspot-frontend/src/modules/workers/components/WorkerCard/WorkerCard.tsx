@@ -1,3 +1,5 @@
+// FILE: src/modules/workers/components/WorkerCard/WorkerCard.tsx
+
 import React from 'react';
 import { useNavigate } from 'react-router';
 import { MapPin, Calendar } from 'lucide-react';
@@ -30,10 +32,19 @@ export const WorkerCard: React.FC<WorkerCardProps> = ({ worker, onBookClick }) =
               </Badge>
             </div>
             <span className={styles.category}>{worker.category}</span>
-            <span className={styles.cities}>
-              <MapPin size={12} style={{ marginTop: 2, flexShrink: 0 }} />
-              <span>{worker.serviceCities.join(', ')}</span>
-            </span>
+
+            {/* Styled City Badges Container */}
+            <div className={styles.citiesList}>
+              <MapPin
+                size={12}
+                style={{ color: 'var(--color-primary-600)', flexShrink: 0 }}
+              />
+              {worker.serviceCities.map((city) => (
+                <span key={city} className={styles.cityBadge}>
+                  {city}
+                </span>
+              ))}
+            </div>
           </div>
         </div>
 

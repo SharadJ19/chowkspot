@@ -1,3 +1,5 @@
+// FILE: src/pages/WorkerDetailPage.tsx
+
 import React, { useState } from 'react';
 import { useParams } from 'react-router';
 import { MapPin, Calendar, Briefcase, ShieldCheck } from 'lucide-react';
@@ -84,12 +86,27 @@ export const WorkerDetailPage: React.FC = () => {
               </Badge>
             </div>
             <span className={styles.categoryText}>{worker.category}</span>
-            <span className={styles.locationMeta}>
-              <MapPin size={13} />
-              <span>
-                {worker.user.city} • Serves: {worker.serviceCities.join(', ')}
+
+            {/* Styled Service Hub Badges */}
+            <div className={styles.citiesList}>
+              <MapPin
+                size={13}
+                style={{ color: 'var(--color-primary-600)', flexShrink: 0 }}
+              />
+              <span
+                style={{
+                  fontSize: 'var(--font-size-xs)',
+                  color: 'var(--color-text-muted)',
+                }}
+              >
+                Base: {worker.user.city} • Serves:
               </span>
-            </span>
+              {worker.serviceCities.map((city) => (
+                <span key={city} className={styles.cityBadge}>
+                  {city}
+                </span>
+              ))}
+            </div>
 
             <div className={styles.ratingRow}>
               <RatingStars rating={parseFloat(worker.avgRating)} showValue />
