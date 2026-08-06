@@ -2,7 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { useSearchParams } from 'react-router';
 import { useWorkerQueries } from '@/modules/workers/hooks/useWorkerQueries';
 import { WorkerCard } from '@/modules/workers/components/WorkerCard/WorkerCard';
-import { WorkerFilters } from '@/modules/workers/components/WorkerFilters/WorkerFilters';
+import { WorkerSidebarFilters } from '@/modules/workers/components/WorkerSidebarFilters/WorkerSidebarFilters';
 import { Pagination } from '@/components/ui/Pagination/Pagination';
 import { Spinner } from '@/components/ui/Spinner/Spinner';
 import { Modal } from '@/components/ui/Modal/Modal';
@@ -22,8 +22,9 @@ export const SearchPage: React.FC = () => {
   const category = searchParams.get('category') || '';
   const city = searchParams.get('city') || '';
   const availableOnly = searchParams.get('availableOnly') === 'true';
-  const rateType = searchParams.get('rateType') || '';
-  const minRating = searchParams.get('minRating') || '';
+  const searchName = searchParams.get('name') || '';
+  const minExperience = parseInt(searchParams.get('minExp') || '0', 10);
+  const maxPrice = parseInt(searchParams.get('maxPrice') || '3000', 10);
   const pageParam = parseInt(searchParams.get('page') || '1', 10);
 
   const [currentPage, setCurrentPage] = useState<number>(
@@ -39,20 +40,29 @@ export const SearchPage: React.FC = () => {
   const [notes, setNotes] = useState('');
   const [bookingError, setBookingError] = useState<string | null>(null);
 
-  // Client-side filtering for extra options (rateType & minRating)
+  // Client-side filtering for search by name, experience years slider, and price range slider
   const filteredWorkers = useMemo(() => {
     const rawList = searchWorkersQuery.data || [];
     return rawList.filter((worker) => {
-      if (rateType && worker.rateType !== rateType) return false;
-      if (minRating) {
-        const ratingNum = parseFloat(worker.avgRating) || 0;
-        if (ratingNum < parseFloat(minRating)) return false;
+      // Name filter
+      if (
+        searchName &&
+        !worker.user.name.toLowerCase().includes(searchName.toLowerCase()) &&
+        !worker.category.toLowerCase().includes(searchName.toLowerCase())
+      ) {
+        return false;
       }
+      // Experience filter
+      if (worker.experienceYears < minExperience) return false;
+
+      // Price filter
+      const rateNum = parseFloat(worker.baseRate) || 0;
+      if (rateNum > maxPrice) return false;
+
       return true;
     });
-  }, [searchWorkersQuery.data, rateType, minRating]);
+  }, [searchWorkersQuery.data, searchName, minExperience, maxPrice]);
 
-  // Pagination calculation
   const totalPages = Math.ceil(filteredWorkers.length / ITEMS_PER_PAGE) || 1;
   const paginatedWorkers = useMemo(() => {
     const start = (currentPage - 1) * ITEMS_PER_PAGE;
@@ -98,80 +108,103 @@ export const SearchPage: React.FC = () => {
         </p>
       </div>
 
-      <WorkerFilters
-        selectedCategory={category}
-        selectedCity={city}
-        availableOnly={availableOnly}
-        rateType={rateType}
-        minRating={minRating}
-        onCategoryChange={(val) => {
-          if (val) searchParams.set('category', val);
-          else searchParams.delete('category');
-          searchParams.delete('page');
-          setCurrentPage(1);
-          setSearchParams(searchParams);
+      {/* E-Commerce Two-Column Layout Container */}
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: '300px 1fr',
+          gap: 'var(--spacing-xl)',
+          alignItems: 'start',
         }}
-        onCityChange={(val) => {
-          if (val) searchParams.set('city', val);
-          else searchParams.delete('city');
-          searchParams.delete('page');
-          setCurrentPage(1);
-          setSearchParams(searchParams);
-        }}
-        onAvailableOnlyChange={(val) => {
-          if (val) searchParams.set('availableOnly', 'true');
-          else searchParams.delete('availableOnly');
-          searchParams.delete('page');
-          setCurrentPage(1);
-          setSearchParams(searchParams);
-        }}
-        onRateTypeChange={(val) => {
-          if (val) searchParams.set('rateType', val);
-          else searchParams.delete('rateType');
-          searchParams.delete('page');
-          setCurrentPage(1);
-          setSearchParams(searchParams);
-        }}
-        onMinRatingChange={(val) => {
-          if (val) searchParams.set('minRating', val);
-          else searchParams.delete('minRating');
-          searchParams.delete('page');
-          setCurrentPage(1);
-          setSearchParams(searchParams);
-        }}
-        onReset={() => {
-          setSearchParams({});
-          setCurrentPage(1);
-        }}
-        totalResults={filteredWorkers.length}
-      />
+        className='searchLayoutGrid'
+      >
+        {/* Left Sidebar Filters */}
+        <WorkerSidebarFilters
+          searchName={searchName}
+          selectedCategory={category}
+          selectedCity={city}
+          availableOnly={availableOnly}
+          minExperience={minExperience}
+          maxPrice={maxPrice}
+          onSearchNameChange={(val) => {
+            if (val) searchParams.set('name', val);
+            else searchParams.delete('name');
+            searchParams.delete('page');
+            setCurrentPage(1);
+            setSearchParams(searchParams);
+          }}
+          onCategoryChange={(val) => {
+            if (val) searchParams.set('category', val);
+            else searchParams.delete('category');
+            searchParams.delete('page');
+            setCurrentPage(1);
+            setSearchParams(searchParams);
+          }}
+          onCityChange={(val) => {
+            if (val) searchParams.set('city', val);
+            else searchParams.delete('city');
+            searchParams.delete('page');
+            setCurrentPage(1);
+            setSearchParams(searchParams);
+          }}
+          onAvailableOnlyChange={(val) => {
+            if (val) searchParams.set('availableOnly', 'true');
+            else searchParams.delete('availableOnly');
+            searchParams.delete('page');
+            setCurrentPage(1);
+            setSearchParams(searchParams);
+          }}
+          onMinExperienceChange={(val) => {
+            if (val > 0) searchParams.set('minExp', val.toString());
+            else searchParams.delete('minExp');
+            searchParams.delete('page');
+            setCurrentPage(1);
+            setSearchParams(searchParams);
+          }}
+          onMaxPriceChange={(val) => {
+            if (val < 3000) searchParams.set('maxPrice', val.toString());
+            else searchParams.delete('maxPrice');
+            searchParams.delete('page');
+            setCurrentPage(1);
+            setSearchParams(searchParams);
+          }}
+          onReset={() => {
+            setSearchParams({});
+            setCurrentPage(1);
+          }}
+          totalResults={filteredWorkers.length}
+        />
 
-      {searchWorkersQuery.isLoading ? (
-        <div className={styles.centerLoading}>
-          <Spinner size='lg' />
-        </div>
-      ) : paginatedWorkers.length > 0 ? (
-        <>
-          <div className='grid-auto-fit'>
-            {paginatedWorkers.map((worker) => (
-              <WorkerCard
-                key={worker.id}
-                worker={worker}
-                onBookClick={(w) => setSelectedWorker(w)}
+        {/* Right Product Grid */}
+        <div>
+          {searchWorkersQuery.isLoading ? (
+            <div className={styles.centerLoading}>
+              <Spinner size='lg' />
+            </div>
+          ) : paginatedWorkers.length > 0 ? (
+            <>
+              <div className='grid-auto-fit'>
+                {paginatedWorkers.map((worker) => (
+                  <WorkerCard
+                    key={worker.id}
+                    worker={worker}
+                    onBookClick={(w) => setSelectedWorker(w)}
+                  />
+                ))}
+              </div>
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={handlePageChange}
               />
-            ))}
-          </div>
-          <Pagination
-            currentPage={currentPage}
-            totalPages={totalPages}
-            onPageChange={handlePageChange}
-          />
-        </>
-      ) : (
-        <p className={styles.emptyMessage}>
-          No service providers matched your search filters.
-        </p>
-      )}
+            </>
+          ) : (
+            <p className={styles.emptyMessage}>
+              No service providers matched your search filters.
+            </p>
+          )}
+        </div>
+      </div>
 
       {/* Booking Modal */}
       <Modal
