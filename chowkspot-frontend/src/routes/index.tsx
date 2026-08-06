@@ -3,11 +3,13 @@
 import { Routes, Route } from 'react-router';
 import { MainLayout } from '@/components/layout/MainLayout';
 import { ProtectedRoute } from '@/components/guards/ProtectedRoute';
+import { RoleGuard } from '@/components/guards/RoleGuard';
 import { HomePage } from '@/pages/HomePage';
 import { SearchPage } from '@/pages/SearchPage';
 import { WorkerDetailPage } from '@/pages/WorkerDetailPage';
 import { BookingsPage } from '@/pages/BookingsPage';
 import { ProfilePage } from '@/pages/ProfilePage';
+import { AdminPage } from '@/pages/AdminPage';
 import { LoginPage } from '@/pages/LoginPage';
 import { RegisterPage } from '@/pages/RegisterPage';
 import { NotFoundPage } from '@/pages/NotFoundPage';
@@ -27,6 +29,11 @@ export const AppRouter = () => {
         <Route element={<ProtectedRoute />}>
           <Route path='/bookings' element={<BookingsPage />} />
           <Route path='/profile' element={<ProfilePage />} />
+
+          {/* Admin Role Guard Route */}
+          <Route element={<RoleGuard allowedRoles={['ADMIN']} />}>
+            <Route path='/admin' element={<AdminPage />} />
+          </Route>
         </Route>
 
         {/* 404 Fallback */}

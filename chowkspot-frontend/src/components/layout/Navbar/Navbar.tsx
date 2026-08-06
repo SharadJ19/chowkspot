@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink, Link, useNavigate } from 'react-router';
-import { Search, Calendar, LogOut } from 'lucide-react';
+import { Search, Calendar, ShieldAlert, LogOut } from 'lucide-react'; // Added ShieldAlert icon
 import { useAuth } from '@/hooks/useAuth';
 import { Avatar } from '@/components/ui/Avatar/Avatar';
 import { Button } from '@/components/ui/Button/Button';
@@ -19,7 +19,7 @@ export const Navbar: React.FC = () => {
   return (
     <header className={styles.navbar}>
       <div className={styles.container}>
-        {/* Brand Logo with proper lg scale */}
+        {/* Brand Logo */}
         <Link to='/' className={styles.brand} aria-label='ChowkSpot Home'>
           <Logo variant='full' size='lg' />
         </Link>
@@ -53,6 +53,20 @@ export const Navbar: React.FC = () => {
             >
               <Calendar size={16} />
               <span>My Bookings</span>
+            </NavLink>
+          )}
+
+          {/* ADMIN COMMAND CENTER LINK */}
+          {isAuthenticated && user?.role === 'ADMIN' && (
+            <NavLink
+              to='/admin'
+              className={({ isActive }) =>
+                `${styles.link} ${isActive ? styles.activeLink : ''}`
+              }
+              style={{ color: 'var(--color-error)', fontWeight: 'bold' }}
+            >
+              <ShieldAlert size={16} />
+              <span>Admin Panel</span>
             </NavLink>
           )}
         </nav>
