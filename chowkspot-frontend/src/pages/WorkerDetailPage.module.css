@@ -1,0 +1,182 @@
+.detailContainer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xl);
+  max-width: 880px;
+  margin: var(--spacing-xl) auto;
+  padding: 0 var(--spacing-md);
+}
+
+.profileCard {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-xl);
+  padding: var(--spacing-2xl);
+  background-color: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-sm);
+}
+
+@media (max-width: 768px) {
+  .profileCard {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+}
+
+.profileMainInfo {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-lg);
+}
+
+@media (max-width: 768px) {
+  .profileMainInfo {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+.textGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2xs);
+}
+
+.nameRow {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  flex-wrap: wrap;
+}
+
+@media (max-width: 768px) {
+  .nameRow {
+    justify-content: center;
+  }
+}
+
+.workerName {
+  font-size: var(--font-size-xl);
+  font-weight: 800;
+  color: var(--color-slate-900);
+  letter-spacing: -0.01em;
+}
+
+.categoryText {
+  font-size: var(--font-size-xs);
+  font-weight: 700;
+  color: var(--color-primary-700);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.locationMeta {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+}
+
+.ratingRow {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  margin-top: 2px;
+}
+
+@media (max-width: 768px) {
+  .ratingRow {
+    justify-content: center;
+  }
+}
+
+.reviewCount {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+}
+
+.rateActionWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--spacing-sm);
+  flex-shrink: 0;
+}
+
+@media (max-width: 768px) {
+  .rateActionWrapper {
+    align-items: center;
+    width: 100%;
+    padding-top: var(--spacing-md);
+    border-top: 1px solid var(--color-border);
+  }
+}
+
+.rateDisplay {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+@media (max-width: 768px) {
+  .rateDisplay {
+    align-items: center;
+  }
+}
+
+.rateAmount {
+  font-size: var(--font-size-xl);
+  font-weight: 800;
+  color: var(--color-slate-900);
+}
+
+.rateTypeLabel {
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.contentSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  padding: var(--spacing-xl);
+  background-color: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-sm);
+}
+
+.sectionHeading {
+  font-size: var(--font-size-base);
+  font-weight: 700;
+  color: var(--color-slate-900);
+  border-bottom: 1px solid var(--color-border);
+  padding-bottom: var(--spacing-xs);
+}
+
+.bioText {
+  font-size: var(--font-size-sm);
+  color: var(--color-slate-700);
+  line-height: var(--line-height-relaxed);
+}
+
+.centerLoading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 50vh;
+}
+
+.emptyMessage {
+  text-align: center;
+  padding: var(--spacing-3xl);
+  color: var(--color-text-muted);
+}
