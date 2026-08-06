@@ -61,25 +61,25 @@ export const LoginForm: React.FC = () => {
         error={fieldErrors.email}
       />
 
-      <div className={styles.passwordWrapper}>
-        <Input
-          label='Password'
-          type={showPassword ? 'text' : 'password'}
-          placeholder='••••••••'
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          error={fieldErrors.password}
-        />
-        <button
-          type='button'
-          className={styles.eyeBtn}
-          onClick={() => setShowPassword(!showPassword)}
-          tabIndex={-1}
-          aria-label='Toggle password visibility'
-        >
-          {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
-        </button>
-      </div>
+      <Input
+        label='Password'
+        type={showPassword ? 'text' : 'password'}
+        placeholder='••••••••'
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        error={fieldErrors.password}
+        rightElement={
+          <button
+            type='button'
+            className={styles.eyeBtn}
+            onClick={() => setShowPassword(!showPassword)}
+            tabIndex={-1}
+            aria-label='Toggle password visibility'
+          >
+            {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+          </button>
+        }
+      />
 
       <Button
         type='submit'

@@ -83,7 +83,7 @@ export const ServerWarmingBanner: React.FC<{ children: React.ReactNode }> = ({
 
     const welcomeTimer = window.setTimeout(() => {
       setShowWelcome(false);
-    }, 4500);
+    }, 1200);
 
     return () => window.clearTimeout(welcomeTimer);
   }, [showWelcome]);

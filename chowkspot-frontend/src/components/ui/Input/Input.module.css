@@ -40,6 +40,19 @@
   box-shadow: 0 0 0 3px var(--color-primary-100);
 }
 
+.rightElementWrapper {
+  position: absolute;
+  right: 0.875rem;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-slate-400);
+  cursor: pointer;
+  z-index: 2;
+}
+
 .hasError .input {
   border-color: var(--color-error);
 }

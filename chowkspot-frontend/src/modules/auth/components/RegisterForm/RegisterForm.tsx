@@ -1,19 +1,19 @@
 import React, { useState } from 'react';
 import { useNavigate, useSearchParams, Link } from 'react-router';
-import { AlertCircle, User, Wrench } from 'lucide-react';
+import { AlertCircle, User, Wrench, Eye, EyeOff } from 'lucide-react';
 import { useAuthMutations } from '../../hooks/useAuthMutations';
 import { Input } from '@/components/ui/Input/Input';
 import { Button } from '@/components/ui/Button/Button';
 import { registerSchema } from '../../schemas/auth.schema';
 import { APP_CONSTANTS } from '@/config/constants';
-import styles from '../LoginForm/LoginForm.module.css';
+import loginStyles from '../LoginForm/LoginForm.module.css';
+import styles from './RegisterForm.module.css';
 
 export const RegisterForm: React.FC = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const { registerMutation } = useAuthMutations();
 
-  // Read initial role from query param ?role=WORKER
   const initialRole = searchParams.get('role') === 'WORKER' ? 'WORKER' : 'USER';
 
   const [formData, setFormData] = useState<{
@@ -32,6 +32,7 @@ export const RegisterForm: React.FC = () => {
     role: initialRole,
   });
 
+  const [showPassword, setShowPassword] = useState(false);
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [apiError, setApiError] = useState<string | null>(null);
 
@@ -59,9 +60,9 @@ export const RegisterForm: React.FC = () => {
   };
 
   return (
-    <form className={styles.form} onSubmit={handleSubmit}>
+    <form className={loginStyles.form} onSubmit={handleSubmit}>
       {apiError && (
-        <div className={styles.errorBanner}>
+        <div className={loginStyles.errorBanner}>
           <AlertCircle size={16} />
           <span>{apiError}</span>
         </div>
@@ -94,11 +95,22 @@ export const RegisterForm: React.FC = () => {
 
       <Input
         label='Password'
-        type='password'
+        type={showPassword ? 'text' : 'password'}
         placeholder='At least 8 characters'
         value={formData.password}
         onChange={(e) => setFormData({ ...formData, password: e.target.value })}
         error={fieldErrors.password}
+        rightElement={
+          <button
+            type='button'
+            className={loginStyles.eyeBtn}
+            onClick={() => setShowPassword(!showPassword)}
+            tabIndex={-1}
+            aria-label='Toggle password visibility'
+          >
+            {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+          </button>
+        }
       />
 
       <div className={styles.fieldGroup}>
@@ -144,14 +156,14 @@ export const RegisterForm: React.FC = () => {
         type='submit'
         isLoading={registerMutation.isPending}
         fullWidth
-        className={styles.submitBtn}
+        className={loginStyles.submitBtn}
       >
         Create Account
       </Button>
 
-      <p className={styles.footerText}>
+      <p className={loginStyles.footerText}>
         Already have an account?{' '}
-        <Link to='/login' className={styles.link}>
+        <Link to='/login' className={loginStyles.link}>
           Log in
         </Link>
       </p>

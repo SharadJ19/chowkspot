@@ -1,6 +1,6 @@
 .authContainer {
   display: grid;
-  grid-template-columns: minmax(320px, 400px) 1fr;
+  grid-template-columns: minmax(360px, 420px) 1fr;
   min-height: calc(100vh - var(--navbar-height));
   width: 100%;
   background-color: var(--color-bg-surface);
@@ -14,7 +14,9 @@
 
 /* ==================== LEFT: LEAN BRANDING HERO ==================== */
 .heroCanvas {
-  position: relative;
+  position: sticky;
+  top: var(--navbar-height);
+  height: calc(100vh - var(--navbar-height));
   background: linear-gradient(180deg, var(--color-slate-900) 0%, #0b1120 100%);
   color: var(--color-text-inverse);
   padding: var(--spacing-2xl) var(--spacing-xl);
@@ -23,6 +25,7 @@
   justify-content: space-between;
   gap: var(--spacing-xl);
   border-right: 1px solid var(--color-slate-800);
+  overflow-y: auto;
 }
 
 @media (max-width: 900px) {
@@ -125,15 +128,16 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: var(--spacing-xl);
+  padding: var(--spacing-2xl) var(--spacing-xl); /* Balanced top & bottom padding for both login & register */
   width: 100%;
+  min-height: 100%;
 }
 
 .formBox {
   width: 100%;
   max-width: 420px;
   margin: auto 0;
-  padding: var(--spacing-lg) 0;
+  padding: var(--spacing-md) 0;
 }
 
 .formHeader {
