@@ -1,4 +1,5 @@
-import React, { useState, useMemo } from 'react';
+// FILE: src/pages/SearchPage.tsx
+import React, { useState } from 'react';
 import { useSearchParams } from 'react-router';
 import { useWorkerQueries } from '@/modules/workers/hooks/useWorkerQueries';
 import { WorkerCard } from '@/modules/workers/components/WorkerCard/WorkerCard';
@@ -13,8 +14,6 @@ import { useAuth } from '@/hooks/useAuth';
 import type { WorkerSearchResult } from '@/types';
 import styles from './Pages.module.css';
 
-const ITEMS_PER_PAGE = 12;
-
 export const SearchPage: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const { user, isAuthenticated } = useAuth();
@@ -22,16 +21,27 @@ export const SearchPage: React.FC = () => {
   const category = searchParams.get('category') || '';
   const city = searchParams.get('city') || '';
   const availableOnly = searchParams.get('availableOnly') === 'true';
-  const searchName = searchParams.get('name') || '';
-  const minExperience = parseInt(searchParams.get('minExp') || '0', 10);
-  const maxPrice = parseInt(searchParams.get('maxPrice') || '3000', 10);
-  const pageParam = parseInt(searchParams.get('page') || '1', 10);
+  const name = searchParams.get('name') || '';
+  const minExperience = searchParams.get('minExp')
+    ? parseInt(searchParams.get('minExp')!, 10)
+    : undefined;
+  const maxPrice = searchParams.get('maxPrice')
+    ? parseFloat(searchParams.get('maxPrice')!)
+    : undefined;
+  const page = parseInt(searchParams.get('page') || '1', 10);
 
-  const [currentPage, setCurrentPage] = useState<number>(
-    isNaN(pageParam) ? 1 : pageParam,
-  );
+  // Hook handles full backend query execution
+  const { searchWorkersQuery } = useWorkerQueries({
+    name,
+    category,
+    city,
+    availableOnly,
+    minExperience,
+    maxPrice,
+    page,
+    limit: 12,
+  });
 
-  const { searchWorkersQuery } = useWorkerQueries({ category, city, availableOnly });
   const { createBookingMutation } = useBookingQueries();
 
   const [selectedWorker, setSelectedWorker] = useState<WorkerSearchResult | null>(null);
@@ -40,37 +50,15 @@ export const SearchPage: React.FC = () => {
   const [notes, setNotes] = useState('');
   const [bookingError, setBookingError] = useState<string | null>(null);
 
-  // Client-side filtering for search by name, experience years slider, and price range slider
-  const filteredWorkers = useMemo(() => {
-    const rawList = searchWorkersQuery.data || [];
-    return rawList.filter((worker) => {
-      // Name filter
-      if (
-        searchName &&
-        !worker.user.name.toLowerCase().includes(searchName.toLowerCase()) &&
-        !worker.category.toLowerCase().includes(searchName.toLowerCase())
-      ) {
-        return false;
-      }
-      // Experience filter
-      if (worker.experienceYears < minExperience) return false;
-
-      // Price filter
-      const rateNum = parseFloat(worker.baseRate) || 0;
-      if (rateNum > maxPrice) return false;
-
-      return true;
-    });
-  }, [searchWorkersQuery.data, searchName, minExperience, maxPrice]);
-
-  const totalPages = Math.ceil(filteredWorkers.length / ITEMS_PER_PAGE) || 1;
-  const paginatedWorkers = useMemo(() => {
-    const start = (currentPage - 1) * ITEMS_PER_PAGE;
-    return filteredWorkers.slice(start, start + ITEMS_PER_PAGE);
-  }, [filteredWorkers, currentPage]);
+  const workers = searchWorkersQuery.data?.workers || [];
+  const pagination = searchWorkersQuery.data?.pagination || {
+    total: 0,
+    page: 1,
+    limit: 12,
+    totalPages: 1,
+  };
 
   const handlePageChange = (newPage: number) => {
-    setCurrentPage(newPage);
     searchParams.set('page', newPage.toString());
     setSearchParams(searchParams);
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -108,7 +96,6 @@ export const SearchPage: React.FC = () => {
         </p>
       </div>
 
-      {/* E-Commerce Two-Column Layout Container */}
       <div
         style={{
           display: 'grid',
@@ -118,73 +105,65 @@ export const SearchPage: React.FC = () => {
         }}
         className='searchLayoutGrid'
       >
-        {/* Left Sidebar Filters */}
         <WorkerSidebarFilters
-          searchName={searchName}
+          searchName={name}
           selectedCategory={category}
           selectedCity={city}
           availableOnly={availableOnly}
-          minExperience={minExperience}
-          maxPrice={maxPrice}
+          minExperience={minExperience || 0}
+          maxPrice={maxPrice || 3000}
           onSearchNameChange={(val) => {
             if (val) searchParams.set('name', val);
             else searchParams.delete('name');
-            searchParams.delete('page');
-            setCurrentPage(1);
+            searchParams.set('page', '1');
             setSearchParams(searchParams);
           }}
           onCategoryChange={(val) => {
             if (val) searchParams.set('category', val);
             else searchParams.delete('category');
-            searchParams.delete('page');
-            setCurrentPage(1);
+            searchParams.set('page', '1');
             setSearchParams(searchParams);
           }}
           onCityChange={(val) => {
             if (val) searchParams.set('city', val);
             else searchParams.delete('city');
-            searchParams.delete('page');
-            setCurrentPage(1);
+            searchParams.set('page', '1');
             setSearchParams(searchParams);
           }}
           onAvailableOnlyChange={(val) => {
             if (val) searchParams.set('availableOnly', 'true');
             else searchParams.delete('availableOnly');
-            searchParams.delete('page');
-            setCurrentPage(1);
+            searchParams.set('page', '1');
             setSearchParams(searchParams);
           }}
           onMinExperienceChange={(val) => {
             if (val > 0) searchParams.set('minExp', val.toString());
             else searchParams.delete('minExp');
-            searchParams.delete('page');
-            setCurrentPage(1);
+            searchParams.set('page', '1');
             setSearchParams(searchParams);
           }}
           onMaxPriceChange={(val) => {
             if (val < 3000) searchParams.set('maxPrice', val.toString());
             else searchParams.delete('maxPrice');
-            searchParams.delete('page');
-            setCurrentPage(1);
+            searchParams.set('page', '1');
             setSearchParams(searchParams);
           }}
           onReset={() => {
             setSearchParams({});
-            setCurrentPage(1);
           }}
-          totalResults={filteredWorkers.length}
+          currentPage={pagination.page} // 👈 Passed to Sidebar
+          itemsPerPage={pagination.limit} // 👈 Passed to Sidebar
+          totalResults={pagination.total}
         />
-
-        {/* Right Product Grid */}
         <div>
           {searchWorkersQuery.isLoading ? (
             <div className={styles.centerLoading}>
               <Spinner size='lg' />
             </div>
-          ) : paginatedWorkers.length > 0 ? (
+          ) : workers.length > 0 ? (
             <>
               <div className='grid-auto-fit'>
-                {paginatedWorkers.map((worker) => (
+                {workers.map((worker) => (
                   <WorkerCard
                     key={worker.id}
                     worker={worker}
@@ -193,8 +172,8 @@ export const SearchPage: React.FC = () => {
                 ))}
               </div>
               <Pagination
-                currentPage={currentPage}
-                totalPages={totalPages}
+                currentPage={pagination.page}
+                totalPages={pagination.totalPages}
                 onPageChange={handlePageChange}
               />
             </>
@@ -206,7 +185,6 @@ export const SearchPage: React.FC = () => {
         </div>
       </div>
 
-      {/* Booking Modal */}
       <Modal
         isOpen={!!selectedWorker}
         onClose={() => setSelectedWorker(null)}
@@ -222,7 +200,7 @@ export const SearchPage: React.FC = () => {
           >
             Please log in to submit a booking request.
           </p>
-        ) : !user?.isVerified ? ( // 👈 Restricted booking for unverified accounts
+        ) : !user?.isVerified ? (
           <div
             style={{
               textAlign: 'center',

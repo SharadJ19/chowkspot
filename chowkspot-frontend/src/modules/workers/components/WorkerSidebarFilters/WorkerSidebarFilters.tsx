@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Search, RotateCcw, Filter } from 'lucide-react';
+import { Filter, RotateCcw } from 'lucide-react';
 import { APP_CONSTANTS } from '@/config/constants';
 import { Input } from '@/components/ui/Input/Input';
 import { Button } from '@/components/ui/Button/Button';
@@ -19,6 +19,8 @@ export interface WorkerSidebarFiltersProps {
   onMinExperienceChange: (exp: number) => void;
   onMaxPriceChange: (price: number) => void;
   onReset: () => void;
+  currentPage: number; // 👈 Added
+  itemsPerPage: number; // 👈 Added
   totalResults: number;
 }
 
@@ -36,12 +38,13 @@ export const WorkerSidebarFilters: React.FC<WorkerSidebarFiltersProps> = ({
   onMinExperienceChange,
   onMaxPriceChange,
   onReset,
+  currentPage,
+  itemsPerPage,
   totalResults,
 }) => {
   const [skillSearchQuery, setSkillSearchQuery] = useState('');
   const [citySearchQuery, setCitySearchQuery] = useState('');
 
-  // Filter 80+ categories and cities dynamically for quick searching inside the sidebar
   const filteredCategories = APP_CONSTANTS.CATEGORIES.filter((cat) =>
     cat.toLowerCase().includes(skillSearchQuery.toLowerCase()),
   );
@@ -49,6 +52,10 @@ export const WorkerSidebarFilters: React.FC<WorkerSidebarFiltersProps> = ({
   const filteredCities = APP_CONSTANTS.CITIES.filter((city) =>
     city.toLowerCase().includes(citySearchQuery.toLowerCase()),
   );
+
+  // Calculate current range (e.g. 1–12, 13–24)
+  const startItem = totalResults === 0 ? 0 : (currentPage - 1) * itemsPerPage + 1;
+  const endItem = Math.min(currentPage * itemsPerPage, totalResults);
 
   return (
     <aside className={styles.sidebar}>
@@ -62,14 +69,13 @@ export const WorkerSidebarFilters: React.FC<WorkerSidebarFiltersProps> = ({
         </Button>
       </div>
 
-      {/* 1. Search by Professional Name */}
+      {/* 1. Search Provider Name */}
       <div className={styles.section}>
         <label className={styles.sectionLabel}>Search Provider</label>
         <Input
           placeholder='Search by name...'
           value={searchName}
           onChange={(e) => onSearchNameChange(e.target.value)}
-          rightElement={<Search size={14} />}
         />
       </div>
 
@@ -126,7 +132,7 @@ export const WorkerSidebarFilters: React.FC<WorkerSidebarFiltersProps> = ({
         </label>
       </div>
 
-      {/* 5. 80+ Skills / Categories Quick Picker */}
+      {/* 5. Categories Picker */}
       <div className={styles.section}>
         <label className={styles.sectionLabel}>Skills &amp; Trades</label>
         <Input
@@ -161,7 +167,7 @@ export const WorkerSidebarFilters: React.FC<WorkerSidebarFiltersProps> = ({
         </div>
       </div>
 
-      {/* 6. 80+ Cities Quick Picker */}
+      {/* 6. Cities Picker */}
       <div className={styles.section}>
         <label className={styles.sectionLabel}>Service City</label>
         <Input
@@ -196,6 +202,7 @@ export const WorkerSidebarFilters: React.FC<WorkerSidebarFiltersProps> = ({
         </div>
       </div>
 
+      {/* Footer Info Displaying Paginated Range */}
       <div
         style={{
           paddingTop: '8px',
@@ -206,7 +213,17 @@ export const WorkerSidebarFilters: React.FC<WorkerSidebarFiltersProps> = ({
         <span
           style={{ fontSize: 'var(--font-size-xs)', color: 'var(--color-text-muted)' }}
         >
-          Showing <strong>{totalResults}</strong> matching professionals
+          {totalResults === 0 ? (
+            'No matching professionals found'
+          ) : (
+            <>
+              Showing{' '}
+              <strong>
+                {startItem}–{endItem}
+              </strong>{' '}
+              of <strong>{totalResults.toLocaleString()}</strong> matching professionals
+            </>
+          )}
         </span>
       </div>
     </aside>
