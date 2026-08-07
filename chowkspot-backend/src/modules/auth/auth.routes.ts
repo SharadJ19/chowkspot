@@ -4,6 +4,7 @@ import { validateRequest } from '@/middlewares/validate.js';
 import {
   registerSchema,
   loginSchema,
+  verifyEmailSchema,
   forgotPasswordSchema,
   resetPasswordSchema,
 } from '@/modules/auth/auth.schema.js';
@@ -15,6 +16,11 @@ router.post('/register', validateRequest(registerSchema), AuthController.registe
 router.post('/login', validateRequest(loginSchema), AuthController.login);
 router.post('/logout', authenticate, AuthController.logout);
 router.post('/refresh', AuthController.refreshToken);
+router.post(
+  '/verify-email',
+  validateRequest(verifyEmailSchema),
+  AuthController.verifyEmail,
+);
 router.post(
   '/forgot-password',
   validateRequest(forgotPasswordSchema),

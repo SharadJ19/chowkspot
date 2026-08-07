@@ -53,7 +53,12 @@ app.get('/health', async (_req: Request, res: Response) => {
 });
 
 // API Routes
-app.use('/api/auth', authRateLimiter, authRoutes);
+// Apply strict rate limiter ONLY to login and register routes
+app.use('/api/auth/login', authRateLimiter);
+app.use('/api/auth/register', authRateLimiter);
+
+// Mount authRoutes with only the global rate limiter active
+app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/workers', workerRoutes);
 app.use('/api/bookings', bookingRoutes);

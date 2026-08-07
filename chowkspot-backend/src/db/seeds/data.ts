@@ -196,14 +196,13 @@ export const SEED_CATEGORIES = [
 export const SEED_USERS = [
   // --- Admin ---
   {
-    name: 'Sharad Chandel',
-    email: 'sharad@chowkspot.com',
+    name: 'Sharad Admin',
+    email: 'sharad@admin.com',
     password: 'Password123!',
-    phone: '+919876543210',
+    phone: '+917590889608',
     city: 'Parwanoo',
     role: 'ADMIN' as const,
-    avatarUrl:
-      'https://res.cloudinary.com/demo/image/upload/v1/samples/people/boy-snow-hoodie.jpg',
+    avatarUrl: 'https://iili.io/CrWkLAl.png',
   },
 
   // --- Base Crew Service Providers ---

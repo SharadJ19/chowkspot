@@ -89,6 +89,16 @@ export class AuthController {
     }
   }
 
+  static async verifyEmail(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { token, email } = req.body;
+      const result = await AuthService.verifyEmail(token, email);
+      res.status(CONSTANTS.HTTP_STATUS.OK).json({ success: true, ...result });
+    } catch (err) {
+      next(err);
+    }
+  }
+
   static async forgotPassword(req: Request, res: Response, next: NextFunction) {
     try {
       const result = await AuthService.forgotPassword(req.body);
