@@ -7,7 +7,7 @@ import styles from './AvatarUploader.module.css';
 export interface AvatarUploaderProps {
   currentAvatarUrl?: string | null;
   name: string;
-  onAvatarChange: (url: string) => void;
+  onAvatarChange: (url: string | null) => void;
 }
 
 export const AvatarUploader: React.FC<AvatarUploaderProps> = ({
@@ -74,7 +74,7 @@ export const AvatarUploader: React.FC<AvatarUploaderProps> = ({
           {currentAvatarUrl && (
             <button
               type='button'
-              onClick={() => onAvatarChange('')}
+              onClick={() => onAvatarChange(null)}
               className={styles.uploadBtnLabel}
               style={{ color: 'var(--color-error)' }}
               disabled={isUploading}

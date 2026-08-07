@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Users,
   Wrench,
@@ -7,16 +7,20 @@ import {
   Activity,
   Trash2,
   ShieldCheck,
+  AlertTriangle,
 } from 'lucide-react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { adminApi } from '../api/admin.api';
 import { Spinner } from '@/components/ui/Spinner/Spinner';
 import { Badge } from '@/components/ui/Badge/Badge';
 import { Button } from '@/components/ui/Button/Button';
+import { Modal } from '@/components/ui/Modal/Modal';
+import type { AuthUser } from '@/types';
 import styles from './AdminDashboard.module.css';
 
 export const AdminDashboard: React.FC = () => {
   const queryClient = useQueryClient();
+  const [userToDelete, setUserToDelete] = useState<AuthUser | null>(null);
 
   const { data: stats, isLoading: statsLoading } = useQuery({
     queryKey: ['admin_stats'],
@@ -39,6 +43,7 @@ export const AdminDashboard: React.FC = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['admin_users'] });
       queryClient.invalidateQueries({ queryKey: ['admin_stats'] });
+      setUserToDelete(null);
     },
   });
 
@@ -186,8 +191,7 @@ export const AdminDashboard: React.FC = () => {
                       <Button
                         variant='danger'
                         size='sm'
-                        onClick={() => deleteUserMutation.mutate(u.id)}
-                        isLoading={deleteUserMutation.isPending}
+                        onClick={() => setUserToDelete(u)}
                       >
                         <Trash2 size={13} />
                         <span>Remove</span>
@@ -200,6 +204,62 @@ export const AdminDashboard: React.FC = () => {
           </table>
         </div>
       </div>
+
+      {/* Admin User Delete Confirmation Modal */}
+      <Modal
+        isOpen={!!userToDelete}
+        onClose={() => setUserToDelete(null)}
+        title='Confirm User Account Removal'
+      >
+        {userToDelete && (
+          <div
+            style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-md)' }}
+          >
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 'var(--spacing-sm)',
+                padding: 'var(--spacing-sm)',
+                backgroundColor: 'var(--color-status-rejected-bg)',
+                color: 'var(--color-status-rejected-text)',
+                borderRadius: 'var(--radius-md)',
+              }}
+            >
+              <AlertTriangle size={24} style={{ flexShrink: 0 }} />
+              <p style={{ fontSize: 'var(--font-size-xs)', margin: 0 }}>
+                Warning: Removing <strong>{userToDelete.name}</strong> (
+                {userToDelete.email}) will permanently delete their profile, active worker
+                listings, bookings, and submitted reviews.
+              </p>
+            </div>
+
+            <div
+              style={{
+                display: 'flex',
+                gap: 'var(--spacing-sm)',
+                justifyContent: 'flex-end',
+                marginTop: 'var(--spacing-xs)',
+              }}
+            >
+              <Button
+                variant='outline'
+                onClick={() => setUserToDelete(null)}
+                disabled={deleteUserMutation.isPending}
+              >
+                Cancel
+              </Button>
+              <Button
+                variant='danger'
+                isLoading={deleteUserMutation.isPending}
+                onClick={() => deleteUserMutation.mutate(userToDelete.id)}
+              >
+                Permanently Remove
+              </Button>
+            </div>
+          </div>
+        )}
+      </Modal>
     </div>
   );
 };

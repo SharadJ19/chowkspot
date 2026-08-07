@@ -9,4 +9,8 @@ export const usersApi = {
       method: 'PATCH',
       body: JSON.stringify(data),
     }),
+  deleteMe: () =>
+    fetchClient<{ message: string }>('/users/me', {
+      method: 'DELETE',
+    }),
 };

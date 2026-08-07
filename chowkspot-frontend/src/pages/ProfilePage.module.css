@@ -101,3 +101,29 @@
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-medium);
 }
+
+/* FILE: src/pages/ProfilePage.module.css */
+
+.dangerZoneCard {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-xl);
+  background-color: var(--color-bg-surface);
+  border: 1px solid var(--color-error);
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-sm);
+}
+
+.dangerZoneTitle {
+  font-size: var(--font-size-base);
+  font-weight: 800;
+  color: var(--color-error);
+}
+
+.dangerZoneDesc {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  margin-bottom: var(--spacing-xs);
+}

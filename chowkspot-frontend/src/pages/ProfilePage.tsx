@@ -1,23 +1,27 @@
+// FILE: src/pages/ProfilePage.tsx
 import React, { useState, useEffect } from 'react';
-import { CheckCircle2, Shield, Wrench } from 'lucide-react';
+import { useNavigate } from 'react-router';
+import { CheckCircle2, Shield, Wrench, Trash2, AlertTriangle } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { usersApi } from '@/modules/users/api/users.api';
 import { Input } from '@/components/ui/Input/Input';
 import { Button } from '@/components/ui/Button/Button';
 import { Badge } from '@/components/ui/Badge/Badge';
+import { Modal } from '@/components/ui/Modal/Modal';
 import { AvatarUploader } from '@/components/ui/AvatarUploader/AvatarUploader';
 import { APP_CONSTANTS } from '@/config/constants';
 import type { AuthUser, WorkerProfile, ApiResponse } from '@/types';
 import styles from './ProfilePage.module.css';
 
 export const ProfilePage: React.FC = () => {
-  const { user, refetchUser } = useAuth();
+  const { user, refetchUser, logout } = useAuth();
+  const navigate = useNavigate();
   const isWorker = user?.role === 'WORKER';
 
   const [name, setName] = useState(user?.name || '');
   const [phone, setPhone] = useState(user?.phone || '');
   const [city, setCity] = useState<string>(user?.city || APP_CONSTANTS.CITIES[0]);
-  const [avatarUrl, setAvatarUrl] = useState(user?.avatarUrl || '');
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(user?.avatarUrl || null);
 
   // Worker specific fields
   const [category, setCategory] = useState<string>(APP_CONSTANTS.CATEGORIES[0]);
@@ -31,6 +35,11 @@ export const ProfilePage: React.FC = () => {
 
   const [isSaving, setIsSaving] = useState(false);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
+
+  // Self account deletion state
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [deleteConfirmationText, setDeleteConfirmationText] = useState('');
 
   useEffect(() => {
     usersApi
@@ -89,6 +98,21 @@ export const ProfilePage: React.FC = () => {
     }
   };
 
+  const handleSelfAccountDelete = async () => {
+    if (deleteConfirmationText !== 'DELETE') return;
+    setIsDeleting(true);
+    try {
+      await usersApi.deleteMe();
+      await logout();
+      navigate('/login');
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsDeleting(false);
+      setIsDeleteModalOpen(false);
+    }
+  };
+
   return (
     <div className={`container ${styles.profileContainer}`}>
       <form onSubmit={handleProfileSubmit} className={styles.profileForm}>
@@ -123,7 +147,7 @@ export const ProfilePage: React.FC = () => {
           </div>
         )}
 
-        {/* Modern Cloudinary Avatar Uploader UI */}
+        {/* Cloudinary Avatar Uploader UI */}
         <div className={styles.formArea}>
           <label className={styles.formLabel}>Profile Photo / Avatar</label>
           <AvatarUploader
@@ -238,6 +262,85 @@ export const ProfilePage: React.FC = () => {
           Save All Changes
         </Button>
       </form>
+
+      {/* Danger Zone / Self-Account Deletion Section */}
+      <div className={styles.dangerZoneCard}>
+        <h3 className={styles.dangerZoneTitle}>Danger Zone</h3>
+        <p className={styles.dangerZoneDesc}>
+          Permanently delete your account and all associated data from ChowkSpot.
+        </p>
+        <Button
+          variant='danger'
+          onClick={() => {
+            setDeleteConfirmationText('');
+            setIsDeleteModalOpen(true);
+          }}
+        >
+          <Trash2 size={16} />
+          <span>Delete My Account</span>
+        </Button>
+      </div>
+
+      {/* Account Deletion Confirmation Modal */}
+      <Modal
+        isOpen={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        title='Confirm Account Deletion'
+      >
+        <div
+          style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-md)' }}
+        >
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 'var(--spacing-sm)',
+              padding: 'var(--spacing-sm)',
+              backgroundColor: 'var(--color-status-rejected-bg)',
+              color: 'var(--color-status-rejected-text)',
+              borderRadius: 'var(--radius-md)',
+            }}
+          >
+            <AlertTriangle size={24} style={{ flexShrink: 0 }} />
+            <p style={{ fontSize: 'var(--font-size-xs)', margin: 0 }}>
+              This action is permanent and irreversible. All your profile data, booking
+              history, ratings, and active listings will be wiped.
+            </p>
+          </div>
+
+          <Input
+            label='Type "DELETE" to confirm'
+            placeholder='DELETE'
+            value={deleteConfirmationText}
+            onChange={(e) => setDeleteConfirmationText(e.target.value)}
+          />
+
+          <div
+            style={{
+              display: 'flex',
+              gap: 'var(--spacing-sm)',
+              justifyContent: 'flex-end',
+              marginTop: 'var(--spacing-xs)',
+            }}
+          >
+            <Button
+              variant='outline'
+              onClick={() => setIsDeleteModalOpen(false)}
+              disabled={isDeleting}
+            >
+              Cancel
+            </Button>
+            <Button
+              variant='danger'
+              isLoading={isDeleting}
+              disabled={deleteConfirmationText !== 'DELETE'}
+              onClick={handleSelfAccountDelete}
+            >
+              Permanently Delete Account
+            </Button>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 };
