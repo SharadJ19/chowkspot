@@ -29,6 +29,18 @@ export interface WorkerSearchResult extends WorkerProfile {
   };
 }
 
+export interface PaginationMeta {
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
+}
+
+export interface PaginatedWorkersResponse {
+  workers: WorkerSearchResult[];
+  pagination: PaginationMeta;
+}
+
 export interface CreateWorkerProfileInput {
   category: string;
   bio?: string;
@@ -40,9 +52,14 @@ export interface CreateWorkerProfileInput {
 }
 
 export interface WorkerSearchQueryParams {
-  category?: string;
-  city?: string;
-  availableOnly?: boolean;
+  name?: string | undefined;
+  category?: string | undefined;
+  city?: string | undefined;
+  availableOnly?: boolean | undefined;
+  minExperience?: number | undefined;
+  maxPrice?: number | undefined;
+  page?: number | undefined;
+  limit?: number | undefined;
 }
 
 export interface UpdateAvailabilityInput {

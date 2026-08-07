@@ -1,3 +1,4 @@
+// FILE: src/modules/workers/hooks/useWorkerQueries.ts
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { workersApi } from '../api/workers.api';
 import type { WorkerSearchQueryParams, CreateWorkerProfileInput } from '@/types';
@@ -11,7 +12,12 @@ export const useWorkerQueries = (params?: WorkerSearchQueryParams) => {
     queryKey: [WORKERS_QUERY_KEY, params],
     queryFn: async () => {
       const res = await workersApi.searchWorkers(params || {});
-      return res.data || [];
+      return (
+        res.data || {
+          workers: [],
+          pagination: { total: 0, page: 1, limit: 12, totalPages: 1 },
+        }
+      );
     },
   });
 
