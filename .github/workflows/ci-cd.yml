@@ -1,0 +1,169 @@
+name: ChowkSpot CI/CD Pipeline
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository_owner }}/chowkspot-backend
+
+jobs:
+  # =========================================================================
+  # JOB 1: Backend Quality Checks (Linting & Typechecking)
+  # =========================================================================
+  backend-quality:
+    name: 🛡️ Backend Quality Check
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: chowkspot-backend
+
+    steps:
+      - name: Checkout Codebase
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js Environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: 26
+          cache: 'npm'
+          cache-dependency-path: chowkspot-backend/package-lock.json
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: TypeScript Type Checking
+        run: npm run typecheck
+
+      - name: ESLint Code Inspection
+        run: npm run lint
+
+  # =========================================================================
+  # JOB 2: Frontend Quality Checks (Linting & Typechecking)
+  # =========================================================================
+  frontend-quality:
+    name: 🎨 Frontend Quality Check
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: chowkspot-frontend
+
+    steps:
+      - name: Checkout Codebase
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js Environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: 26
+          cache: 'npm'
+          cache-dependency-path: chowkspot-frontend/package-lock.json
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: TypeScript Type Checking
+        run: npm run typecheck
+
+      - name: ESLint Code Inspection
+        run: npm run lint
+
+      - name: Verify Build Artifacts
+        run: npm run build
+        env:
+          VITE_APP_NAME: 'ChowkSpot'
+          VITE_APP_URL: 'https://chowkspot.vercel.app'
+          VITE_API_BASE_URL: 'https://chowkspot-backend.onrender.com/api'
+          VITE_SOCKET_URL: 'https://chowkspot-backend.onrender.com'
+          VITE_CLOUDINARY_CLOUD_NAME: 'duz2lpw4c'
+          VITE_CLOUDINARY_UPLOAD_PRESET: 'chowkspot_avatar_upload'
+
+  # =========================================================================
+  # JOB 3: Docker Container Registry Build & Push (GHCR)
+  # =========================================================================
+  docker-ghcr:
+    name: 🐳 Docker Build & Publish (GHCR)
+    needs: backend-quality
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout Codebase
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GitHub Container Registry
+        if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract Metadata (Tags & Labels)
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=raw,value=latest,enable=${{ github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master' }}
+            type=sha,prefix=commit-
+
+      - name: Build and Push Docker Image
+        uses: docker/build-push-action@v6
+        with:
+          context: ./chowkspot-backend
+          file: ./chowkspot-backend/Dockerfile
+          push: ${{ github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master') }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  # =========================================================================
+  # JOB 4: Production Deployment — Render Backend
+  # =========================================================================
+  deploy-backend:
+    name: 🚀 Deploy Backend to Render
+    needs: [backend-quality, docker-ghcr]
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Trigger Render Deploy Hook
+        run: |
+          curl -X POST "${{ secrets.RENDER_DEPLOY_HOOK_URL }}"
+        shell: bash
+
+  # =========================================================================
+  # JOB 5: Production Deployment — Vercel Frontend
+  # =========================================================================
+  deploy-frontend:
+    name: 🚀 Deploy Frontend to Vercel
+    needs: frontend-quality
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Codebase
+        uses: actions/checkout@v4
+
+      - name: Deploy to Vercel
+        uses: amondnet/vercel-action@v25
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          vercel-args: '--prod'
+          working-directory: ./chowkspot-frontend
