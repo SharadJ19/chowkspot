@@ -7,127 +7,19 @@ import {
   SEED_CATEGORIES,
   SEED_USERS,
   SEED_WORKER_PROFILES,
+  FIRST_NAMES,
+  LAST_NAMES,
+  LOCALITY_PREFIXES,
+  GOOD_COMMENTS,
+  BAD_COMMENTS,
 } from '@/db/seeds/data.js';
 import { eq, sql } from 'drizzle-orm';
 
-const FIRST_NAMES = [
-  'Aarav',
-  'Rohan',
-  'Smarth',
-  'Rudar',
-  'Mohit',
-  'Bipin',
-  'Anshul',
-  'Kartik',
-  'Eshant',
-  'Sahil',
-  'Tarun',
-  'Gagan',
-  'Sachit',
-  'Shaiv',
-  'Tushar',
-  'Vivek',
-  'Sumit',
-  'Vansh',
-  'Jashan',
-  'Ashu',
-  'Vikram',
-  'Deepak',
-  'Manish',
-  'Sandeep',
-  'Pankaj',
-  'Rajesh',
-  'Suresh',
-  'Amit',
-  'Varun',
-  'Gaurav',
-  'Harish',
-  'Nitin',
-  'Ramesh',
-  'Vijay',
-  'Sunil',
-  'Karan',
-  'Vishal',
-  'Neeraj',
-  'Suraj',
-  'Ajay',
-  'Praveen',
-  'Sanjay',
-  'Dinesh',
-  'Kunal',
-  'Abhishek',
-  'Rahul',
-  'Pooja',
-  'Shivani',
-  'Anju',
-  'Shruti',
-  'Harkiran',
-  'Simran',
-  'Neha',
-  'Priya',
-];
-
-const LAST_NAMES = [
-  'Chandel',
-  'Sharda',
-  'Singh',
-  'Thakur',
-  'Awasthi',
-  'Katoch',
-  'Kumar',
-  'Monga',
-  'Vashisht',
-  'Akhtar',
-  'Kumawat',
-  'Bansal',
-  'Rajpal',
-  'Sood',
-  'Attri',
-  'Karwal',
-  'Vedwall',
-  'Rani',
-  'Rajput',
-  'Dhiman',
-  'Chhalotre',
-  'Vadhwa',
-  'Sharma',
-  'Singla',
-  'Verma',
-  'Gupta',
-  'Saini',
-  'Kashyap',
-  'Chauhan',
-  'Giri',
-  'Kundu',
-  'Puri',
-  'Bhasin',
-  'Mehta',
-  'Garg',
-  'Joshi',
-];
-
-const LOCALITY_PREFIXES = [
-  'Near Sector 1A Timber Trail',
-  'Housing Board Colony',
-  'Phase 1 Industrial Area',
-  'Opposite Bus Stand',
-  'Near Railway Station',
-  'Mall Road',
-  'Main Market',
-  'Bypass Road',
-  'Phase 8 Industrial Focal Point',
-  'Sector 20 Panchkula',
-  'GT Road',
-  'Subathu Road',
-];
-
-const REVIEW_COMMENTS = [
-  'Punctual and reliable service in Parwanoo. Solved my issue quickly!',
-  'Very professional and honest pricing. Will definitely hire again.',
-  'Great experience through ChowkSpot. Highly recommended for local jobs.',
-  'Super fast response time and clean execution.',
-  'Honest service provider. Very polite behavior and quality work.',
-];
+// --- SEEDING SCALE CONFIGURATION CONSTANTS ---
+const TOTAL_EXTRA_WORKERS = 1500;
+const TOTAL_EXTRA_CUSTOMERS = 900;
+const TOTAL_BOOKINGS = 3500;
+const BASE_WORKER_REVIEW_COUNT = 25;
 
 function getRandomElement<T>(arr: readonly T[] | T[]): T {
   const item = arr[Math.floor(Math.random() * arr.length)];
@@ -148,7 +40,7 @@ function getRandomNumber(min: number, max: number): number {
 
 async function seed() {
   logger.info(
-    '🌱 Seeding ChowkSpot with 80+ Unique Flat Services & 80+ North Indian Cities...',
+    `🌱 Seeding ChowkSpot with massive scale (~${1 + SEED_USERS.length + TOTAL_EXTRA_WORKERS + TOTAL_EXTRA_CUSTOMERS} Users & ${TOTAL_BOOKINGS} Bookings)...`,
   );
 
   try {
@@ -163,7 +55,7 @@ async function seed() {
       const createdUsersMap = new Map<string, string>();
       const createdWorkerMap = new Map<string, string>();
 
-      // 1. Insert Base Template Users (Admin, Crew & Base Customers)
+      // 1. Insert Base Template Users (Admin, Crew & Base Customers) FIRST
       logger.info('👤 Inserting Base Template Users & Admin...');
       for (const userData of SEED_USERS) {
         const passwordHash = await hashPassword(userData.password);
@@ -185,7 +77,7 @@ async function seed() {
         }
       }
 
-      // 2. Insert Base Worker Profiles
+      // 2. Insert Base Worker Profiles SECOND (Ensures Smarth appears first in search results)
       logger.info('🛠️ Inserting Base Worker Profiles...');
       for (const workerData of SEED_WORKER_PROFILES) {
         const userId = createdUsersMap.get(workerData.email);
@@ -211,9 +103,112 @@ async function seed() {
         }
       }
 
-      // 3. Dynamic Expansion: Generate ~300 Extra Workers across ALL 80+ Flat Categories
+      // 3. Generate Extra Customer Accounts
       logger.info(
-        '🚀 Expanding dataset with ~300 generated workers across 80+ flat skills...',
+        `👥 Expanding dataset with ~${TOTAL_EXTRA_CUSTOMERS} customer accounts...`,
+      );
+      const createdCustomersList: { id: string; name: string; city: string }[] = [];
+
+      for (const userData of SEED_USERS) {
+        if (userData.role === 'USER') {
+          const userId = createdUsersMap.get(userData.email);
+          if (userId) {
+            createdCustomersList.push({
+              id: userId,
+              name: userData.name,
+              city: userData.city,
+            });
+          }
+        }
+      }
+
+      for (let j = 0; j < TOTAL_EXTRA_CUSTOMERS; j++) {
+        const firstName = getRandomElement(FIRST_NAMES);
+        const lastName = getRandomElement(LAST_NAMES);
+        const fullName = `${firstName} ${lastName}`;
+        const email = `customer.${j + 1}.${firstName.toLowerCase()}@gmail.com`;
+        const phone = `+9197${getRandomNumber(10000000, 99999999)}`;
+        const city = getRandomElement(SEED_CITIES);
+
+        const [cust] = await tx
+          .insert(users)
+          .values({
+            name: fullName,
+            email,
+            passwordHash: defaultPasswordHash,
+            phone,
+            city,
+            role: 'USER',
+            avatarUrl: `https://i.pravatar.cc/150?u=${email}`,
+          })
+          .returning();
+
+        if (cust) {
+          createdCustomersList.push({ id: cust.id, name: cust.name, city: cust.city });
+        }
+      }
+
+      // 4. GUARANTEED REVIEWS FOR EACH EXPLICIT BASE WORKER
+      logger.info('⭐ Generating guaranteed reviews for each base worker profile...');
+      for (const [email, workerProfileId] of createdWorkerMap.entries()) {
+        const workerUserId = createdUsersMap.get(email);
+        if (!workerUserId) continue;
+
+        for (let r = 0; r < BASE_WORKER_REVIEW_COUNT; r++) {
+          const customer = getRandomElement(createdCustomersList);
+          const daysAgo = getRandomNumber(1, 30);
+          const requestedDate = new Date(Date.now() - daysAgo * 24 * 60 * 60 * 1000);
+
+          const [booking] = await tx
+            .insert(bookings)
+            .values({
+              userId: customer.id,
+              workerId: workerProfileId,
+              status: 'COMPLETED',
+              requestedDate,
+              address: `${getRandomElement(LOCALITY_PREFIXES)}, ${customer.city}`,
+              notes: 'Priority service request.',
+            })
+            .returning();
+
+          if (booking) {
+            const isBadReview = Math.random() < 0.3;
+            let rating: number;
+            let comment: string;
+
+            if (isBadReview) {
+              rating = getRandomNumber(1, 3);
+              comment = getRandomElement(BAD_COMMENTS);
+            } else {
+              rating = Math.random() < 0.1 ? 5 : 4;
+              comment = getRandomElement(GOOD_COMMENTS);
+            }
+
+            await tx.insert(reviews).values({
+              bookingId: booking.id,
+              userId: customer.id,
+              workerId: workerProfileId,
+              rating,
+              comment,
+            });
+
+            await tx
+              .update(workerProfiles)
+              .set({
+                totalReviews: sql`${workerProfiles.totalReviews} + 1`,
+                avgRating: sql`ROUND(
+                  ((${workerProfiles.avgRating} * ${workerProfiles.totalReviews}) + ${rating}) / (${workerProfiles.totalReviews} + 1),
+                  2
+                )`,
+              })
+              .where(eq(workerProfiles.id, workerProfileId));
+          }
+        }
+      }
+
+      // 5. Dynamic Expansion: Generate Extra Workers
+      logger.info(
+        `🚀 Expanding dataset with ~${TOTAL_EXTRA_WORKERS} generated workers across 80+ flat skills...`,
       );
       const createdWorkerProfilesList: { id: string; userId: string; email: string }[] =
         [];
@@ -225,8 +220,7 @@ async function seed() {
         }
       }
 
-      const totalExtraWorkers = 300;
-      for (let i = 0; i < totalExtraWorkers; i++) {
+      for (let i = 0; i < TOTAL_EXTRA_WORKERS; i++) {
         const firstName = getRandomElement(FIRST_NAMES);
         const lastName = getRandomElement(LAST_NAMES);
         const fullName = `${firstName} ${lastName}`;
@@ -259,7 +253,6 @@ async function seed() {
 
         if (!userRecord) continue;
 
-        // Guaranteed non-null category string lookup
         const categoryIndex = i % SEED_CATEGORIES.length;
         const category = SEED_CATEGORIES[categoryIndex] ?? 'Handyman & Odd Jobs';
 
@@ -282,8 +275,8 @@ async function seed() {
         const [profile] = await tx
           .insert(workerProfiles)
           .values({
-            userId: userRecord.id, // Explicitly guaranteed string from userRecord guard
-            category, // Explicitly guaranteed string with fallback
+            userId: userRecord.id,
+            category,
             bio: `Available for ${category} services in ${primaryCity} and nearby areas. Direct booking with zero commission.`,
             experienceYears: getRandomNumber(2, 16),
             rateType,
@@ -305,51 +298,8 @@ async function seed() {
         }
       }
 
-      // 4. Dynamic Expansion: Generate ~100 Extra Customer Accounts
-      logger.info('👥 Expanding dataset with ~100 customer accounts...');
-      const createdCustomersList: { id: string; name: string; city: string }[] = [];
-
-      for (const userData of SEED_USERS) {
-        if (userData.role === 'USER') {
-          const userId = createdUsersMap.get(userData.email);
-          if (userId) {
-            createdCustomersList.push({
-              id: userId,
-              name: userData.name,
-              city: userData.city,
-            });
-          }
-        }
-      }
-
-      for (let j = 0; j < 100; j++) {
-        const firstName = getRandomElement(FIRST_NAMES);
-        const lastName = getRandomElement(LAST_NAMES);
-        const fullName = `${firstName} ${lastName}`;
-        const email = `customer.${j + 1}.${firstName.toLowerCase()}@gmail.com`;
-        const phone = `+9197${getRandomNumber(10000000, 99999999)}`;
-        const city = getRandomElement(SEED_CITIES);
-
-        const [cust] = await tx
-          .insert(users)
-          .values({
-            name: fullName,
-            email,
-            passwordHash: defaultPasswordHash,
-            phone,
-            city,
-            role: 'USER',
-            avatarUrl: `https://i.pravatar.cc/150?u=${email}`,
-          })
-          .returning();
-
-        if (cust) {
-          createdCustomersList.push({ id: cust.id, name: cust.name, city: cust.city });
-        }
-      }
-
-      // 5. Generate 450+ Bookings Across Various Lifecycle States
-      logger.info('📅 Generating 450+ Bookings...');
+      // 6. Generate Bookings Across Various Lifecycle States
+      logger.info(`📅 Generating ${TOTAL_BOOKINGS} Bookings...`);
       const createdCompletedBookings: { id: string; userId: string; workerId: string }[] =
         [];
       const bookingStatuses: (
@@ -371,7 +321,7 @@ async function seed() {
         'CANCELLED',
       ];
 
-      for (let k = 0; k < 450; k++) {
+      for (let k = 0; k < TOTAL_BOOKINGS; k++) {
         const customer = getRandomElement(createdCustomersList);
         const worker = getRandomElement(createdWorkerProfilesList);
         const status = getRandomElement(bookingStatuses);
@@ -407,13 +357,21 @@ async function seed() {
         }
       }
 
-      // 6. Generate 300+ Verified Reviews and Recalculate Ratings
-      logger.info('⭐ Submitting Verified Reviews and recalculating worker ratings...');
+      // 7. Generate Extra Verified Reviews and Recalculate Ratings for General Bookings
+      logger.info('⭐ Submitting General Verified Reviews and recalculating ratings...');
       for (const compBooking of createdCompletedBookings) {
         if (Math.random() < 0.8) {
-          const ratingRoll = Math.random();
-          const rating = ratingRoll > 0.25 ? 5 : ratingRoll > 0.08 ? 4 : 3;
-          const comment = getRandomElement(REVIEW_COMMENTS);
+          const isBadReview = Math.random() < 0.3;
+          let rating: number;
+          let comment: string;
+
+          if (isBadReview) {
+            rating = getRandomNumber(1, 3);
+            comment = getRandomElement(BAD_COMMENTS);
+          } else {
+            rating = Math.random() < 0.1 ? 5 : 4;
+            comment = getRandomElement(GOOD_COMMENTS);
+          }
 
           await tx.insert(reviews).values({
             bookingId: compBooking.id,
@@ -438,7 +396,7 @@ async function seed() {
     });
 
     logger.info(
-      '🎉 Database seeding complete! 80+ flat skills & 80+ North Indian cities populated with zero compiler errors.',
+      '🎉 Massive database seeding complete! 2,500+ users & diverse reviews successfully generated.',
     );
     process.exit(0);
   } catch (error) {
