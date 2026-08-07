@@ -17,7 +17,7 @@ const ITEMS_PER_PAGE = 12;
 
 export const SearchPage: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const { isAuthenticated } = useAuth();
+  const { user, isAuthenticated } = useAuth();
 
   const category = searchParams.get('category') || '';
   const city = searchParams.get('city') || '';
@@ -222,6 +222,26 @@ export const SearchPage: React.FC = () => {
           >
             Please log in to submit a booking request.
           </p>
+        ) : !user?.isVerified ? ( // 👈 Restricted booking for unverified accounts
+          <div
+            style={{
+              textAlign: 'center',
+              padding: 'var(--spacing-md)',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '8px',
+            }}
+          >
+            <p style={{ color: 'var(--color-error)', fontWeight: 'bold' }}>
+              Email Verification Required
+            </p>
+            <p
+              style={{ fontSize: 'var(--font-size-xs)', color: 'var(--color-slate-600)' }}
+            >
+              Please verify your email address (<strong>{user?.email}</strong>) to send
+              booking requests to workers.
+            </p>
+          </div>
         ) : (
           <form
             onSubmit={handleBookSubmit}

@@ -2,6 +2,7 @@ import React from 'react';
 import { Outlet, useLocation } from 'react-router';
 import { Navbar } from './Navbar/Navbar';
 import { Footer } from './Footer/Footer';
+import { EmailVerificationBanner } from '@/components/ui/EmailVerificationBanner/EmailVerificationBanner';
 import styles from './MainLayout.module.css';
 
 export const MainLayout: React.FC = () => {
@@ -11,6 +12,7 @@ export const MainLayout: React.FC = () => {
   return (
     <div className={styles.layoutWrapper}>
       <Navbar />
+      <EmailVerificationBanner /> {/* 👈 Injected sticky banner */}
       <main className={`${styles.mainContent} ${isAuthPage ? styles.authMain : ''}`}>
         <Outlet />
       </main>

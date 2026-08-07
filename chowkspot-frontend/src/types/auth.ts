@@ -16,6 +16,7 @@ export interface AuthUser {
   phone: string;
   role: Role;
   city: string;
+  isVerified: boolean;
   avatarUrl?: string | null;
   createdAt: string;
   updatedAt: string;

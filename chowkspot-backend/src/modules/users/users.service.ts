@@ -16,6 +16,7 @@ export class UserService {
         avatarUrl: users.avatarUrl,
         role: users.role,
         city: users.city,
+        isVerified: users.isVerified,
         createdAt: users.createdAt,
       })
       .from(users)
@@ -76,6 +77,7 @@ export class UserService {
           avatarUrl: users.avatarUrl,
           role: users.role,
           city: users.city,
+          isVerified: users.isVerified,
           updatedAt: users.updatedAt,
         });
 
