@@ -17,19 +17,37 @@ export const VerifyEmailPage: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!token || !email) {
-      setStatus('error');
-      setErrorMessage('Missing verification token or email parameters.');
-      return;
-    }
+    let isMounted = true;
 
-    authApi
-      .verifyEmail({ token, email })
-      .then(() => setStatus('success'))
-      .catch((err) => {
-        setStatus('error');
-        setErrorMessage(err.message || 'Verification failed or link expired.');
-      });
+    const verify = async () => {
+      if (!token || !email) {
+        if (isMounted) {
+          setStatus('error');
+          setErrorMessage('Missing verification token or email parameters.');
+        }
+        return;
+      }
+
+      try {
+        await authApi.verifyEmail({ token, email });
+        if (isMounted) {
+          setStatus('success');
+        }
+      } catch (err) {
+        if (isMounted) {
+          setStatus('error');
+          setErrorMessage(
+            (err as Error).message || 'Verification failed or link expired.',
+          );
+        }
+      }
+    };
+
+    void verify();
+
+    return () => {
+      isMounted = false;
+    };
   }, [token, email]);
 
   return (

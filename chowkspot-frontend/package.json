@@ -1,5 +1,6 @@
 {
   "name": "chowkspot-frontend",
+  "description": "Frontend for ChowkSpot hyperlocal service marketplace",
   "private": true,
   "version": "0.0.0",
   "type": "module",
