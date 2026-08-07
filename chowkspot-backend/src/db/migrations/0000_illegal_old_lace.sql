@@ -1,4 +1,3 @@
-CREATE EXTENSION IF NOT EXISTS pg_trgm;
 CREATE TYPE "public"."booking_status" AS ENUM('PENDING', 'ACCEPTED', 'REJECTED', 'COUNTER_PROPOSED', 'IN_PROGRESS', 'COMPLETED', 'CANCELLED');--> statement-breakpoint
 CREATE TYPE "public"."rate_type" AS ENUM('HOURLY', 'FIXED', 'INSPECTION_FIRST');--> statement-breakpoint
 CREATE TYPE "public"."role" AS ENUM('USER', 'WORKER', 'ADMIN');--> statement-breakpoint
@@ -11,6 +10,11 @@ CREATE TABLE "users" (
 	"avatar_url" text,
 	"role" "role" DEFAULT 'USER' NOT NULL,
 	"city" text NOT NULL,
+	"is_verified" boolean DEFAULT false NOT NULL,
+	"email_verify_token_hash" text,
+	"email_verify_expires_at" timestamp with time zone,
+	"password_reset_token_hash" text,
+	"password_reset_expires_at" timestamp with time zone,
 	"refresh_token_hash" text,
 	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
 	"updated_at" timestamp with time zone DEFAULT now() NOT NULL,
