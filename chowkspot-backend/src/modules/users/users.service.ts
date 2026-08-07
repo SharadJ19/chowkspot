@@ -1,3 +1,4 @@
+// FILE: src/modules/users/users.service.ts
 import { db } from '@/db/index.js';
 import { users, workerProfiles } from '@/db/schema/index.js';
 import { eq } from 'drizzle-orm';
@@ -44,7 +45,6 @@ export class UserService {
         throw new ApiError(CONSTANTS.HTTP_STATUS.NOT_FOUND, 'User profile not found');
       }
 
-      // Separate core user fields from worker profile fields
       const {
         name,
         phone,
@@ -105,5 +105,15 @@ export class UserService {
 
       return { user: updatedUser, workerProfile: updatedWorkerProfile };
     });
+  }
+
+  static async deleteOwnAccount(userId: string) {
+    const [deletedUser] = await db.delete(users).where(eq(users.id, userId)).returning();
+
+    if (!deletedUser) {
+      throw new ApiError(CONSTANTS.HTTP_STATUS.NOT_FOUND, 'User account not found');
+    }
+
+    return { message: 'Account successfully deleted' };
   }
 }

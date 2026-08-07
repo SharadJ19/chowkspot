@@ -1,3 +1,4 @@
+// FILE: src/modules/users/users.controller.ts
 import { Request, Response, NextFunction } from 'express';
 import { UserService } from '@/modules/users/users.service.js';
 import { CONSTANTS } from '@/config/constants.js';
@@ -16,6 +17,16 @@ export class UserController {
     try {
       const updatedUser = await UserService.updateProfile(req.user!.userId, req.body);
       res.status(CONSTANTS.HTTP_STATUS.OK).json({ success: true, data: updatedUser });
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  static async deleteMe(req: Request, res: Response, next: NextFunction) {
+    try {
+      const result = await UserService.deleteOwnAccount(req.user!.userId);
+      res.clearCookie(CONSTANTS.JWT.COOKIE_NAME);
+      res.status(CONSTANTS.HTTP_STATUS.OK).json({ success: true, data: result });
     } catch (err) {
       next(err);
     }

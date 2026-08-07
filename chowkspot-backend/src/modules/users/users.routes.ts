@@ -11,5 +11,6 @@ router.use(authenticate);
 
 router.get('/me', UserController.getMe);
 router.patch('/me', validateRequest(updateProfileSchema), UserController.updateMe);
+router.delete('/me', UserController.deleteMe);
 
 export default router;

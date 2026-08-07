@@ -7,7 +7,7 @@ export const registerSchema = z.object({
   phone: z.string().min(10, 'Phone number must be at least 10 digits'),
   city: z.string().min(2, 'City is required'),
   role: z.enum(['USER', 'WORKER']).default('USER'),
-  avatarUrl: z.url().optional(), // Cloudinary URL from React frontend
+  avatarUrl: z.url('Invalid image URL').nullable().optional(), // Cloudinary URL from React frontend
 });
 
 export const loginSchema = z.object({
