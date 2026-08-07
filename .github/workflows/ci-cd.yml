@@ -25,6 +25,10 @@ jobs:
       run:
         working-directory: chowkspot-backend
 
+    environment:
+      name: backend
+      url: https://chowkspot-backend.onrender.com
+
     steps:
       - name: Checkout Codebase
         uses: actions/checkout@v4
@@ -54,6 +58,10 @@ jobs:
     defaults:
       run:
         working-directory: chowkspot-frontend
+
+    environment:
+      name: frontend
+      url: https://chowkspot.vercel.app
 
     steps:
       - name: Checkout Codebase
