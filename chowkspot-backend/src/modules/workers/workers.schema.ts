@@ -35,14 +35,14 @@ export const searchWorkersQuerySchema = z.object({
     .optional(),
   page: z
     .string()
+    .default('1')
     .transform((val) => parseInt(val, 10))
-    .pipe(z.number().min(1))
-    .default('1'),
+    .pipe(z.number().min(1)),
   limit: z
     .string()
+    .default('12')
     .transform((val) => parseInt(val, 10))
-    .pipe(z.number().min(1).max(100))
-    .default('12'),
+    .pipe(z.number().min(1).max(100)),
 });
 
 export type CreateWorkerProfileInput = z.infer<typeof createWorkerProfileSchema>;

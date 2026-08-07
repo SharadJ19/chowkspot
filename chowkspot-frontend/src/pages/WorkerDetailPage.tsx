@@ -6,6 +6,7 @@ import { MapPin, Calendar, Briefcase, ShieldCheck } from 'lucide-react';
 import { useWorkerQueries } from '@/modules/workers/hooks/useWorkerQueries';
 import { useReviewQueries } from '@/modules/reviews/hooks/useReviewQueries';
 import { useBookingQueries } from '@/modules/bookings/hooks/useBookingQueries';
+import type { WorkerSearchResult } from '@/types';
 import { useAuth } from '@/hooks/useAuth';
 import { ReviewList } from '@/modules/reviews/components/ReviewList/ReviewList';
 import { Avatar } from '@/components/ui/Avatar/Avatar';
@@ -31,7 +32,9 @@ export const WorkerDetailPage: React.FC = () => {
   const [notes, setNotes] = useState('');
   const [bookingError, setBookingError] = useState<string | null>(null);
 
-  const worker = searchWorkersQuery.data?.find((w) => w.id === id);
+  const worker = searchWorkersQuery.data?.workers.find(
+    (w: WorkerSearchResult) => w.id === id,
+  );
 
   const handleBookSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -101,7 +104,7 @@ export const WorkerDetailPage: React.FC = () => {
               >
                 Base: {worker.user.city} • Serves:
               </span>
-              {worker.serviceCities.map((city) => (
+              {worker.serviceCities.map((city: string) => (
                 <span key={city} className={styles.cityBadge}>
                   {city}
                 </span>
