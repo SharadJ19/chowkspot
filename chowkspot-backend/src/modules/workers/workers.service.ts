@@ -1,18 +1,21 @@
+// FILE: src/modules/workers/workers.service.ts
 import { db } from '@/db/index.js';
 import { workerProfiles, users } from '@/db/schema/index.js';
-import { arrayContains, ilike, eq, and } from 'drizzle-orm';
+import { arrayContains, ilike, eq, and, gte, lte, or, sql } from 'drizzle-orm';
 import { ApiError } from '@/utils/ApiError.js';
 import { CONSTANTS } from '@/config/constants.js';
-import { CreateWorkerProfileInput } from '@/modules/workers/workers.schema.js';
+import {
+  CreateWorkerProfileInput,
+  SearchWorkersQueryInput,
+} from '@/modules/workers/workers.schema.js';
+
 export class WorkerService {
   static async createOrUpdateProfile(userId: string, input: CreateWorkerProfileInput) {
-    // 1. Check if user exists
     const [user] = await db.select().from(users).where(eq(users.id, userId));
     if (!user) {
       throw new ApiError(CONSTANTS.HTTP_STATUS.NOT_FOUND, 'User not found');
     }
 
-    // 2. Insert or update worker profile
     const [existingProfile] = await db
       .select()
       .from(workerProfiles)
@@ -27,7 +30,6 @@ export class WorkerService {
       return updated;
     }
 
-    // First time setup - update user role to WORKER
     await db
       .update(users)
       .set({ role: CONSTANTS.ROLES.WORKER })
@@ -58,49 +60,97 @@ export class WorkerService {
     return updated;
   }
 
-  static async searchWorkers(category?: string, city?: string, availableOnly?: boolean) {
-    const query = db
-      .select({
-        id: workerProfiles.id,
-        category: workerProfiles.category,
-        bio: workerProfiles.bio,
-        experienceYears: workerProfiles.experienceYears,
-        rateType: workerProfiles.rateType,
-        baseRate: workerProfiles.baseRate,
-        isAvailable: workerProfiles.isAvailable,
-        serviceCities: workerProfiles.serviceCities,
-        paymentIdentifier: workerProfiles.paymentIdentifier,
-        avgRating: workerProfiles.avgRating,
-        totalReviews: workerProfiles.totalReviews,
-        user: {
-          name: users.name,
-          phone: users.phone,
-          city: users.city,
-          avatarUrl: users.avatarUrl,
-        },
-      })
-      .from(workerProfiles)
-      .innerJoin(users, eq(workerProfiles.userId, users.id));
+  static async searchWorkers(filters: SearchWorkersQueryInput) {
+    const page = filters.page || 1;
+    const limit = filters.limit || 12;
+    const offset = (page - 1) * limit;
 
     const conditions = [];
 
-    if (category) {
-      conditions.push(ilike(workerProfiles.category, `%${category}%`));
+    // 1. Search by Name or Category keyword
+    if (filters.name) {
+      conditions.push(
+        or(
+          ilike(users.name, `%${filters.name}%`),
+          ilike(workerProfiles.category, `%${filters.name}%`),
+        ),
+      );
     }
 
-    if (city) {
-      // Pure type-safe Drizzle array contains helper
-      conditions.push(arrayContains(workerProfiles.serviceCities, [city]));
+    // 2. Exact/Partial Category match
+    if (filters.category) {
+      conditions.push(ilike(workerProfiles.category, `%${filters.category}%`));
     }
 
-    if (availableOnly) {
+    // 3. PostgreSQL Array Contains for City
+    if (filters.city) {
+      conditions.push(arrayContains(workerProfiles.serviceCities, [filters.city]));
+    }
+
+    // 4. Availability Filter
+    if (filters.availableOnly) {
       conditions.push(eq(workerProfiles.isAvailable, true));
     }
 
-    if (conditions.length > 0) {
-      return await query.where(and(...conditions));
+    // 5. Minimum Experience Threshold
+    if (filters.minExperience !== undefined && !isNaN(filters.minExperience)) {
+      conditions.push(gte(workerProfiles.experienceYears, filters.minExperience));
     }
 
-    return await query;
+    // 6. Max Price Cap
+    if (filters.maxPrice !== undefined && !isNaN(filters.maxPrice)) {
+      conditions.push(
+        lte(sql`CAST(${workerProfiles.baseRate} AS numeric)`, filters.maxPrice),
+      );
+    }
+
+    const whereClause = conditions.length > 0 ? and(...conditions) : undefined;
+
+    // Execute total count and paginated queries concurrently
+    const [countResult, workers] = await Promise.all([
+      db
+        .select({ total: sql<number>`cast(count(*) as integer)` })
+        .from(workerProfiles)
+        .innerJoin(users, eq(workerProfiles.userId, users.id))
+        .where(whereClause),
+      db
+        .select({
+          id: workerProfiles.id,
+          category: workerProfiles.category,
+          bio: workerProfiles.bio,
+          experienceYears: workerProfiles.experienceYears,
+          rateType: workerProfiles.rateType,
+          baseRate: workerProfiles.baseRate,
+          isAvailable: workerProfiles.isAvailable,
+          serviceCities: workerProfiles.serviceCities,
+          paymentIdentifier: workerProfiles.paymentIdentifier,
+          avgRating: workerProfiles.avgRating,
+          totalReviews: workerProfiles.totalReviews,
+          user: {
+            name: users.name,
+            phone: users.phone,
+            city: users.city,
+            avatarUrl: users.avatarUrl,
+          },
+        })
+        .from(workerProfiles)
+        .innerJoin(users, eq(workerProfiles.userId, users.id))
+        .where(whereClause)
+        .limit(limit)
+        .offset(offset),
+    ]);
+
+    const total = countResult[0]?.total ?? 0;
+    const totalPages = Math.ceil(total / limit) || 1;
+
+    return {
+      workers,
+      pagination: {
+        total,
+        page,
+        limit,
+        totalPages,
+      },
+    };
   }
 }

@@ -1,6 +1,8 @@
+// FILE: src/modules/workers/workers.controller.ts
 import { Request, Response, NextFunction } from 'express';
 import { WorkerService } from '@/modules/workers/workers.service.js';
 import { CONSTANTS } from '@/config/constants.js';
+import { searchWorkersQuerySchema } from './workers.schema.js';
 
 export class WorkerController {
   static async upsertProfile(req: Request, res: Response, next: NextFunction) {
@@ -29,15 +31,8 @@ export class WorkerController {
 
   static async search(req: Request, res: Response, next: NextFunction) {
     try {
-      const { category, city, availableOnly } = req.query;
-      const isAvailable = availableOnly === 'true';
-
-      const results = await WorkerService.searchWorkers(
-        category as string,
-        city as string,
-        isAvailable,
-      );
-
+      const validatedQuery = searchWorkersQuerySchema.parse(req.query);
+      const results = await WorkerService.searchWorkers(validatedQuery);
       res.status(CONSTANTS.HTTP_STATUS.OK).json({ success: true, data: results });
     } catch (err) {
       next(err);

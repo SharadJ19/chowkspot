@@ -1,3 +1,4 @@
+// FILE: src/modules/workers/workers.schema.ts
 import { z } from 'zod';
 
 export const createWorkerProfileSchema = z.object({
@@ -14,10 +15,35 @@ export const updateAvailabilitySchema = z.object({
   isAvailable: z.boolean(),
 });
 
-export const searchWorkersSchema = z.object({
+export const searchWorkersQuerySchema = z.object({
+  name: z.string().optional(),
   category: z.string().optional(),
   city: z.string().optional(),
-  availableOnly: z.enum(['true', 'false']).optional(),
+  availableOnly: z
+    .enum(['true', 'false'])
+    .transform((val) => val === 'true')
+    .optional(),
+  minExperience: z
+    .string()
+    .transform((val) => parseInt(val, 10))
+    .pipe(z.number().min(0))
+    .optional(),
+  maxPrice: z
+    .string()
+    .transform((val) => parseFloat(val))
+    .pipe(z.number().positive())
+    .optional(),
+  page: z
+    .string()
+    .transform((val) => parseInt(val, 10))
+    .pipe(z.number().min(1))
+    .default('1'),
+  limit: z
+    .string()
+    .transform((val) => parseInt(val, 10))
+    .pipe(z.number().min(1).max(100))
+    .default('12'),
 });
 
 export type CreateWorkerProfileInput = z.infer<typeof createWorkerProfileSchema>;
+export type SearchWorkersQueryInput = z.infer<typeof searchWorkersQuerySchema>;
