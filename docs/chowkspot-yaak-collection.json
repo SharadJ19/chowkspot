@@ -1,0 +1,847 @@
+{
+  "yaakVersion": "2026.5.0",
+  "yaakSchema": 4,
+  "timestamp": "2026-08-07T20:37:42.000000000",
+  "resources": {
+    "workspaces": [
+      {
+        "model": "workspace",
+        "id": "wk_o2ZXPt42RP",
+        "createdAt": "2026-07-25T15:25:35.830473405",
+        "updatedAt": "2026-08-07T20:37:42.000000000",
+        "authentication": {},
+        "authenticationType": null,
+        "description": "ChowkSpot Backend API Collection for Yaak REST Client",
+        "headers": [],
+        "name": "ChowkSpot API",
+        "encryptionKeyChallenge": null,
+        "settingValidateCertificates": true,
+        "settingFollowRedirects": true,
+        "settingRequestTimeout": 0,
+        "settingRequestMessageSize": 67108864,
+        "settingDnsOverrides": [],
+        "settingSendCookies": false,
+        "settingStoreCookies": false
+      }
+    ],
+    "environments": [
+      {
+        "model": "environment",
+        "id": "ev_jVfzF4vDas",
+        "workspaceId": "wk_o2ZXPt42RP",
+        "createdAt": "2026-07-25T15:25:36.451010818",
+        "updatedAt": "2026-08-07T20:37:42.000000000",
+        "name": "Global Variables",
+        "public": true,
+        "base": true,
+        "parentModel": "workspace",
+        "parentId": null,
+        "variables": [
+          {
+            "enabled": true,
+            "name": "BASE_URL",
+            "value": "http://localhost:5000/api",
+            "id": "W0rd4xanJH"
+          },
+          {
+            "enabled": true,
+            "name": "ACCESS_TOKEN",
+            "value": "your_jwt_access_token_here",
+            "id": "djsjpPbsmT"
+          },
+          {
+            "enabled": true,
+            "name": "WORKER_ID",
+            "value": "5ca0126a-2b06-4949-8001-1f4888eda6cd",
+            "id": "bayRSxiJni"
+          },
+          {
+            "enabled": true,
+            "name": "BOOKING_ID",
+            "value": "fd105af7-3243-4055-93a8-03b56fd7bd49",
+            "id": "2j8DPUAdet"
+          },
+          {
+            "enabled": true,
+            "name": "USER_ID",
+            "value": "2c57fad1-7439-4704-a771-c95c81f6bfc8",
+            "id": "usr_x98aK2pL00"
+          }
+        ],
+        "color": null,
+        "sortPriority": 0.0
+      }
+    ],
+    "folders": [
+      {
+        "model": "folder",
+        "id": "fl_QACau3i5Jf",
+        "createdAt": "2026-08-02T20:11:00.159038174",
+        "updatedAt": "2026-08-07T20:37:42.000000000",
+        "workspaceId": "wk_o2ZXPt42RP",
+        "folderId": null,
+        "authentication": {},
+        "authenticationType": null,
+        "description": "",
+        "headers": [],
+        "name": "ChowkSpot Backend API",
+        "sortPriority": 0.0,
+        "settingSendCookies": { "enabled": false, "value": false },
+        "settingStoreCookies": { "enabled": false, "value": false },
+        "settingValidateCertificates": { "enabled": false, "value": true },
+        "settingFollowRedirects": { "enabled": false, "value": true },
+        "settingRequestTimeout": { "enabled": false, "value": 0 },
+        "settingRequestMessageSize": { "enabled": false, "value": 67108864 }
+      },
+      {
+        "model": "folder",
+        "id": "fl_KTfxxzX2WT",
+        "createdAt": "2026-08-02T20:11:27.654106523",
+        "updatedAt": "2026-08-07T20:37:42.000000000",
+        "workspaceId": "wk_o2ZXPt42RP",
+        "folderId": "fl_QACau3i5Jf",
+        "authentication": {},
+        "authenticationType": null,
+        "description": "",
+        "headers": [],
+        "name": "Auth",
+        "sortPriority": -100.0,
+        "settingSendCookies": { "enabled": false, "value": false },
+        "settingStoreCookies": { "enabled": false, "value": false },
+        "settingValidateCertificates": { "enabled": false, "value": true },
+        "settingFollowRedirects": { "enabled": false, "value": true },
+        "settingRequestTimeout": { "enabled": false, "value": 0 }
+      },
+      {
+        "model": "folder",
+        "id": "fl_yeZ3GAt3Bn",
+        "createdAt": "2026-08-02T20:11:36.381233474",
+        "updatedAt": "2026-08-07T20:37:42.000000000",
+        "workspaceId": "wk_o2ZXPt42RP",
+        "folderId": "fl_QACau3i5Jf",
+        "authentication": {},
+        "authenticationType": null,
+        "description": "",
+        "headers": [],
+        "name": "Users",
+        "sortPriority": -90.0,
+        "settingSendCookies": { "enabled": false, "value": false },
+        "settingStoreCookies": { "enabled": false, "value": false },
+        "settingValidateCertificates": { "enabled": false, "value": true },
+        "settingFollowRedirects": { "enabled": false, "value": true },
+        "settingRequestTimeout": { "enabled": false, "value": 0 }
+      },
+      {
+        "model": "folder",
+        "id": "fl_DbEfW54jU4",
+        "createdAt": "2026-08-02T20:11:41.468321024",
+        "updatedAt": "2026-08-07T20:37:42.000000000",
+        "workspaceId": "wk_o2ZXPt42RP",
+        "folderId": "fl_QACau3i5Jf",
+        "authentication": {},
+        "authenticationType": null,
+        "description": "",
+        "headers": [],
+        "name": "Workers",
+        "sortPriority": -80.0,
+        "settingSendCookies": { "enabled": false, "value": false },
+        "settingStoreCookies": { "enabled": false, "value": false },
+        "settingValidateCertificates": { "enabled": false, "value": true },
+        "settingFollowRedirects": { "enabled": false, "value": true },
+        "settingRequestTimeout": { "enabled": false, "value": 0 }
+      },
+      {
+        "model": "folder",
+        "id": "fl_ih8UpTNcRk",
+        "createdAt": "2026-08-02T20:11:46.636705688",
+        "updatedAt": "2026-08-07T20:37:42.000000000",
+        "workspaceId": "wk_o2ZXPt42RP",
+        "folderId": "fl_QACau3i5Jf",
+        "authentication": {},
+        "authenticationType": null,
+        "description": "",
+        "headers": [],
+        "name": "Bookings",
+        "sortPriority": -70.0,
+        "settingSendCookies": { "enabled": false, "value": false },
+        "settingStoreCookies": { "enabled": false, "value": false },
+        "settingValidateCertificates": { "enabled": false, "value": true },
+        "settingFollowRedirects": { "enabled": false, "value": true },
+        "settingRequestTimeout": { "enabled": false, "value": 0 }
+      },
+      {
+        "model": "folder",
+        "id": "fl_QYyZSaqvCN",
+        "createdAt": "2026-08-02T20:11:55.548265573",
+        "updatedAt": "2026-08-07T20:37:42.000000000",
+        "workspaceId": "wk_o2ZXPt42RP",
+        "folderId": "fl_QACau3i5Jf",
+        "authentication": {},
+        "authenticationType": null,
+        "description": "",
+        "headers": [],
+        "name": "Reviews",
+        "sortPriority": -60.0,
+        "settingSendCookies": { "enabled": false, "value": false },
+        "settingStoreCookies": { "enabled": false, "value": false },
+        "settingValidateCertificates": { "enabled": false, "value": true },
+        "settingFollowRedirects": { "enabled": false, "value": true },
+        "settingRequestTimeout": { "enabled": false, "value": 0 }
+      },
+      {
+        "model": "folder",
+        "id": "fl_VhQNGEkAVv",
+        "createdAt": "2026-08-06T04:47:23.938269451",
+        "updatedAt": "2026-08-07T20:37:42.000000000",
+        "workspaceId": "wk_o2ZXPt42RP",
+        "folderId": "fl_QACau3i5Jf",
+        "authentication": {},
+        "authenticationType": null,
+        "description": "",
+        "headers": [],
+        "name": "Admin",
+        "sortPriority": -50.0,
+        "settingSendCookies": { "enabled": false, "value": false },
+        "settingStoreCookies": { "enabled": false, "value": false },
+        "settingValidateCertificates": { "enabled": false, "value": true },
+        "settingFollowRedirects": { "enabled": false, "value": true },
+        "settingRequestTimeout": { "enabled": false, "value": 0 }
+      }
+    ],
+    "httpRequests": [
+      {
+        "model": "http_request",
+        "id": "rq_mtw7VBQpwz",
+        "createdAt": "2026-08-02T20:12:54.063035165",
+        "updatedAt": "2026-08-07T20:37:42.000000000",
+        "workspaceId": "wk_o2ZXPt42RP",
+        "folderId": "fl_KTfxxzX2WT",
+        "authentication": {},
+        "authenticationType": null,
+        "body": {
+          "text": "{\n  \"name\": \"Sharad Chandel\",\n  \"email\": \"sharad@chowkspot.com\",\n  \"password\": \"Password123!\",\n  \"phone\": \"+919876543210\",\n  \"city\": \"Parwanoo\",\n  \"role\": \"USER\"\n}"
+        },
+        "bodyType": "application/json",
+        "description": "",
+        "headers": [
+          {
+            "enabled": true,
+            "name": "Content-Type",
+            "value": "application/json",
+            "id": "5QVaCnCDKS"
+          }
+        ],
+        "method": "POST",
+        "name": "Register User",
+        "sortPriority": 1.0,
+        "url": "${[ BASE_URL ]}/auth/register",
+        "urlParameters": [],
+        "settingSendCookies": { "enabled": false, "value": false },
+        "settingStoreCookies": { "enabled": false, "value": false }
+      },
+      {
+        "model": "http_request",
+        "id": "rq_iPdsVDT4RU",
+        "createdAt": "2026-08-02T21:01:42.795402567",
+        "updatedAt": "2026-08-07T20:37:42.000000000",
+        "workspaceId": "wk_o2ZXPt42RP",
+        "folderId": "fl_KTfxxzX2WT",
+        "authentication": {},
+        "authenticationType": null,
+        "body": {
+          "text": "{\n  \"name\": \"Safal Varadhan\",\n  \"email\": \"safal@chowkspot.com\",\n  \"password\": \"Password123!\",\n  \"phone\": \"+919812345678\",\n  \"city\": \"Chandigarh\",\n  \"role\": \"WORKER\"\n}"
+        },
+        "bodyType": "application/json",
+        "description": "",
+        "headers": [
+          {
+            "enabled": true,
+            "name": "Content-Type",
+            "value": "application/json",
+            "id": "5PHRkqVfSc"
+          }
+        ],
+        "method": "POST",
+        "name": "Register Worker",
+        "sortPriority": 2.0,
+        "url": "${[ BASE_URL ]}/auth/register",
+        "urlParameters": [],
+        "settingSendCookies": { "enabled": false, "value": false },
+        "settingStoreCookies": { "enabled": false, "value": false }
+      },
+      {
+        "model": "http_request",
+        "id": "rq_bAk2PJiUwL",
+        "createdAt": "2026-08-02T21:03:40.112042296",
+        "updatedAt": "2026-08-07T20:37:42.000000000",
+        "workspaceId": "wk_o2ZXPt42RP",
+        "folderId": "fl_KTfxxzX2WT",
+        "authentication": {},
+        "authenticationType": null,
+        "body": {
+          "text": "{\n  \"email\": \"sharad@chowkspot.com\",\n  \"password\": \"Password123!\"\n}"
+        },
+        "bodyType": "application/json",
+        "description": "",
+        "headers": [
+          {
+            "enabled": true,
+            "name": "Content-Type",
+            "value": "application/json",
+            "id": "ijEHBwTEsC"
+          }
+        ],
+        "method": "POST",
+        "name": "Login User",
+        "sortPriority": 3.0,
+        "url": "${[ BASE_URL ]}/auth/login",
+        "urlParameters": [],
+        "settingSendCookies": { "enabled": false, "value": false },
+        "settingStoreCookies": { "enabled": false, "value": false }
+      },
+      {
+        "model": "http_request",
+        "id": "rq_8rkWh2JWUF",
+        "createdAt": "2026-08-02T21:09:57.211699240",
+        "updatedAt": "2026-08-07T20:37:42.000000000",
+        "workspaceId": "wk_o2ZXPt42RP",
+        "folderId": "fl_KTfxxzX2WT",
+        "authentication": { "token": "${[ ACCESS_TOKEN ]}" },
+        "authenticationType": "bearer",
+        "body": {},
+        "bodyType": null,
+        "description": "",
+        "headers": [],
+        "method": "POST",
+        "name": "Logout",
+        "sortPriority": 4.0,
+        "url": "${[ BASE_URL ]}/auth/logout",
+        "urlParameters": [],
+        "settingSendCookies": { "enabled": false, "value": false },
+        "settingStoreCookies": { "enabled": false, "value": false }
+      },
+      {
+        "model": "http_request",
+        "id": "rq_dKsJGmQ2Z8",
+        "createdAt": "2026-08-02T21:07:35.479196595",
+        "updatedAt": "2026-08-07T20:37:42.000000000",
+        "workspaceId": "wk_o2ZXPt42RP",
+        "folderId": "fl_KTfxxzX2WT",
+        "authentication": {},
+        "authenticationType": null,
+        "body": {},
+        "bodyType": null,
+        "description": "",
+        "headers": [],
+        "method": "POST",
+        "name": "Refresh Tokens",
+        "sortPriority": 5.0,
+        "url": "${[ BASE_URL ]}/auth/refresh",
+        "urlParameters": [],
+        "settingSendCookies": { "enabled": false, "value": false },
+        "settingStoreCookies": { "enabled": false, "value": false }
+      },
+      {
+        "model": "http_request",
+        "id": "rq_VrfyEmail1",
+        "createdAt": "2026-08-07T20:37:42.000000000",
+        "updatedAt": "2026-08-07T20:37:42.000000000",
+        "workspaceId": "wk_o2ZXPt42RP",
+        "folderId": "fl_KTfxxzX2WT",
+        "authentication": {},
+        "authenticationType": null,
+        "body": {
+          "text": "{\n  \"token\": \"raw_verification_token_string\",\n  \"email\": \"sharad@chowkspot.com\"\n}"
+        },
+        "bodyType": "application/json",
+        "description": "",
+        "headers": [
+          {
+            "enabled": true,
+            "name": "Content-Type",
+            "value": "application/json",
+            "id": "vrfEmHdr11"
+          }
+        ],
+        "method": "POST",
+        "name": "Verify Email",
+        "sortPriority": 6.0,
+        "url": "${[ BASE_URL ]}/auth/verify-email",
+        "urlParameters": [],
+        "settingSendCookies": { "enabled": false, "value": false },
+        "settingStoreCookies": { "enabled": false, "value": false }
+      },
+      {
+        "model": "http_request",
+        "id": "rq_FrgtPass1",
+        "createdAt": "2026-08-07T20:37:42.000000000",
+        "updatedAt": "2026-08-07T20:37:42.000000000",
+        "workspaceId": "wk_o2ZXPt42RP",
+        "folderId": "fl_KTfxxzX2WT",
+        "authentication": {},
+        "authenticationType": null,
+        "body": {
+          "text": "{\n  \"email\": \"sharad@chowkspot.com\"\n}"
+        },
+        "bodyType": "application/json",
+        "description": "",
+        "headers": [
+          {
+            "enabled": true,
+            "name": "Content-Type",
+            "value": "application/json",
+            "id": "frgtPassHdr1"
+          }
+        ],
+        "method": "POST",
+        "name": "Forgot Password",
+        "sortPriority": 7.0,
+        "url": "${[ BASE_URL ]}/auth/forgot-password",
+        "urlParameters": [],
+        "settingSendCookies": { "enabled": false, "value": false },
+        "settingStoreCookies": { "enabled": false, "value": false }
+      },
+      {
+        "model": "http_request",
+        "id": "rq_RstPass11",
+        "createdAt": "2026-08-07T20:37:42.000000000",
+        "updatedAt": "2026-08-07T20:37:42.000000000",
+        "workspaceId": "wk_o2ZXPt42RP",
+        "folderId": "fl_KTfxxzX2WT",
+        "authentication": {},
+        "authenticationType": null,
+        "body": {
+          "text": "{\n  \"token\": \"raw_reset_token_string\",\n  \"email\": \"sharad@chowkspot.com\",\n  \"newPassword\": \"NewPassword123!\"\n}"
+        },
+        "bodyType": "application/json",
+        "description": "",
+        "headers": [
+          {
+            "enabled": true,
+            "name": "Content-Type",
+            "value": "application/json",
+            "id": "rstPassHdr1"
+          }
+        ],
+        "method": "POST",
+        "name": "Reset Password",
+        "sortPriority": 8.0,
+        "url": "${[ BASE_URL ]}/auth/reset-password",
+        "urlParameters": [],
+        "settingSendCookies": { "enabled": false, "value": false },
+        "settingStoreCookies": { "enabled": false, "value": false }
+      },
+      {
+        "model": "http_request",
+        "id": "rq_SNMHH4fmHc",
+        "createdAt": "2026-08-02T21:16:56.716876396",
+        "updatedAt": "2026-08-07T20:37:42.000000000",
+        "workspaceId": "wk_o2ZXPt42RP",
+        "folderId": "fl_yeZ3GAt3Bn",
+        "authentication": { "token": "${[ ACCESS_TOKEN ]}" },
+        "authenticationType": "bearer",
+        "body": {},
+        "bodyType": null,
+        "description": "",
+        "headers": [],
+        "method": "GET",
+        "name": "Get Current User Profile",
+        "sortPriority": 1.0,
+        "url": "${[ BASE_URL ]}/users/me",
+        "urlParameters": [],
+        "settingSendCookies": { "enabled": false, "value": false },
+        "settingStoreCookies": { "enabled": false, "value": false }
+      },
+      {
+        "model": "http_request",
+        "id": "rq_EtmLsc8a9X",
+        "createdAt": "2026-08-02T21:20:24.646154267",
+        "updatedAt": "2026-08-07T20:37:42.000000000",
+        "workspaceId": "wk_o2ZXPt42RP",
+        "folderId": "fl_yeZ3GAt3Bn",
+        "authentication": { "token": "${[ ACCESS_TOKEN ]}" },
+        "authenticationType": "bearer",
+        "body": {
+          "text": "{\n  \"name\": \"Sharad Chandel\",\n  \"phone\": \"+917590889608\",\n  \"city\": \"Parwanoo\",\n  \"avatarUrl\": \"https://res.cloudinary.com/demo/image/upload/sample.jpg\"\n}"
+        },
+        "bodyType": "application/json",
+        "description": "",
+        "headers": [
+          {
+            "enabled": true,
+            "name": "Content-Type",
+            "value": "application/json",
+            "id": "EpKqnA9nUq"
+          }
+        ],
+        "method": "PATCH",
+        "name": "Update Profile",
+        "sortPriority": 2.0,
+        "url": "${[ BASE_URL ]}/users/me",
+        "urlParameters": [],
+        "settingSendCookies": { "enabled": false, "value": false },
+        "settingStoreCookies": { "enabled": false, "value": false }
+      },
+      {
+        "model": "http_request",
+        "id": "rq_PcFJYTLVAw",
+        "createdAt": "2026-08-02T21:28:04.859088058",
+        "updatedAt": "2026-08-07T20:37:42.000000000",
+        "workspaceId": "wk_o2ZXPt42RP",
+        "folderId": "fl_DbEfW54jU4",
+        "authentication": {},
+        "authenticationType": null,
+        "body": {},
+        "bodyType": null,
+        "description": "",
+        "headers": [],
+        "method": "GET",
+        "name": "Search Workers",
+        "sortPriority": 1.0,
+        "url": "${[ BASE_URL ]}/workers/search?category=Electrician&city=Parwanoo&availableOnly=true",
+        "urlParameters": [],
+        "settingSendCookies": { "enabled": false, "value": false },
+        "settingStoreCookies": { "enabled": false, "value": false }
+      },
+      {
+        "model": "http_request",
+        "id": "rq_aWX4a5ezp4",
+        "createdAt": "2026-08-02T21:22:15.981137418",
+        "updatedAt": "2026-08-07T20:37:42.000000000",
+        "workspaceId": "wk_o2ZXPt42RP",
+        "folderId": "fl_DbEfW54jU4",
+        "authentication": { "token": "${[ ACCESS_TOKEN ]}" },
+        "authenticationType": "bearer",
+        "body": {
+          "text": "{\n  \"category\": \"Electrician\",\n  \"bio\": \"Certified electrician with 8+ years of residential experience.\",\n  \"experienceYears\": 8,\n  \"rateType\": \"HOURLY\",\n  \"baseRate\": \"350.00\",\n  \"serviceCities\": [\"Chandigarh\", \"Mohali\", \"Panchkula\", \"Parwanoo\"],\n  \"paymentIdentifier\": \"safal@upi\"\n}"
+        },
+        "bodyType": "application/json",
+        "description": "",
+        "headers": [
+          {
+            "enabled": true,
+            "name": "Content-Type",
+            "value": "application/json",
+            "id": "kxPgYPydK4"
+          }
+        ],
+        "method": "POST",
+        "name": "Create / Update Worker Profile",
+        "sortPriority": 2.0,
+        "url": "${[ BASE_URL ]}/workers/profile",
+        "urlParameters": [],
+        "settingSendCookies": { "enabled": false, "value": false },
+        "settingStoreCookies": { "enabled": false, "value": false }
+      },
+      {
+        "model": "http_request",
+        "id": "rq_hBF7JFiY8N",
+        "createdAt": "2026-08-02T21:26:10.399085639",
+        "updatedAt": "2026-08-07T20:37:42.000000000",
+        "workspaceId": "wk_o2ZXPt42RP",
+        "folderId": "fl_DbEfW54jU4",
+        "authentication": { "token": "${[ ACCESS_TOKEN ]}" },
+        "authenticationType": "bearer",
+        "body": {
+          "text": "{\n  \"isAvailable\": true\n}"
+        },
+        "bodyType": "application/json",
+        "description": "",
+        "headers": [
+          {
+            "enabled": true,
+            "name": "Content-Type",
+            "value": "application/json",
+            "id": "feY487SSzS"
+          }
+        ],
+        "method": "PATCH",
+        "name": "Toggle Availability",
+        "sortPriority": 3.0,
+        "url": "${[ BASE_URL ]}/workers/availability",
+        "urlParameters": [],
+        "settingSendCookies": { "enabled": false, "value": false },
+        "settingStoreCookies": { "enabled": false, "value": false }
+      },
+      {
+        "model": "http_request",
+        "id": "rq_whw4GAm2KH",
+        "createdAt": "2026-08-02T21:31:52.167739078",
+        "updatedAt": "2026-08-07T20:37:42.000000000",
+        "workspaceId": "wk_o2ZXPt42RP",
+        "folderId": "fl_ih8UpTNcRk",
+        "authentication": { "token": "${[ ACCESS_TOKEN ]}" },
+        "authenticationType": "bearer",
+        "body": {
+          "text": "{\n  \"workerId\": \"${[ WORKER_ID ]}\",\n  \"requestedDate\": \"2026-08-15T10:00:00.000Z\",\n  \"address\": \"House #123, Sector 17, Chandigarh\",\n  \"notes\": \"Main circuit breaker keeps tripping\"\n}"
+        },
+        "bodyType": "application/json",
+        "description": "",
+        "headers": [
+          {
+            "enabled": true,
+            "name": "Content-Type",
+            "value": "application/json",
+            "id": "pw83FCcadJ"
+          }
+        ],
+        "method": "POST",
+        "name": "Create Booking",
+        "sortPriority": 1.0,
+        "url": "${[ BASE_URL ]}/bookings",
+        "urlParameters": [],
+        "settingSendCookies": { "enabled": false, "value": false },
+        "settingStoreCookies": { "enabled": false, "value": false }
+      },
+      {
+        "model": "http_request",
+        "id": "rq_QzbUoeaYpq",
+        "createdAt": "2026-08-02T21:35:32.834131295",
+        "updatedAt": "2026-08-07T20:37:42.000000000",
+        "workspaceId": "wk_o2ZXPt42RP",
+        "folderId": "fl_ih8UpTNcRk",
+        "authentication": { "token": "${[ ACCESS_TOKEN ]}" },
+        "authenticationType": "bearer",
+        "body": {},
+        "bodyType": null,
+        "description": "",
+        "headers": [],
+        "method": "GET",
+        "name": "Get My Bookings",
+        "sortPriority": 2.0,
+        "url": "${[ BASE_URL ]}/bookings",
+        "urlParameters": [],
+        "settingSendCookies": { "enabled": false, "value": false },
+        "settingStoreCookies": { "enabled": false, "value": false }
+      },
+      {
+        "model": "http_request",
+        "id": "rq_DCyd6HXMjV",
+        "createdAt": "2026-08-02T21:39:56.257206713",
+        "updatedAt": "2026-08-07T20:37:42.000000000",
+        "workspaceId": "wk_o2ZXPt42RP",
+        "folderId": "fl_ih8UpTNcRk",
+        "authentication": { "token": "${[ ACCESS_TOKEN ]}" },
+        "authenticationType": "bearer",
+        "body": {
+          "text": "{\n  \"status\": \"ACCEPTED\"\n}"
+        },
+        "bodyType": "application/json",
+        "description": "",
+        "headers": [
+          {
+            "enabled": true,
+            "name": "Content-Type",
+            "value": "application/json",
+            "id": "IJIG2q3skg"
+          }
+        ],
+        "method": "PATCH",
+        "name": "Accept Booking",
+        "sortPriority": 3.0,
+        "url": "${[ BASE_URL ]}/bookings/${[ BOOKING_ID ]}/status",
+        "urlParameters": [],
+        "settingSendCookies": { "enabled": false, "value": false },
+        "settingStoreCookies": { "enabled": false, "value": false }
+      },
+      {
+        "model": "http_request",
+        "id": "rq_NLUcWvzcAG",
+        "createdAt": "2026-08-02T21:38:39.893095159",
+        "updatedAt": "2026-08-07T20:37:42.000000000",
+        "workspaceId": "wk_o2ZXPt42RP",
+        "folderId": "fl_ih8UpTNcRk",
+        "authentication": { "token": "${[ ACCESS_TOKEN ]}" },
+        "authenticationType": "bearer",
+        "body": {
+          "text": "{\n  \"status\": \"COUNTER_PROPOSED\",\n  \"counterDate\": \"2026-08-11T14:00:00.000Z\"\n}"
+        },
+        "bodyType": "application/json",
+        "description": "",
+        "headers": [
+          {
+            "enabled": true,
+            "name": "Content-Type",
+            "value": "application/json",
+            "id": "zVdNRB9tp6"
+          }
+        ],
+        "method": "PATCH",
+        "name": "Worker Counter-Proposal",
+        "sortPriority": 4.0,
+        "url": "${[ BASE_URL ]}/bookings/${[ BOOKING_ID ]}/status",
+        "urlParameters": [],
+        "settingSendCookies": { "enabled": false, "value": false },
+        "settingStoreCookies": { "enabled": false, "value": false }
+      },
+      {
+        "model": "http_request",
+        "id": "rq_FPqvBFYF9L",
+        "createdAt": "2026-08-02T21:41:02.066264524",
+        "updatedAt": "2026-08-07T20:37:42.000000000",
+        "workspaceId": "wk_o2ZXPt42RP",
+        "folderId": "fl_ih8UpTNcRk",
+        "authentication": { "token": "${[ ACCESS_TOKEN ]}" },
+        "authenticationType": "bearer",
+        "body": {
+          "text": "{\n  \"status\": \"COMPLETED\"\n}"
+        },
+        "bodyType": "application/json",
+        "description": "",
+        "headers": [
+          {
+            "enabled": true,
+            "name": "Content-Type",
+            "value": "application/json",
+            "id": "BSFiHgzHPM"
+          }
+        ],
+        "method": "PATCH",
+        "name": "Complete Booking",
+        "sortPriority": 5.0,
+        "url": "${[ BASE_URL ]}/bookings/${[ BOOKING_ID ]}/status",
+        "urlParameters": [],
+        "settingSendCookies": { "enabled": false, "value": false },
+        "settingStoreCookies": { "enabled": false, "value": false }
+      },
+      {
+        "model": "http_request",
+        "id": "rq_mTEk8zgnff",
+        "createdAt": "2026-08-02T21:43:57.214703407",
+        "updatedAt": "2026-08-07T20:37:42.000000000",
+        "workspaceId": "wk_o2ZXPt42RP",
+        "folderId": "fl_QYyZSaqvCN",
+        "authentication": {},
+        "authenticationType": null,
+        "body": {},
+        "bodyType": null,
+        "description": "",
+        "headers": [],
+        "method": "GET",
+        "name": "Get Worker Reviews",
+        "sortPriority": 1.0,
+        "url": "${[ BASE_URL ]}/reviews/worker/${[ WORKER_ID ]}",
+        "urlParameters": [],
+        "settingSendCookies": { "enabled": false, "value": false },
+        "settingStoreCookies": { "enabled": false, "value": false }
+      },
+      {
+        "model": "http_request",
+        "id": "rq_KdjwQyCdzN",
+        "createdAt": "2026-08-02T21:42:17.846869406",
+        "updatedAt": "2026-08-07T20:37:42.000000000",
+        "workspaceId": "wk_o2ZXPt42RP",
+        "folderId": "fl_QYyZSaqvCN",
+        "authentication": { "token": "${[ ACCESS_TOKEN ]}" },
+        "authenticationType": "bearer",
+        "body": {
+          "text": "{\n  \"bookingId\": \"${[ BOOKING_ID ]}\",\n  \"rating\": 5,\n  \"comment\": \"Safal fixed the wiring issue quickly and clean!\"\n}"
+        },
+        "bodyType": "application/json",
+        "description": "",
+        "headers": [
+          {
+            "enabled": true,
+            "name": "Content-Type",
+            "value": "application/json",
+            "id": "ENXBmcvMM2"
+          }
+        ],
+        "method": "POST",
+        "name": "Submit Verified Review",
+        "sortPriority": 2.0,
+        "url": "${[ BASE_URL ]}/reviews",
+        "urlParameters": [],
+        "settingSendCookies": { "enabled": false, "value": false },
+        "settingStoreCookies": { "enabled": false, "value": false }
+      },
+      {
+        "model": "http_request",
+        "id": "rq_QVnafbDtxM",
+        "createdAt": "2026-08-06T04:47:27.076635170",
+        "updatedAt": "2026-08-07T20:37:42.000000000",
+        "workspaceId": "wk_o2ZXPt42RP",
+        "folderId": "fl_VhQNGEkAVv",
+        "authentication": { "token": "${[ ACCESS_TOKEN ]}" },
+        "authenticationType": "bearer",
+        "body": {},
+        "bodyType": null,
+        "description": "",
+        "headers": [],
+        "method": "GET",
+        "name": "Get Platform Statistics",
+        "sortPriority": 1.0,
+        "url": "${[ BASE_URL ]}/admin/stats",
+        "urlParameters": [],
+        "settingSendCookies": { "enabled": false, "value": false },
+        "settingStoreCookies": { "enabled": false, "value": false }
+      },
+      {
+        "model": "http_request",
+        "id": "rq_MjbcnMVTKH",
+        "createdAt": "2026-08-06T04:54:25.864961069",
+        "updatedAt": "2026-08-07T20:37:42.000000000",
+        "workspaceId": "wk_o2ZXPt42RP",
+        "folderId": "fl_VhQNGEkAVv",
+        "authentication": { "token": "${[ ACCESS_TOKEN ]}" },
+        "authenticationType": "bearer",
+        "body": {},
+        "bodyType": null,
+        "description": "",
+        "headers": [],
+        "method": "GET",
+        "name": "Get All Users Directory",
+        "sortPriority": 2.0,
+        "url": "${[ BASE_URL ]}/admin/users",
+        "urlParameters": [],
+        "settingSendCookies": { "enabled": false, "value": false },
+        "settingStoreCookies": { "enabled": false, "value": false }
+      },
+      {
+        "model": "http_request",
+        "id": "rq_hQpDXbeLhH",
+        "createdAt": "2026-08-06T04:54:59.314808451",
+        "updatedAt": "2026-08-07T20:37:42.000000000",
+        "workspaceId": "wk_o2ZXPt42RP",
+        "folderId": "fl_VhQNGEkAVv",
+        "authentication": { "token": "${[ ACCESS_TOKEN ]}" },
+        "authenticationType": "bearer",
+        "body": {},
+        "bodyType": null,
+        "description": "",
+        "headers": [],
+        "method": "DELETE",
+        "name": "Delete User Account",
+        "sortPriority": 3.0,
+        "url": "${[ BASE_URL ]}/admin/users/${[ USER_ID ]}",
+        "urlParameters": [],
+        "settingSendCookies": { "enabled": false, "value": false },
+        "settingStoreCookies": { "enabled": false, "value": false }
+      }
+    ],
+    "grpcRequests": [],
+    "websocketRequests": [
+      {
+        "model": "websocket_request",
+        "id": "wr_q3KajTcMFo",
+        "createdAt": "2026-08-02T21:46:24.669979111",
+        "updatedAt": "2026-08-07T20:37:42.000000000",
+        "workspaceId": "wk_o2ZXPt42RP",
+        "folderId": "fl_QACau3i5Jf",
+        "authentication": { "token": "${[ ACCESS_TOKEN ]}" },
+        "authenticationType": "bearer",
+        "description": "",
+        "headers": [],
+        "message": "",
+        "name": "Real-time Socket Engine",
+        "sortPriority": 0.0,
+        "url": "ws://localhost:5000",
+        "urlParameters": [],
+        "settingSendCookies": { "enabled": false, "value": false },
+        "settingStoreCookies": { "enabled": false, "value": false },
+        "settingValidateCertificates": { "enabled": false, "value": true },
+        "settingRequestMessageSize": { "enabled": false, "value": 67108864 }
+      }
+    ]
+  }
+}
