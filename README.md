@@ -45,8 +45,6 @@ The skilled workers were out there, and families needed them—but there was no 
 - 🔍 **Fuzzy Local Discovery**: High-performance PostgreSQL trigram search (`pg_trgm`) matching worker categories and multi-city service belts, even with typos.
 - 🛡️ **Verified Review Loop**: Ratings can only be posted for verified, completed booking records, triggering atomic score updates.
 
----
-
 ## 🔑 Demo Accounts (Pre-Verified & Ready to Test)
 
 To explore and evaluate all core marketplace features instantly without being blocked by email verification, you can log in using any of these pre-verified accounts manually configured in the database:
@@ -65,8 +63,6 @@ To explore and evaluate all core marketplace features instantly without being bl
   - **Email**: `sachit.rajpal@gmail.com`
   - **Password**: `Password123!`
   - **Role**: `USER` (Customer profile capable of discovering workers, submitting booking requests, making direct UPI payments, and leaving verified reviews)
-
----
 
 ## 🛠️ Tech Stack Matrix
 
