@@ -19,6 +19,9 @@ import reviewRoutes from '@/modules/reviews/reviews.routes.js';
 
 const app = express();
 
+// 👈 REQUIRED FOR RENDER: Enable Express trust proxy for reverse proxies
+app.set('trust proxy', 1);
+
 // Security & Body Parsing Middlewares
 app.use(helmet());
 app.use(cors(corsOptions));
