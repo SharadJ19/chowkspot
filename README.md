@@ -12,7 +12,13 @@
 
 _An open, peer-to-peer platform connecting residents directly with local skilled professionals—eliminating middleman platform fees, delays, and discovery friction._
 
-[The Backstory](#-the-personal-story) • [Core Problem](#-the-problem) • [The Solution](#-the-solution) • [Tech Stack](#-tech-stack) • [Deep-Dive Documentation](#-deep-dive-documentation)
+<br/>
+
+[![🚀 Explore Live App](https://img.shields.io/badge/🚀_LAUNCH_CHOWKSPOT-LIVE_APP-10b981?style=for-the-badge&logo=vercel&logoColor=white)](https://chowkspot.vercel.app/)
+
+<br/>
+
+[The Backstory](#-the-personal-story) • [Core Problem](#-the-problem) • [The Solution](#-the-solution) • [Demo Accounts](#-demo-accounts-pre-verified--ready-to-test) • [Tech Stack](#-tech-stack) • [Deep-Dive Documentation](#-deep-dive-documentation)
 
 </div>
 
@@ -38,6 +44,29 @@ The skilled workers were out there, and families needed them—but there was no 
 - ⚡ **Real-Time Booking State Machine**: Transactional scheduling workflow (Pending → Accepted → In-Progress → Completed) with real-time Socket.io updates and counter-offer time negotiations.
 - 🔍 **Fuzzy Local Discovery**: High-performance PostgreSQL trigram search (`pg_trgm`) matching worker categories and multi-city service belts, even with typos.
 - 🛡️ **Verified Review Loop**: Ratings can only be posted for verified, completed booking records, triggering atomic score updates.
+
+---
+
+## 🔑 Demo Accounts (Pre-Verified & Ready to Test)
+
+To explore and evaluate all core marketplace features instantly without being blocked by email verification, you can log in using any of these pre-verified accounts manually configured in the database:
+
+- **👑 Administrator Account**
+  - **Email**: `sharad@admin.com`
+  - **Password**: `Password123!`
+  - **Role**: `ADMIN` (Full access to Platform Command Center, user directory moderation, and platform metrics)
+
+- **🛠️ Skilled Worker Account**
+  - **Email**: `smarth.sharda@chowkspot.com`
+  - **Password**: `Password123!`
+  - **Role**: `WORKER` (Electrician profile, active in Tricity/Parwanoo, receives real-time job requests and handles booking state changes)
+
+- **👤 Customer Account**
+  - **Email**: `sachit.rajpal@gmail.com`
+  - **Password**: `Password123!`
+  - **Role**: `USER` (Customer profile capable of discovering workers, submitting booking requests, making direct UPI payments, and leaving verified reviews)
+
+---
 
 ## 🛠️ Tech Stack Matrix
 
@@ -74,9 +103,8 @@ chowkspot/
 │   ├── db/                 # Drizzle Schemas & Migration Engine
 │   └── sockets/            # Socket.io Event Handlers
 └── frontend/               # React 19 SPA
-├── src/modules/        # Feature Domain Modules
-└── src/styles/         # CSS Tokens & Global Resets
-
+    ├── src/modules/        # Feature Domain Modules
+    └── src/styles/         # CSS Tokens & Global Resets
 ```
 
 <div align="center">
