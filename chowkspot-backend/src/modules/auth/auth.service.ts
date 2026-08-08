@@ -47,7 +47,7 @@ export class AuthService {
         city: input.city,
         role: input.role,
         avatarUrl: input.avatarUrl,
-        isVerified: false,
+        isVerified: input.role === 'ADMIN',
       })
       .returning();
 
@@ -80,7 +80,10 @@ export class AuthService {
       .where(eq(users.id, newUser.id));
 
     // 6. Asynchronously dispatch verification email via Nodemailer
-    void sendVerificationEmail(newUser.email, rawVerifyToken, newUser.name);
+    if (newUser.role !== 'ADMIN') {
+      // 👈 2. WRAP THIS IN AN IF BLOCK (Don't send email to ADMIN)
+      void sendVerificationEmail(newUser.email, rawVerifyToken, newUser.name);
+    }
 
     const {
       passwordHash: _,

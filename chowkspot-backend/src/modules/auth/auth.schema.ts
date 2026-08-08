@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { CONSTANTS } from '@/config/constants.js';
 
 export const registerSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters'),
@@ -6,7 +7,9 @@ export const registerSchema = z.object({
   password: z.string().min(8, 'Password must be at least 8 characters'),
   phone: z.string().min(10, 'Phone number must be at least 10 digits'),
   city: z.string().min(2, 'City is required'),
-  role: z.enum(['USER', 'WORKER']).default('USER'),
+  role: z
+    .enum([CONSTANTS.ROLES.USER, CONSTANTS.ROLES.WORKER, CONSTANTS.ROLES.ADMIN])
+    .default('USER'),
   avatarUrl: z.url('Invalid image URL').nullable().optional(), // Cloudinary URL from React frontend
 });
 
