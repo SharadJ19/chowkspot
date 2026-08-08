@@ -2,7 +2,7 @@
 .pageContainer {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-xl);
+  gap: var(--spacing-2xl); /* Increased layout spacing */
 }
 
 .centerLoading {
@@ -42,13 +42,17 @@
   display: flex;
   gap: var(--spacing-xs);
   overflow-x: auto;
-  padding-bottom: var(--spacing-3xs);
+  padding-bottom: var(--spacing-xs);
+  border-bottom: 1px solid var(--color-border);
+  margin-bottom: var(--spacing-sm);
 }
 
 .cardsList {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-md);
+  gap: var(
+    --spacing-lg
+  ); /* 👈 Increased gap from md to lg for distinct card separation */
 }
 
 .reviewModalContent {

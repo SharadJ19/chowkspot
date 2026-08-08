@@ -1,3 +1,4 @@
+// FILE: src/modules/bookings/components/BookingCard/BookingCard.tsx
 import React from 'react';
 import {
   MapPin,
@@ -14,6 +15,7 @@ import {
 } from 'lucide-react';
 import type { CustomerBookingItem, WorkerBookingItem, BookingStatus } from '@/types';
 import { BookingStatusBadge } from '../BookingStatusBadge/BookingStatusBadge';
+import { BookingTimeline } from '../BookingTimeline/BookingTimeline';
 import { Avatar } from '@/components/ui/Avatar/Avatar';
 import { Button } from '@/components/ui/Button/Button';
 import { formatDate } from '@/utils/formatDate';
@@ -43,18 +45,24 @@ export const BookingCard: React.FC<BookingCardProps> = ({
   const { booking } = item;
   const isCustomer = !isWorkerRole;
 
+  // Extract worker profile (if customer view) or customer user info (if worker view)
   const workerProf = (item as CustomerBookingItem).workerProfile;
   const customerUser = (item as WorkerBookingItem).user;
 
+  // Intelligent Title & Subtitle based on active role
   const title = isCustomer
     ? workerProf?.category || 'Professional Service'
     : customerUser?.name || 'Customer';
+
   const subtitle = isCustomer
     ? workerProf?.rateType
       ? `${workerProf.rateType} Service`
       : 'Verified Pro'
-    : `Customer in ${customerUser?.city || 'Local'}`;
+    : `Customer Hub • ${customerUser?.city || 'Local'}`;
+
   const avatarSrc = isCustomer ? undefined : customerUser?.avatarUrl;
+
+  // Workers need direct customer phone numbers to coordinate job dispatch
   const contactPhone = isCustomer ? undefined : customerUser?.phone;
   const upiId = isCustomer ? workerProf?.paymentIdentifier : undefined;
 
@@ -70,6 +78,9 @@ export const BookingCard: React.FC<BookingCardProps> = ({
         </div>
         <BookingStatusBadge status={booking.status} />
       </div>
+
+      {/* Real-life status tracker tailored per role */}
+      <BookingTimeline status={booking.status} isWorkerRole={isWorkerRole} />
 
       <div className={styles.metaGrid}>
         <div className={styles.metaItem}>
@@ -105,10 +116,10 @@ export const BookingCard: React.FC<BookingCardProps> = ({
           <div className={styles.metaItem}>
             <Phone size={14} className={styles.metaIcon} />
             <div className={styles.metaText}>
-              <strong>Contact Phone</strong>
+              <strong>Customer Phone</strong>
               <a
                 href={`tel:${contactPhone}`}
-                style={{ color: 'var(--color-primary-600)' }}
+                style={{ color: 'var(--color-primary-600)', fontWeight: 'bold' }}
               >
                 {contactPhone}
               </a>
@@ -120,7 +131,7 @@ export const BookingCard: React.FC<BookingCardProps> = ({
       {booking.notes && (
         <div className={styles.notesBox}>
           <FileText size={13} style={{ display: 'inline', marginRight: 4 }} />
-          <strong>Notes:</strong> {booking.notes}
+          <strong>Instructions / Notes:</strong> {booking.notes}
         </div>
       )}
 
@@ -131,6 +142,7 @@ export const BookingCard: React.FC<BookingCardProps> = ({
         </Button>
 
         <div className={styles.actionButtonGroup}>
+          {/* ================= WORKER ACTIONS ================= */}
           {isWorkerRole && booking.status === 'PENDING' && (
             <>
               <Button
@@ -147,7 +159,7 @@ export const BookingCard: React.FC<BookingCardProps> = ({
                 onClick={() => onStatusChange(booking.id, 'REJECTED')}
               >
                 <X size={14} />
-                <span>Decline</span>
+                <span>Decline Request</span>
               </Button>
             </>
           )}
@@ -159,7 +171,7 @@ export const BookingCard: React.FC<BookingCardProps> = ({
               onClick={() => onStatusChange(booking.id, 'IN_PROGRESS')}
             >
               <Play size={14} />
-              <span>Start Work</span>
+              <span>Start Work (Arrived)</span>
             </Button>
           )}
 
@@ -170,10 +182,11 @@ export const BookingCard: React.FC<BookingCardProps> = ({
               onClick={() => onStatusChange(booking.id, 'COMPLETED')}
             >
               <Check size={14} />
-              <span>Mark Complete</span>
+              <span>Mark Job Complete</span>
             </Button>
           )}
 
+          {/* ================= CUSTOMER ACTIONS ================= */}
           {isCustomer &&
             (booking.status === 'PENDING' || booking.status === 'ACCEPTED') && (
               <Button
@@ -195,7 +208,7 @@ export const BookingCard: React.FC<BookingCardProps> = ({
                   onClick={() => onPayClick?.(upiId, title)}
                 >
                   <CreditCard size={14} />
-                  <span>Pay via UPI</span>
+                  <span>Pay via UPI (0% Fee)</span>
                 </Button>
               )}
               <Button

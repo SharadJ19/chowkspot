@@ -1,5 +1,6 @@
 // FILE: src/pages/BookingsPage.tsx
 import React, { useState, useMemo } from 'react';
+import { Wrench, Calendar as CalendarIcon } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { useBookingQueries } from '@/modules/bookings/hooks/useBookingQueries';
 import { BookingCard } from '@/modules/bookings/components/BookingCard/BookingCard';
@@ -7,6 +8,7 @@ import { Spinner } from '@/components/ui/Spinner/Spinner';
 import { UpiQrModal } from '@/modules/payments/components/UpiQrModal/UpiQrModal';
 import { useUpiPayment } from '@/modules/payments/hooks/useUpiPayment';
 import { Modal } from '@/components/ui/Modal/Modal';
+import { Pagination } from '@/components/ui/Pagination/Pagination'; // 👈 Import Pagination
 import { toast } from 'sonner';
 import { RatingStars } from '@/components/ui/RatingStars/RatingStars';
 import { Button } from '@/components/ui/Button/Button';
@@ -17,6 +19,8 @@ import { formatDate } from '@/utils/formatDate';
 import styles from './Pages.module.css';
 import modStyles from './BookingsPage.module.css';
 
+const ITEMS_PER_PAGE = 6; // 👈 Limit bookings per page to eliminate clutter
+
 export const BookingsPage: React.FC = () => {
   const { user } = useAuth();
   const isWorkerRole = user?.role === 'WORKER';
@@ -26,6 +30,7 @@ export const BookingsPage: React.FC = () => {
   const { createReviewMutation } = useReviewQueries();
 
   const [activeTab, setActiveTab] = useState<string>('ALL');
+  const [currentPage, setCurrentPage] = useState<number>(1);
   const [reviewBookingId, setReviewBookingId] = useState<string | null>(null);
   const [selectedDetailItem, setSelectedDetailItem] = useState<
     CustomerBookingItem | WorkerBookingItem | null
@@ -42,6 +47,17 @@ export const BookingsPage: React.FC = () => {
     return items.filter((item) => item.booking.status === activeTab);
   }, [items, activeTab]);
 
+  const totalPages = Math.ceil(filteredItems.length / ITEMS_PER_PAGE) || 1;
+  const paginatedItems = useMemo(() => {
+    const start = (currentPage - 1) * ITEMS_PER_PAGE;
+    return filteredItems.slice(start, start + ITEMS_PER_PAGE);
+  }, [filteredItems, currentPage]);
+
+  const handleTabChange = (tab: string) => {
+    setActiveTab(tab);
+    setCurrentPage(1); // Reset page counter on tab switch
+  };
+
   const handleStatusChange = (
     bookingId: string,
     status: BookingStatus,
@@ -51,7 +67,7 @@ export const BookingsPage: React.FC = () => {
       { bookingId, data: { status, counterDate } },
       {
         onSuccess: () => {
-          toast.success(`Booking marked as ${status.replace('_', ' ')}!`);
+          toast.success(`Booking successfully marked as ${status.replace('_', ' ')}!`);
         },
         onError: (err) => {
           toast.error('Failed to update booking status', {
@@ -70,7 +86,7 @@ export const BookingsPage: React.FC = () => {
         rating,
         comment,
       });
-      toast.success('Thank you! Review submitted successfully.');
+      toast.success('Thank you! Verified review posted successfully.');
       setReviewBookingId(null);
       setRating(5);
       setComment('');
@@ -92,18 +108,43 @@ export const BookingsPage: React.FC = () => {
   return (
     <div className={`container ${styles.pageContainer}`}>
       <div className={styles.flexBetween} style={{ flexWrap: 'wrap', gap: '1rem' }}>
-        <div>
-          <h1 className={styles.sectionTitle}>
-            {isWorkerRole
-              ? 'Incoming Job Requests Command Center'
-              : 'My Service Bookings'}
-          </h1>
-          <p className={styles.sectionSubtitle}>
-            Manage job lifecycles, direct P2P payments, and service tracking
-          </p>
+        <div
+          style={{ display: 'flex', alignItems: 'flex-start', gap: 'var(--spacing-md)' }}
+        >
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: '48px',
+              height: '48px',
+              backgroundColor: 'var(--color-primary-50)',
+              color: 'var(--color-primary-600)',
+              borderRadius: 'var(--radius-xl)',
+              border: '1px solid var(--color-primary-200)',
+              flexShrink: 0,
+            }}
+          >
+            {isWorkerRole ? <Wrench size={24} /> : <CalendarIcon size={24} />}
+          </div>
+          <div>
+            <h1 className={styles.sectionTitle}>
+              {isWorkerRole
+                ? 'Incoming Job Requests Command Center'
+                : 'My Service Bookings'}
+            </h1>
+            <p className={styles.sectionSubtitle}>
+              {isWorkerRole
+                ? 'Accept customer service requests, manage active job lifecycles, and coordinate with clients'
+                : 'Track active repair requests, settle direct UPI payments with 0% commission, and review completed jobs'}
+            </p>
+          </div>
         </div>
-        <Badge variant='primary'>
-          <span>Total Records: {items.length}</span>
+        <Badge variant={isWorkerRole ? 'primary' : 'secondary'}>
+          <span>
+            {isWorkerRole ? 'Worker Mode Active' : 'Customer Mode Active'} •{' '}
+            {items.length} Records
+          </span>
         </Badge>
       </div>
 
@@ -119,7 +160,7 @@ export const BookingsPage: React.FC = () => {
                 key={tab}
                 size='sm'
                 variant={activeTab === tab ? 'primary' : 'outline'}
-                onClick={() => setActiveTab(tab)}
+                onClick={() => handleTabChange(tab)}
               >
                 {tab.replace('_', ' ')} ({count})
               </Button>
@@ -128,11 +169,18 @@ export const BookingsPage: React.FC = () => {
         )}
       </div>
 
-      {filteredItems.length === 0 ? (
-        <p className={styles.emptyMessage}>No booking records found for this filter.</p>
+      {paginatedItems.length === 0 ? (
+        <p className={styles.emptyMessage}>
+          {isWorkerRole
+            ? 'No incoming job requests match this filter right now.'
+            : 'You have no service bookings under this filter category.'}
+        </p>
       ) : (
-        <div className={styles.flexCol} style={{ gap: 'var(--spacing-md)' }}>
-          {filteredItems.map((item) => (
+        <div
+          className={modStyles.cardsList}
+          style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-lg)' }}
+        >
+          {paginatedItems.map((item) => (
             <BookingCard
               key={item.booking.id}
               item={item}
@@ -145,6 +193,13 @@ export const BookingsPage: React.FC = () => {
           ))}
         </div>
       )}
+
+      {/* Pagination component controls */}
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={(p) => setCurrentPage(p)}
+      />
 
       {activePayment && (
         <UpiQrModal
@@ -163,17 +218,17 @@ export const BookingsPage: React.FC = () => {
       >
         <div className={modStyles.reviewModalContent}>
           <div className={modStyles.ratingCenterBox}>
-            <span className={styles.formLabel}>Rating</span>
+            <span className={styles.formLabel}>Rating (1 to 5 Stars)</span>
             <RatingStars rating={rating} interactive onChange={(r) => setRating(r)} />
           </div>
 
           <div className={styles.formArea}>
-            <label className={styles.formLabel}>Written Review</label>
+            <label className={styles.formLabel}>Written Review (Verified Booking)</label>
             <textarea
               rows={3}
               value={comment}
               onChange={(e) => setComment(e.target.value)}
-              placeholder='Share your experience...'
+              placeholder='Share how the service went...'
               className={styles.textareaInput}
             />
           </div>
@@ -183,7 +238,7 @@ export const BookingsPage: React.FC = () => {
             isLoading={createReviewMutation.isPending}
             fullWidth
           >
-            Submit Review
+            Submit Verified Review
           </Button>
         </div>
       </Modal>
@@ -196,7 +251,7 @@ export const BookingsPage: React.FC = () => {
         {selectedDetailItem && (
           <div className={modStyles.detailModalContent}>
             <div className={modStyles.detailHeaderRow}>
-              <strong>Status:</strong>
+              <strong>Current Status:</strong>
               <Badge variant='success'>{selectedDetailItem.booking.status}</Badge>
             </div>
             <div>
