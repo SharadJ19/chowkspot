@@ -12,7 +12,7 @@ import { Button } from '@/components/ui/Button/Button';
 import { Badge } from '@/components/ui/Badge/Badge';
 import { useReviewQueries } from '@/modules/reviews/hooks/useReviewQueries';
 import type { BookingStatus, CustomerBookingItem, WorkerBookingItem } from '@/types';
-import { formatDateTime } from '@/utils/formatDate';
+import { formatDate } from '@/utils/formatDate';
 import styles from './Pages.module.css';
 
 export const BookingsPage: React.FC = () => {
@@ -31,9 +31,12 @@ export const BookingsPage: React.FC = () => {
   const [rating, setRating] = useState(5);
   const [comment, setComment] = useState('');
 
-  const items = bookingsQuery.data || [];
+  // Stable items memoization to prevent unnecessary trigger re-evaluations
+  const items = useMemo(() => {
+    return bookingsQuery.data || [];
+  }, [bookingsQuery.data]);
 
-  // Filter items by status tab
+  // Stable filtered items memoization
   const filteredItems = useMemo(() => {
     if (activeTab === 'ALL') return items;
     return items.filter((item) => item.booking.status === activeTab);
@@ -104,7 +107,6 @@ export const BookingsPage: React.FC = () => {
         </Badge>
       </div>
 
-      {/* Filter Tabs Bar */}
       <div
         style={{ display: 'flex', gap: '8px', overflowX: 'auto', paddingBottom: '4px' }}
       >
@@ -148,7 +150,6 @@ export const BookingsPage: React.FC = () => {
         </div>
       )}
 
-      {/* UPI Payment Modal */}
       {activePayment && (
         <UpiQrModal
           isOpen={!!activePayment}
@@ -159,7 +160,6 @@ export const BookingsPage: React.FC = () => {
         />
       )}
 
-      {/* Review Submission Modal */}
       <Modal
         isOpen={!!reviewBookingId}
         onClose={() => setReviewBookingId(null)}
@@ -201,7 +201,6 @@ export const BookingsPage: React.FC = () => {
         </div>
       </Modal>
 
-      {/* Detailed Booking Summary Modal */}
       <Modal
         isOpen={!!selectedDetailItem}
         onClose={() => setSelectedDetailItem(null)}
@@ -242,7 +241,7 @@ export const BookingsPage: React.FC = () => {
                   marginTop: '2px',
                 }}
               >
-                {formatDateTime(selectedDetailItem.booking.requestedDate)}
+                {formatDate(selectedDetailItem.booking.requestedDate, 'datetime')}
               </p>
             </div>
             {selectedDetailItem.booking.notes && (

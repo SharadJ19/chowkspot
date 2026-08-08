@@ -16,7 +16,7 @@ import type { CustomerBookingItem, WorkerBookingItem, BookingStatus } from '@/ty
 import { BookingStatusBadge } from '../BookingStatusBadge/BookingStatusBadge';
 import { Avatar } from '@/components/ui/Avatar/Avatar';
 import { Button } from '@/components/ui/Button/Button';
-import { formatDateTime } from '@/utils/formatDate';
+import { formatDate } from '@/utils/formatDate';
 import styles from './BookingCard.module.css';
 
 export interface BookingCardProps {
@@ -43,7 +43,6 @@ export const BookingCard: React.FC<BookingCardProps> = ({
   const { booking } = item;
   const isCustomer = !isWorkerRole;
 
-  // Extract counterpart information based on viewer role
   const workerProf = (item as CustomerBookingItem).workerProfile;
   const customerUser = (item as WorkerBookingItem).user;
 
@@ -61,7 +60,6 @@ export const BookingCard: React.FC<BookingCardProps> = ({
 
   return (
     <div className={styles.card} data-status={booking.status}>
-      {/* Top Header Row */}
       <div className={styles.topRow}>
         <div className={styles.participantInfo}>
           <Avatar name={title} src={avatarSrc} size='lg' />
@@ -73,13 +71,12 @@ export const BookingCard: React.FC<BookingCardProps> = ({
         <BookingStatusBadge status={booking.status} />
       </div>
 
-      {/* Information Grid Container */}
       <div className={styles.metaGrid}>
         <div className={styles.metaItem}>
           <Calendar size={14} className={styles.metaIcon} />
           <div className={styles.metaText}>
             <strong>Requested Slot</strong>
-            <span>{formatDateTime(booking.requestedDate)}</span>
+            <span>{formatDate(booking.requestedDate, 'datetime')}</span>
           </div>
         </div>
 
@@ -91,7 +88,7 @@ export const BookingCard: React.FC<BookingCardProps> = ({
             <Clock size={14} className={styles.metaIcon} />
             <div className={styles.metaText}>
               <strong>Counter-Proposed Slot</strong>
-              <span>{formatDateTime(booking.counterDate)}</span>
+              <span>{formatDate(booking.counterDate, 'datetime')}</span>
             </div>
           </div>
         )}
@@ -127,7 +124,6 @@ export const BookingCard: React.FC<BookingCardProps> = ({
         </div>
       )}
 
-      {/* Actions & Detail Expansion Row */}
       <div className={styles.actionsRow}>
         <Button variant='ghost' size='sm' onClick={() => onViewDetails?.(item)}>
           <UserCheck size={14} />
@@ -135,7 +131,6 @@ export const BookingCard: React.FC<BookingCardProps> = ({
         </Button>
 
         <div className={styles.actionButtonGroup}>
-          {/* Worker State Machine Triggers */}
           {isWorkerRole && booking.status === 'PENDING' && (
             <>
               <Button
@@ -179,7 +174,6 @@ export const BookingCard: React.FC<BookingCardProps> = ({
             </Button>
           )}
 
-          {/* Customer State Machine Triggers */}
           {isCustomer &&
             (booking.status === 'PENDING' || booking.status === 'ACCEPTED') && (
               <Button
