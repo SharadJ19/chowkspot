@@ -2,8 +2,7 @@
 
 import { Routes, Route } from 'react-router';
 import { MainLayout } from '@/components/layout/MainLayout';
-import { ProtectedRoute } from '@/components/guards/ProtectedRoute';
-import { RoleGuard } from '@/components/guards/RoleGuard';
+import { RouteGuard } from '@/components/guards/RouteGuard';
 import { HomePage } from '@/pages/HomePage';
 import { SearchPage } from '@/pages/SearchPage';
 import { WorkerDetailPage } from '@/pages/WorkerDetailPage';
@@ -27,20 +26,21 @@ export const AppRouter = () => {
         <Route path='/worker/:id' element={<WorkerDetailPage />} />
         <Route path='/login' element={<LoginPage />} />
         <Route path='/register' element={<RegisterPage />} />
-        // Inside AppRouter in src/routes/index.tsx
         <Route path='/verify-email' element={<VerifyEmailPage />} />
         <Route path='/forgot-password' element={<ForgotPasswordPage />} />
         <Route path='/reset-password' element={<ResetPasswordPage />} />
-        {/* Protected Authenticated Routes */}
-        <Route element={<ProtectedRoute />}>
+
+        {/* Standard Protected Authenticated Routes */}
+        <Route element={<RouteGuard />}>
           <Route path='/bookings' element={<BookingsPage />} />
           <Route path='/profile' element={<ProfilePage />} />
-
-          {/* Admin Role Guard Route */}
-          <Route element={<RoleGuard allowedRoles={['ADMIN']} />}>
-            <Route path='/admin' element={<AdminPage />} />
-          </Route>
         </Route>
+
+        {/* Admin Role-Guarded Route */}
+        <Route element={<RouteGuard allowedRoles={['ADMIN']} />}>
+          <Route path='/admin' element={<AdminPage />} />
+        </Route>
+
         {/* 404 Fallback */}
         <Route path='*' element={<NotFoundPage />} />
       </Route>
