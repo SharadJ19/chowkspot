@@ -1,3 +1,4 @@
+// FILE: src/modules/admin/components/AdminDashboard.tsx
 import React, { useState, useMemo } from 'react';
 import {
   Users,
@@ -7,10 +8,10 @@ import {
   Activity,
   Trash2,
   ShieldCheck,
-  AlertTriangle,
   Search,
   CheckCircle2,
   XCircle,
+  AlertTriangle,
 } from 'lucide-react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { adminApi } from '../api/admin.api';
@@ -24,6 +25,7 @@ import { Modal } from '@/components/ui/Modal/Modal';
 import { Pagination } from '@/components/ui/Pagination/Pagination';
 import type { AuthUser } from '@/types';
 import styles from './AdminDashboard.module.css';
+import modStyles from './AdminDashboard.module.css';
 
 const USERS_PER_PAGE = 10;
 
@@ -31,7 +33,6 @@ export const AdminDashboard: React.FC = () => {
   const queryClient = useQueryClient();
   const [userToDelete, setUserToDelete] = useState<AuthUser | null>(null);
 
-  // Directory filter & pagination state
   const [searchQuery, setSearchQuery] = useState('');
   const [roleFilter, setRoleFilter] = useState<'ALL' | 'USER' | 'WORKER' | 'ADMIN'>(
     'ALL',
@@ -69,7 +70,6 @@ export const AdminDashboard: React.FC = () => {
     },
   });
 
-  // Filter users by search query and role filter
   const filteredUsers = useMemo(() => {
     if (!usersList) return [];
     return usersList.filter((u) => {
@@ -86,7 +86,6 @@ export const AdminDashboard: React.FC = () => {
     });
   }, [usersList, searchQuery, roleFilter]);
 
-  // Calculate paginated slice
   const totalPages = Math.ceil(filteredUsers.length / USERS_PER_PAGE) || 1;
   const paginatedUsers = useMemo(() => {
     const start = (currentPage - 1) * USERS_PER_PAGE;
@@ -105,14 +104,7 @@ export const AdminDashboard: React.FC = () => {
 
   if (statsLoading || usersLoading) {
     return (
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-          minHeight: '60vh',
-          alignItems: 'center',
-        }}
-      >
+      <div className={modStyles.centerLoading}>
         <Spinner size='lg' />
       </div>
     );
@@ -120,7 +112,6 @@ export const AdminDashboard: React.FC = () => {
 
   return (
     <div className={styles.adminContainer}>
-      {/* Header */}
       <div className={styles.headerRow}>
         <div>
           <h1 className={styles.pageTitle}>Platform Command Center</h1>
@@ -134,7 +125,6 @@ export const AdminDashboard: React.FC = () => {
         </Badge>
       </div>
 
-      {/* Stats Grid */}
       <div className={styles.statsGrid}>
         <div className={styles.statCard}>
           <div className={styles.statHeader}>
@@ -152,13 +142,7 @@ export const AdminDashboard: React.FC = () => {
         <div className={styles.statCard}>
           <div className={styles.statHeader}>
             <span className={styles.statLabel}>Skilled Workers</span>
-            <div
-              className={styles.iconWrapper}
-              style={{
-                backgroundColor: 'var(--color-status-accepted-bg)',
-                color: 'var(--color-status-accepted-text)',
-              }}
-            >
+            <div className={styles.iconWrapper}>
               <Wrench size={20} />
             </div>
           </div>
@@ -171,13 +155,7 @@ export const AdminDashboard: React.FC = () => {
         <div className={styles.statCard}>
           <div className={styles.statHeader}>
             <span className={styles.statLabel}>Total Bookings</span>
-            <div
-              className={styles.iconWrapper}
-              style={{
-                backgroundColor: 'var(--color-status-completed-bg)',
-                color: 'var(--color-status-completed-text)',
-              }}
-            >
+            <div className={styles.iconWrapper}>
               <CalendarCheck size={20} />
             </div>
           </div>
@@ -190,13 +168,7 @@ export const AdminDashboard: React.FC = () => {
         <div className={styles.statCard}>
           <div className={styles.statHeader}>
             <span className={styles.statLabel}>Verified Reviews</span>
-            <div
-              className={styles.iconWrapper}
-              style={{
-                backgroundColor: 'var(--color-status-pending-bg)',
-                color: 'var(--color-status-pending-text)',
-              }}
-            >
+            <div className={styles.iconWrapper}>
               <Star size={20} />
             </div>
           </div>
@@ -207,7 +179,6 @@ export const AdminDashboard: React.FC = () => {
         </div>
       </div>
 
-      {/* User Moderation Directory Panel */}
       <div className={styles.panel}>
         <div className={styles.panelHeaderRow}>
           <div>
@@ -218,7 +189,6 @@ export const AdminDashboard: React.FC = () => {
             </span>
           </div>
 
-          {/* Search Input */}
           <div className={styles.directorySearchWrapper}>
             <Input
               placeholder='Search name, email, city, phone...'
@@ -229,7 +199,6 @@ export const AdminDashboard: React.FC = () => {
           </div>
         </div>
 
-        {/* Role Filter Tabs */}
         <div className={styles.tabsRow}>
           {(['ALL', 'USER', 'WORKER', 'ADMIN'] as const).map((role) => (
             <Button
@@ -249,7 +218,6 @@ export const AdminDashboard: React.FC = () => {
           ))}
         </div>
 
-        {/* Paginated User Table */}
         <div className={styles.tableWrapper}>
           <table className={styles.table}>
             <thead>
@@ -266,7 +234,7 @@ export const AdminDashboard: React.FC = () => {
             <tbody>
               {paginatedUsers.length === 0 ? (
                 <tr>
-                  <td colSpan={7} style={{ textAlign: 'center', padding: '2rem' }}>
+                  <td colSpan={7} className={modStyles.tableEmptyCell}>
                     No accounts match your filter criteria.
                   </td>
                 </tr>
@@ -325,7 +293,6 @@ export const AdminDashboard: React.FC = () => {
           </table>
         </div>
 
-        {/* Pagination Controls */}
         <Pagination
           currentPage={currentPage}
           totalPages={totalPages}
@@ -333,43 +300,23 @@ export const AdminDashboard: React.FC = () => {
         />
       </div>
 
-      {/* Account Deletion Confirmation Modal */}
       <Modal
         isOpen={!!userToDelete}
         onClose={() => setUserToDelete(null)}
         title='Confirm User Account Removal'
       >
         {userToDelete && (
-          <div
-            style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-md)' }}
-          >
-            <div
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: 'var(--spacing-sm)',
-                padding: 'var(--spacing-sm)',
-                backgroundColor: 'var(--color-status-rejected-bg)',
-                color: 'var(--color-status-rejected-text)',
-                borderRadius: 'var(--radius-md)',
-              }}
-            >
-              <AlertTriangle size={24} style={{ flexShrink: 0 }} />
-              <p style={{ fontSize: 'var(--font-size-xs)', margin: 0 }}>
+          <div className={modStyles.modalContent}>
+            <div className={modStyles.warningBox}>
+              <AlertTriangle size={24} />
+              <p className={modStyles.warningText}>
                 Warning: Removing <strong>{userToDelete.name}</strong> (
                 {userToDelete.email}) will permanently delete their profile, active worker
                 listings, bookings, and submitted reviews.
               </p>
             </div>
 
-            <div
-              style={{
-                display: 'flex',
-                gap: 'var(--spacing-sm)',
-                justifyContent: 'flex-end',
-                marginTop: 'var(--spacing-xs)',
-              }}
-            >
+            <div className={modStyles.modalButtonRow}>
               <Button
                 variant='outline'
                 onClick={() => setUserToDelete(null)}

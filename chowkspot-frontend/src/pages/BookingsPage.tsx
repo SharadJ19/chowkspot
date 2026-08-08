@@ -1,3 +1,4 @@
+// FILE: src/pages/BookingsPage.tsx
 import React, { useState, useMemo } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { useBookingQueries } from '@/modules/bookings/hooks/useBookingQueries';
@@ -14,6 +15,7 @@ import { useReviewQueries } from '@/modules/reviews/hooks/useReviewQueries';
 import type { BookingStatus, CustomerBookingItem, WorkerBookingItem } from '@/types';
 import { formatDate } from '@/utils/formatDate';
 import styles from './Pages.module.css';
+import modStyles from './BookingsPage.module.css';
 
 export const BookingsPage: React.FC = () => {
   const { user } = useAuth();
@@ -31,12 +33,10 @@ export const BookingsPage: React.FC = () => {
   const [rating, setRating] = useState(5);
   const [comment, setComment] = useState('');
 
-  // Stable items memoization to prevent unnecessary trigger re-evaluations
   const items = useMemo(() => {
     return bookingsQuery.data || [];
   }, [bookingsQuery.data]);
 
-  // Stable filtered items memoization
   const filteredItems = useMemo(() => {
     if (activeTab === 'ALL') return items;
     return items.filter((item) => item.booking.status === activeTab);
@@ -107,9 +107,7 @@ export const BookingsPage: React.FC = () => {
         </Badge>
       </div>
 
-      <div
-        style={{ display: 'flex', gap: '8px', overflowX: 'auto', paddingBottom: '4px' }}
-      >
+      <div className={modStyles.tabsContainer}>
         {['ALL', 'PENDING', 'ACCEPTED', 'IN_PROGRESS', 'COMPLETED', 'CANCELLED'].map(
           (tab) => {
             const count =
@@ -133,9 +131,7 @@ export const BookingsPage: React.FC = () => {
       {filteredItems.length === 0 ? (
         <p className={styles.emptyMessage}>No booking records found for this filter.</p>
       ) : (
-        <div
-          style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-md)' }}
-        >
+        <div className={styles.flexCol} style={{ gap: 'var(--spacing-md)' }}>
           {filteredItems.map((item) => (
             <BookingCard
               key={item.booking.id}
@@ -165,17 +161,8 @@ export const BookingsPage: React.FC = () => {
         onClose={() => setReviewBookingId(null)}
         title='Leave a Verified Review'
       >
-        <div
-          style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-md)' }}
-        >
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              gap: 'var(--spacing-xs)',
-            }}
-          >
+        <div className={modStyles.reviewModalContent}>
+          <div className={modStyles.ratingCenterBox}>
             <span className={styles.formLabel}>Rating</span>
             <RatingStars rating={rating} interactive onChange={(r) => setRating(r)} />
           </div>
@@ -207,61 +194,33 @@ export const BookingsPage: React.FC = () => {
         title='Booking Full Summary & Audit'
       >
         {selectedDetailItem && (
-          <div
-            style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-md)' }}
-          >
-            <div
-              style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-              }}
-            >
+          <div className={modStyles.detailModalContent}>
+            <div className={modStyles.detailHeaderRow}>
               <strong>Status:</strong>
               <Badge variant='success'>{selectedDetailItem.booking.status}</Badge>
             </div>
             <div>
               <strong>Service Address:</strong>
-              <p
-                style={{
-                  color: 'var(--color-slate-600)',
-                  fontSize: '14px',
-                  marginTop: '2px',
-                }}
-              >
+              <p className={modStyles.detailSubText}>
                 {selectedDetailItem.booking.address}
               </p>
             </div>
             <div>
               <strong>Requested Slot Timestamp:</strong>
-              <p
-                style={{
-                  color: 'var(--color-slate-600)',
-                  fontSize: '14px',
-                  marginTop: '2px',
-                }}
-              >
+              <p className={modStyles.detailSubText}>
                 {formatDate(selectedDetailItem.booking.requestedDate, 'datetime')}
               </p>
             </div>
             {selectedDetailItem.booking.notes && (
               <div>
                 <strong>Task Instructions / Notes:</strong>
-                <p
-                  style={{
-                    color: 'var(--color-slate-600)',
-                    fontSize: '14px',
-                    marginTop: '2px',
-                  }}
-                >
+                <p className={modStyles.detailSubText}>
                   {selectedDetailItem.booking.notes}
                 </p>
               </div>
             )}
-            <div
-              style={{ paddingTop: '12px', borderTop: '1px solid var(--color-border)' }}
-            >
-              <span style={{ fontSize: '12px', color: 'var(--color-text-muted)' }}>
+            <div className={modStyles.detailDivider}>
+              <span className={modStyles.detailIdText}>
                 Booking ID: {selectedDetailItem.booking.id}
               </span>
             </div>

@@ -1,3 +1,4 @@
+// FILE: src/components/BookingRequestModal/BookingRequestModal.tsx
 import React, { useState } from 'react';
 import { toast } from 'sonner';
 import { useAuth } from '@/hooks/useAuth';
@@ -6,7 +7,8 @@ import { Modal } from '@/components/ui/Modal/Modal';
 import { Input } from '@/components/ui/Input/Input';
 import { Button } from '@/components/ui/Button/Button';
 import type { WorkerSearchResult } from '@/types';
-import styles from '@/pages/Pages.module.css';
+import pagesStyles from '@/pages/Pages.module.css';
+import styles from './BookingRequestModal.module.css';
 
 export interface BookingRequestModalProps {
   worker: WorkerSearchResult | null;
@@ -72,48 +74,18 @@ export const BookingRequestModal: React.FC<BookingRequestModalProps> = ({
       title={worker ? `Book ${worker.user.name} (${worker.category})` : 'Book Service'}
     >
       {!isAuthenticated ? (
-        <p
-          style={{
-            fontSize: 'var(--font-size-sm)',
-            textAlign: 'center',
-            padding: 'var(--spacing-md)',
-          }}
-        >
-          Please log in to submit a booking request.
-        </p>
+        <p className={styles.unauthText}>Please log in to submit a booking request.</p>
       ) : !user?.isVerified ? (
-        <div
-          style={{
-            textAlign: 'center',
-            padding: 'var(--spacing-md)',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '8px',
-          }}
-        >
-          <p style={{ color: 'var(--color-error)', fontWeight: 'bold' }}>
-            Email Verification Required
-          </p>
-          <p
-            style={{
-              fontSize: 'var(--font-size-xs)',
-              color: 'var(--color-slate-600)',
-            }}
-          >
+        <div className={styles.verificationBox}>
+          <p className={styles.errorText}>Email Verification Required</p>
+          <p className={styles.emailText}>
             Please verify your email address (<strong>{user?.email}</strong>) to send
             booking requests to workers.
           </p>
         </div>
       ) : (
-        <form
-          onSubmit={handleBookSubmit}
-          style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-sm)' }}
-        >
-          {bookingError && (
-            <div style={{ color: 'var(--color-error)', fontSize: 'var(--font-size-xs)' }}>
-              {bookingError}
-            </div>
-          )}
+        <form onSubmit={handleBookSubmit} className={styles.container}>
+          {bookingError && <div className={styles.bannerError}>{bookingError}</div>}
 
           <Input
             label='Requested Date & Time'
@@ -131,14 +103,14 @@ export const BookingRequestModal: React.FC<BookingRequestModalProps> = ({
             required
           />
 
-          <div className={styles.formArea}>
-            <label className={styles.formLabel}>Notes / Task Description</label>
+          <div className={pagesStyles.formArea}>
+            <label className={pagesStyles.formLabel}>Notes / Task Description</label>
             <textarea
               rows={3}
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
               placeholder='Describe the repair or installation requirements...'
-              className={styles.textareaInput}
+              className={pagesStyles.textareaInput}
             />
           </div>
 
