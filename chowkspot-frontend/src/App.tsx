@@ -18,24 +18,25 @@ export default function App() {
               <AppRouter />
             </ServerWarmingBanner>
           </BrowserRouter>
-          {/* Prominent, Prominently Sized Toast Container using Existing Design Tokens */}
+          {/* Light Mode Toast using ChowkSpot Design Tokens */}
           <Toaster
+            theme='light'
             position='bottom-right'
             closeButton
+            richColors={false}
             toastOptions={{
               duration: 4000,
               style: {
-                background: 'var(--color-slate-900)',
-                color: 'var(--color-slate-50)',
-                border: '1px solid var(--color-slate-700)',
-                borderLeft: '6px solid var(--color-primary-500)',
-                borderRadius: 'var(--radius-2xl)',
-                fontSize: 'var(--font-size-sm)',
+                background: '#ffffff',
+                color: 'var(--color-slate-900)',
+                border: '1px solid var(--color-border)',
+                borderLeft: '5px solid var(--color-primary-500)',
+                borderRadius: 'var(--radius-xl)',
+                fontSize: 'var(--font-size-xs)',
                 fontFamily: 'var(--font-sans)',
-                boxShadow: 'var(--shadow-xl)',
-                padding: 'var(--spacing-md) var(--spacing-lg)',
-                minWidth: '360px',
-                minHeight: '64px',
+                boxShadow: 'var(--shadow-lg)',
+                padding: 'var(--spacing-sm) var(--spacing-md)',
+                minWidth: '340px',
               },
             }}
           />

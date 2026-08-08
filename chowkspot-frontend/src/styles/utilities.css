@@ -84,3 +84,55 @@
 ::-webkit-scrollbar-thumb:hover {
   background: var(--color-slate-400);
 }
+
+/* ==========================================================
+   CHOWKSPOT BRAND LIGHT TOAST OVERRIDES
+   ========================================================== */
+
+/* Force Sonner's Card Background & Text Colors */
+[data-sonner-toast] {
+  background-color: #ffffff !important;
+  color: var(--color-slate-900) !important;
+  border-radius: var(--radius-xl) !important;
+  border: 1px solid var(--color-border) !important;
+  box-shadow: var(--shadow-lg) !important;
+}
+
+/* Toast Header Title */
+[data-sonner-toast] [data-title] {
+  color: var(--color-slate-900) !important;
+  font-weight: var(--font-weight-bold) !important;
+  font-size: var(--font-size-xs) !important;
+}
+
+/* Toast Body Text */
+[data-sonner-toast] [data-description] {
+  color: var(--color-slate-600) !important;
+  font-size: 0.72rem !important;
+  line-height: 1.4 !important;
+}
+
+/* Close Button Styling */
+[data-sonner-toast] [data-close-button] {
+  background-color: var(--color-slate-100) !important;
+  border: 1px solid var(--color-border) !important;
+  color: var(--color-slate-500) !important;
+}
+
+/* Brand Status Left-Borders */
+[data-sonner-toast][data-type='success'],
+[data-sonner-toast]:not([data-type]) {
+  border-left: 5px solid var(--color-primary-500) !important;
+}
+
+[data-sonner-toast][data-type='info'] {
+  border-left: 5px solid var(--color-info) !important;
+}
+
+[data-sonner-toast][data-type='warning'] {
+  border-left: 5px solid var(--color-warning) !important;
+}
+
+[data-sonner-toast][data-type='error'] {
+  border-left: 5px solid var(--color-error) !important;
+}
