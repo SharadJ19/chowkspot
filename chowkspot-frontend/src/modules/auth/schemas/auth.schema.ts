@@ -12,7 +12,13 @@ export const registerSchema = z.object({
   password: z.string().min(8, 'Password must be at least 8 characters'),
   phone: z.string().min(10, 'Phone number must be at least 10 digits'),
   city: z.string().min(2, 'Please select or enter a city'),
-  role: z.enum([APP_CONSTANTS.ROLES.USER, APP_CONSTANTS.ROLES.WORKER]).default('USER'),
+  role: z
+    .enum([
+      APP_CONSTANTS.ROLES.USER,
+      APP_CONSTANTS.ROLES.WORKER,
+      APP_CONSTANTS.ROLES.ADMIN,
+    ])
+    .default('USER'),
   avatarUrl: z.url('Invalid image URL').optional().or(z.literal('')),
 });
 export const forgotPasswordSchema = z.object({

@@ -10,7 +10,7 @@ export const EmailVerificationBanner: React.FC = () => {
   const [isSent, setIsSent] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  if (!isAuthenticated || !user || user.isVerified) {
+  if (!isAuthenticated || !user || user.isVerified || user.role === 'ADMIN') {
     return null;
   }
 

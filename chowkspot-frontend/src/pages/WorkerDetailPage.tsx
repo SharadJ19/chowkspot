@@ -1,5 +1,3 @@
-// FILE: src/pages/WorkerDetailPage.tsx
-
 import React, { useState } from 'react';
 import { useParams } from 'react-router';
 import { MapPin, Calendar, Briefcase, ShieldCheck } from 'lucide-react';
@@ -21,7 +19,7 @@ import styles from './WorkerDetailPage.module.css';
 
 export const WorkerDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const { isAuthenticated } = useAuth();
+  const { user, isAuthenticated } = useAuth();
   const { searchWorkersQuery } = useWorkerQueries();
   const { reviewsQuery } = useReviewQueries(id);
   const { createBookingMutation } = useBookingQueries();
@@ -77,7 +75,7 @@ export const WorkerDetailPage: React.FC = () => {
 
   return (
     <div className={`container ${styles.detailContainer}`}>
-      {/* Refactored Streamlined Profile Card */}
+      {/* Streamlined Profile Card */}
       <div className={styles.profileCard}>
         <div className={styles.profileMainInfo}>
           <Avatar name={worker.user.name} src={worker.user.avatarUrl} size='xl' />
@@ -90,7 +88,7 @@ export const WorkerDetailPage: React.FC = () => {
             </div>
             <span className={styles.categoryText}>{worker.category}</span>
 
-            {/* Styled Service Hub Badges */}
+            {/* Service Hub Badges */}
             <div className={styles.citiesList}>
               <MapPin
                 size={13}
@@ -192,6 +190,26 @@ export const WorkerDetailPage: React.FC = () => {
           >
             Please log in to submit a direct booking request.
           </p>
+        ) : !user?.isVerified ? (
+          <div
+            style={{
+              textAlign: 'center',
+              padding: 'var(--spacing-md)',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '8px',
+            }}
+          >
+            <p style={{ color: 'var(--color-error)', fontWeight: 'bold' }}>
+              Email Verification Required
+            </p>
+            <p
+              style={{ fontSize: 'var(--font-size-xs)', color: 'var(--color-slate-600)' }}
+            >
+              Please verify your email address (<strong>{user?.email}</strong>) to send
+              booking requests to workers.
+            </p>
+          </div>
         ) : (
           <form
             onSubmit={handleBookSubmit}
