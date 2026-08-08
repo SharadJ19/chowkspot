@@ -192,7 +192,7 @@ export const ProfilePage: React.FC = () => {
         {isWorker && (
           <>
             <h3 className={styles.formTitle} style={{ marginTop: 'var(--spacing-md)' }}>
-              Professional Trade Configuration
+              Professional Trade Configuration &amp; Direct P2P Payments
             </h3>
 
             <div className={styles.formArea}>
@@ -242,10 +242,11 @@ export const ProfilePage: React.FC = () => {
             />
 
             <Input
-              label='UPI ID for Direct P2P Settlement'
-              placeholder='e.g. name@upi'
+              label='UPI ID or Linked Phone Number for Direct P2P Settlement'
+              placeholder='e.g. 9876543210@paytm or 9876543210'
               value={paymentIdentifier}
               onChange={(e) => setPaymentIdentifier(e.target.value)}
+              helperText='Customers will scan a live QR code or use this to pay you directly with 0% commission.'
             />
 
             <div className={styles.formArea}>
