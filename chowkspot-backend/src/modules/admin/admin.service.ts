@@ -57,6 +57,7 @@ export class AdminService {
         role: users.role,
         city: users.city,
         avatarUrl: users.avatarUrl,
+        isVerified: users.isVerified,
         createdAt: users.createdAt,
       })
       .from(users)
