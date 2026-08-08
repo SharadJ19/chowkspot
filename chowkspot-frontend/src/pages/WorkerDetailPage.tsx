@@ -1,69 +1,30 @@
+// FILE: src/pages/WorkerDetailPage.tsx
 import React, { useState } from 'react';
 import { useParams } from 'react-router';
 import { MapPin, Calendar, Briefcase, ShieldCheck } from 'lucide-react';
 import { useWorkerQueries } from '@/modules/workers/hooks/useWorkerQueries';
 import { useReviewQueries } from '@/modules/reviews/hooks/useReviewQueries';
-import { useBookingQueries } from '@/modules/bookings/hooks/useBookingQueries';
+import { BookingRequestModal } from '@/components/BookingRequestModal/BookingRequestModal';
 import type { WorkerSearchResult } from '@/types';
-import { toast } from 'sonner';
-import { useAuth } from '@/hooks/useAuth';
 import { ReviewList } from '@/modules/reviews/components/ReviewList/ReviewList';
 import { Avatar } from '@/components/ui/Avatar/Avatar';
 import { Badge } from '@/components/ui/Badge/Badge';
 import { RatingStars } from '@/components/ui/RatingStars/RatingStars';
 import { Spinner } from '@/components/ui/Spinner/Spinner';
 import { Button } from '@/components/ui/Button/Button';
-import { Modal } from '@/components/ui/Modal/Modal';
-import { Input } from '@/components/ui/Input/Input';
 import { formatCurrency } from '@/utils/formatCurrency';
 import styles from './WorkerDetailPage.module.css';
 
 export const WorkerDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const { user, isAuthenticated } = useAuth();
   const { searchWorkersQuery } = useWorkerQueries();
   const { reviewsQuery } = useReviewQueries(id);
-  const { createBookingMutation } = useBookingQueries();
 
   const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
-  const [requestedDate, setRequestedDate] = useState('');
-  const [address, setAddress] = useState('');
-  const [notes, setNotes] = useState('');
-  const [bookingError, setBookingError] = useState<string | null>(null);
 
   const worker = searchWorkersQuery.data?.workers.find(
     (w: WorkerSearchResult) => w.id === id,
   );
-
-  const handleBookSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (!worker) return;
-    setBookingError(null);
-
-    try {
-      const formattedIsoDate = new Date(requestedDate).toISOString();
-      await createBookingMutation.mutateAsync({
-        workerId: worker.id,
-        requestedDate: formattedIsoDate,
-        address,
-        notes,
-      });
-
-      // 👈 Toast UI Acknowledgement
-      toast.success(`Booking request sent to ${worker.user.name}!`, {
-        description: 'You can track status updates in your "My Bookings" tab.',
-      });
-
-      setIsBookingModalOpen(false);
-      setRequestedDate('');
-      setAddress('');
-      setNotes('');
-    } catch (err) {
-      const msg = (err as Error).message || 'Failed to submit booking request';
-      setBookingError(msg);
-      toast.error('Booking submission failed', { description: msg });
-    }
-  };
 
   if (searchWorkersQuery.isLoading) {
     return (
@@ -182,108 +143,12 @@ export const WorkerDetailPage: React.FC = () => {
         )}
       </div>
 
-      {/* Booking Request Modal */}
-      <Modal
+      {/* Shared Booking Request Modal */}
+      <BookingRequestModal
+        worker={worker}
         isOpen={isBookingModalOpen}
         onClose={() => setIsBookingModalOpen(false)}
-        title={`Book ${worker.user.name} (${worker.category})`}
-      >
-        {!isAuthenticated ? (
-          <p
-            style={{
-              fontSize: 'var(--font-size-sm)',
-              textAlign: 'center',
-              padding: 'var(--spacing-md)',
-            }}
-          >
-            Please log in to submit a direct booking request.
-          </p>
-        ) : !user?.isVerified ? (
-          <div
-            style={{
-              textAlign: 'center',
-              padding: 'var(--spacing-md)',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '8px',
-            }}
-          >
-            <p style={{ color: 'var(--color-error)', fontWeight: 'bold' }}>
-              Email Verification Required
-            </p>
-            <p
-              style={{ fontSize: 'var(--font-size-xs)', color: 'var(--color-slate-600)' }}
-            >
-              Please verify your email address (<strong>{user?.email}</strong>) to send
-              booking requests to workers.
-            </p>
-          </div>
-        ) : (
-          <form
-            onSubmit={handleBookSubmit}
-            style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-sm)' }}
-          >
-            {bookingError && (
-              <div
-                style={{ color: 'var(--color-error)', fontSize: 'var(--font-size-xs)' }}
-              >
-                {bookingError}
-              </div>
-            )}
-
-            <Input
-              label='Requested Date &amp; Time'
-              type='datetime-local'
-              value={requestedDate}
-              onChange={(e) => setRequestedDate(e.target.value)}
-              required
-            />
-
-            <Input
-              label='Service Address'
-              placeholder='House #, Street, Locality'
-              value={address}
-              onChange={(e) => setAddress(e.target.value)}
-              required
-            />
-
-            <div
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                gap: 'var(--spacing-2xs)',
-              }}
-            >
-              <label
-                style={{
-                  fontSize: 'var(--font-size-xs)',
-                  fontWeight: 600,
-                  color: 'var(--color-slate-700)',
-                }}
-              >
-                Task Notes / Description
-              </label>
-              <textarea
-                rows={3}
-                value={notes}
-                onChange={(e) => setNotes(e.target.value)}
-                placeholder='Describe the repair or installation requirements...'
-                style={{
-                  padding: '0.625rem 0.875rem',
-                  borderRadius: 'var(--radius-md)',
-                  border: '1px solid var(--color-border-strong)',
-                  fontFamily: 'var(--font-sans)',
-                  fontSize: 'var(--font-size-sm)',
-                }}
-              />
-            </div>
-
-            <Button type='submit' isLoading={createBookingMutation.isPending} fullWidth>
-              Send Direct Booking Request
-            </Button>
-          </form>
-        )}
-      </Modal>
+      />
     </div>
   );
 };
