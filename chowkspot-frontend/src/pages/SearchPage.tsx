@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { useSearchParams } from 'react-router';
 import { useWorkerQueries } from '@/modules/workers/hooks/useWorkerQueries';
+import { toast } from 'sonner';
 import { WorkerCard } from '@/modules/workers/components/WorkerCard/WorkerCard';
 import { WorkerSidebarFilters } from '@/modules/workers/components/WorkerSidebarFilters/WorkerSidebarFilters';
 import { Pagination } from '@/components/ui/Pagination/Pagination';
@@ -78,12 +79,19 @@ export const SearchPage: React.FC = () => {
         notes,
       });
 
+      // 👈 Toast UI Acknowledgement
+      toast.success(`Booking request sent to ${selectedWorker.user.name}!`, {
+        description: 'You can track status updates in your "My Bookings" tab.',
+      });
+
       setSelectedWorker(null);
       setRequestedDate('');
       setAddress('');
       setNotes('');
     } catch (err) {
-      setBookingError((err as Error).message || 'Failed to submit booking request');
+      const msg = (err as Error).message || 'Failed to submit booking request';
+      setBookingError(msg);
+      toast.error('Booking submission failed', { description: msg });
     }
   };
 

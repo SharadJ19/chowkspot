@@ -6,6 +6,7 @@ import { Spinner } from '@/components/ui/Spinner/Spinner';
 import { UpiQrModal } from '@/modules/payments/components/UpiQrModal/UpiQrModal';
 import { useUpiPayment } from '@/modules/payments/hooks/useUpiPayment';
 import { Modal } from '@/components/ui/Modal/Modal';
+import { toast } from 'sonner';
 import { RatingStars } from '@/components/ui/RatingStars/RatingStars';
 import { Button } from '@/components/ui/Button/Button';
 import { Badge } from '@/components/ui/Badge/Badge';
@@ -43,19 +44,38 @@ export const BookingsPage: React.FC = () => {
     status: BookingStatus,
     counterDate?: string | undefined,
   ) => {
-    updateStatusMutation.mutate({ bookingId, data: { status, counterDate } });
+    updateStatusMutation.mutate(
+      { bookingId, data: { status, counterDate } },
+      {
+        onSuccess: () => {
+          toast.success(`Booking marked as ${status.replace('_', ' ')}!`);
+        },
+        onError: (err) => {
+          toast.error('Failed to update booking status', {
+            description: (err as Error).message,
+          });
+        },
+      },
+    );
   };
 
   const handleReviewSubmit = async () => {
     if (!reviewBookingId) return;
-    await createReviewMutation.mutateAsync({
-      bookingId: reviewBookingId,
-      rating,
-      comment,
-    });
-    setReviewBookingId(null);
-    setRating(5);
-    setComment('');
+    try {
+      await createReviewMutation.mutateAsync({
+        bookingId: reviewBookingId,
+        rating,
+        comment,
+      });
+      toast.success('Thank you! Review submitted successfully.');
+      setReviewBookingId(null);
+      setRating(5);
+      setComment('');
+    } catch (err) {
+      toast.error('Failed to submit review', {
+        description: (err as Error).message,
+      });
+    }
   };
 
   if (bookingsQuery.isLoading) {

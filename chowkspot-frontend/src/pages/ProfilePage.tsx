@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/Input/Input';
 import { Button } from '@/components/ui/Button/Button';
 import { Badge } from '@/components/ui/Badge/Badge';
 import { Modal } from '@/components/ui/Modal/Modal';
+import { toast } from 'sonner';
 import { AvatarUploader } from '@/components/ui/AvatarUploader/AvatarUploader';
 import { APP_CONSTANTS } from '@/config/constants';
 import type { AuthUser, WorkerProfile, ApiResponse } from '@/types';
@@ -90,6 +91,7 @@ export const ProfilePage: React.FC = () => {
 
       await usersApi.updateMe(payload);
       await refetchUser();
+      toast.success('Profile details updated successfully!');
       setSuccessMessage('Profile details successfully updated!');
     } catch (err) {
       console.error(err);

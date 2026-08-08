@@ -5,6 +5,7 @@ import { useWorkerQueries } from '@/modules/workers/hooks/useWorkerQueries';
 import { useReviewQueries } from '@/modules/reviews/hooks/useReviewQueries';
 import { useBookingQueries } from '@/modules/bookings/hooks/useBookingQueries';
 import type { WorkerSearchResult } from '@/types';
+import { toast } from 'sonner';
 import { useAuth } from '@/hooks/useAuth';
 import { ReviewList } from '@/modules/reviews/components/ReviewList/ReviewList';
 import { Avatar } from '@/components/ui/Avatar/Avatar';
@@ -48,12 +49,19 @@ export const WorkerDetailPage: React.FC = () => {
         notes,
       });
 
+      // 👈 Toast UI Acknowledgement
+      toast.success(`Booking request sent to ${worker.user.name}!`, {
+        description: 'You can track status updates in your "My Bookings" tab.',
+      });
+
       setIsBookingModalOpen(false);
       setRequestedDate('');
       setAddress('');
       setNotes('');
     } catch (err) {
-      setBookingError((err as Error).message || 'Failed to submit booking request');
+      const msg = (err as Error).message || 'Failed to submit booking request';
+      setBookingError(msg);
+      toast.error('Booking submission failed', { description: msg });
     }
   };
 

@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { adminApi } from '../api/admin.api';
+import { toast } from 'sonner';
 import { Spinner } from '@/components/ui/Spinner/Spinner';
 import { Badge } from '@/components/ui/Badge/Badge';
 import { Button } from '@/components/ui/Button/Button';
@@ -59,6 +60,12 @@ export const AdminDashboard: React.FC = () => {
       queryClient.invalidateQueries({ queryKey: ['admin_users'] });
       queryClient.invalidateQueries({ queryKey: ['admin_stats'] });
       setUserToDelete(null);
+      toast.success('User account permanently removed.');
+    },
+    onError: (err) => {
+      toast.error('Failed to remove user account', {
+        description: (err as Error).message,
+      });
     },
   });
 
