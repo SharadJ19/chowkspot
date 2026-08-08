@@ -1,3 +1,4 @@
+// FILE: src/components/layout/MainLayout.tsx
 import React from 'react';
 import { Outlet, useLocation } from 'react-router';
 import { Navbar } from './Navbar/Navbar';
@@ -7,12 +8,19 @@ import styles from './MainLayout.module.css';
 
 export const MainLayout: React.FC = () => {
   const location = useLocation();
-  const isAuthPage = location.pathname === '/login' || location.pathname === '/register';
+  const authPaths = [
+    '/login',
+    '/register',
+    '/forgot-password',
+    '/reset-password',
+    '/verify-email',
+  ];
+  const isAuthPage = authPaths.includes(location.pathname);
 
   return (
     <div className={styles.layoutWrapper}>
       <Navbar />
-      <EmailVerificationBanner /> {/* 👈 Injected sticky banner */}
+      <EmailVerificationBanner />
       <main className={`${styles.mainContent} ${isAuthPage ? styles.authMain : ''}`}>
         <Outlet />
       </main>
