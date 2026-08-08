@@ -39,13 +39,25 @@ function getRandomNumber(min: number, max: number): number {
 }
 
 async function seed() {
+  const startTime = performance.now();
+  const projectedUsersCount =
+    1 + SEED_USERS.length + TOTAL_EXTRA_WORKERS + TOTAL_EXTRA_CUSTOMERS;
+
   logger.info(
-    `🌱 Seeding ChowkSpot with massive scale (~${1 + SEED_USERS.length + TOTAL_EXTRA_WORKERS + TOTAL_EXTRA_CUSTOMERS} Users & ${TOTAL_BOOKINGS} Bookings)...`,
+    {
+      event: 'db_seed_initiated',
+      targetEntities: {
+        users: projectedUsersCount,
+        bookings: TOTAL_BOOKINGS,
+        reviewsPerWorker: BASE_WORKER_REVIEW_COUNT,
+      },
+    },
+    '[DB_SEED]: Executing batch population sequence...',
   );
 
   try {
     await db.transaction(async (tx) => {
-      logger.info('🧹 Clearing old table entries...');
+      logger.info('[DB_SEED]: Truncating existing relation records in cascade order...');
       await tx.delete(reviews);
       await tx.delete(bookings);
       await tx.delete(workerProfiles);
@@ -56,7 +68,9 @@ async function seed() {
       const createdWorkerMap = new Map<string, string>();
 
       // 1. Insert Base Template Users (Admin, Crew & Base Customers) FIRST
-      logger.info('👤 Inserting Base Template Users & Admin...');
+      logger.info(
+        `[DB_SEED]: Persisting ${SEED_USERS.length} base template identities...`,
+      );
       for (const userData of SEED_USERS) {
         const passwordHash = await hashPassword(userData.password);
         const [insertedUser] = await tx
@@ -69,6 +83,7 @@ async function seed() {
             city: userData.city,
             role: userData.role,
             avatarUrl: userData.avatarUrl,
+            isVerified: true,
           })
           .returning();
 
@@ -78,7 +93,9 @@ async function seed() {
       }
 
       // 2. Insert Base Worker Profiles SECOND (Ensures Smarth appears first in search results)
-      logger.info('🛠️ Inserting Base Worker Profiles...');
+      logger.info(
+        `[DB_SEED]: Initializing ${SEED_WORKER_PROFILES.length} base service provider profiles...`,
+      );
       for (const workerData of SEED_WORKER_PROFILES) {
         const userId = createdUsersMap.get(workerData.email);
         if (!userId) continue;
@@ -105,7 +122,7 @@ async function seed() {
 
       // 3. Generate Extra Customer Accounts
       logger.info(
-        `👥 Expanding dataset with ~${TOTAL_EXTRA_CUSTOMERS} customer accounts...`,
+        `[DB_SEED]: Batch inserting synthetic consumer cohort (n=${TOTAL_EXTRA_CUSTOMERS})...`,
       );
       const createdCustomersList: { id: string; name: string; city: string }[] = [];
 
@@ -140,6 +157,7 @@ async function seed() {
             city,
             role: 'USER',
             avatarUrl: `https://i.pravatar.cc/150?u=${email}`,
+            isVerified: true,
           })
           .returning();
 
@@ -149,7 +167,9 @@ async function seed() {
       }
 
       // 4. GUARANTEED REVIEWS FOR EACH EXPLICIT BASE WORKER
-      logger.info('⭐ Generating guaranteed reviews for each base worker profile...');
+      logger.info(
+        '[DB_SEED]: Injecting baseline rating metrics and audit trail for core providers...',
+      );
       for (const [email, workerProfileId] of createdWorkerMap.entries()) {
         const workerUserId = createdUsersMap.get(email);
         if (!workerUserId) continue;
@@ -167,7 +187,7 @@ async function seed() {
               status: 'COMPLETED',
               requestedDate,
               address: `${getRandomElement(LOCALITY_PREFIXES)}, ${customer.city}`,
-              notes: 'Priority service request.',
+              notes: 'Synthetic baseline audit booking.',
             })
             .returning();
 
@@ -208,7 +228,7 @@ async function seed() {
 
       // 5. Dynamic Expansion: Generate Extra Workers
       logger.info(
-        `🚀 Expanding dataset with ~${TOTAL_EXTRA_WORKERS} generated workers across 80+ flat skills...`,
+        `[DB_SEED]: Provisioning scale worker pool across 80+ catalog trade categories (n=${TOTAL_EXTRA_WORKERS})...`,
       );
       const createdWorkerProfilesList: { id: string; userId: string; email: string }[] =
         [];
@@ -248,6 +268,7 @@ async function seed() {
             city: primaryCity,
             role: 'WORKER',
             avatarUrl: `https://i.pravatar.cc/150?u=${email}`,
+            isVerified: true,
           })
           .returning();
 
@@ -277,7 +298,7 @@ async function seed() {
           .values({
             userId: userRecord.id,
             category,
-            bio: `Available for ${category} services in ${primaryCity} and nearby areas. Direct booking with zero commission.`,
+            bio: `Verified trade execution profile for ${category} operating within ${primaryCity} and designated regional nodes.`,
             experienceYears: getRandomNumber(2, 16),
             rateType,
             baseRate,
@@ -299,7 +320,9 @@ async function seed() {
       }
 
       // 6. Generate Bookings Across Various Lifecycle States
-      logger.info(`📅 Generating ${TOTAL_BOOKINGS} Bookings...`);
+      logger.info(
+        `[DB_SEED]: Allocating execution states across transactional ledger (target=${TOTAL_BOOKINGS})...`,
+      );
       const createdCompletedBookings: { id: string; userId: string; workerId: string }[] =
         [];
       const bookingStatuses: (
@@ -344,7 +367,7 @@ async function seed() {
             requestedDate,
             counterDate,
             address,
-            notes: `Service request in ${customer.city}. Please confirm slot availability.`,
+            notes: `Automated transaction payload for node dispatch in ${customer.city}.`,
           })
           .returning();
 
@@ -358,7 +381,9 @@ async function seed() {
       }
 
       // 7. Generate Extra Verified Reviews and Recalculate Ratings for General Bookings
-      logger.info('⭐ Submitting General Verified Reviews and recalculating ratings...');
+      logger.info(
+        '[DB_SEED]: Committing historical reviews and calculating atomic rating adjustments...',
+      );
       for (const compBooking of createdCompletedBookings) {
         if (Math.random() < 0.8) {
           const isBadReview = Math.random() < 0.3;
@@ -395,12 +420,24 @@ async function seed() {
       }
     });
 
+    const executionTimeMs = Math.round(performance.now() - startTime);
     logger.info(
-      '🎉 Massive database seeding complete! 2,500+ users & diverse reviews successfully generated.',
+      {
+        event: 'db_seed_success',
+        durationMs: executionTimeMs,
+      },
+      `[DB_SEED]: Transaction committed successfully in ${executionTimeMs}ms.`,
     );
+
     process.exit(0);
   } catch (error) {
-    logger.error(error, '❌ Seeding failed:');
+    logger.error(
+      {
+        event: 'db_seed_error',
+        err: error,
+      },
+      '[DB_SEED]: Fatal execution error during seed transaction.',
+    );
     process.exit(1);
   }
 }
