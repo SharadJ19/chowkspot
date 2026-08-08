@@ -25,10 +25,6 @@ jobs:
       run:
         working-directory: chowkspot-backend
 
-    environment:
-      name: backend
-      url: https://chowkspot-backend.onrender.com
-
     steps:
       - name: Checkout Codebase
         uses: actions/checkout@v4
@@ -58,10 +54,6 @@ jobs:
     defaults:
       run:
         working-directory: chowkspot-frontend
-
-    environment:
-      name: frontend
-      url: https://chowkspot.vercel.app
 
     steps:
       - name: Checkout Codebase
@@ -148,6 +140,10 @@ jobs:
     if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
     runs-on: ubuntu-latest
 
+    environment:
+      name: chowkspot-backend
+      url: https://chowkspot-backend.onrender.com
+
     steps:
       - name: Trigger Render Deploy Hook
         run: |
@@ -162,6 +158,10 @@ jobs:
     needs: frontend-quality
     if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
     runs-on: ubuntu-latest
+
+    environment:
+      name: chowkspot-frontend
+      url: https://chowkspot.vercel.app
 
     steps:
       - name: Checkout Codebase
