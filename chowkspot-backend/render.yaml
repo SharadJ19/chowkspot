@@ -18,7 +18,11 @@ services:
         sync: false # Set your Vercel/Netlify frontend URL in Render dashboard
       - key: DATABASE_URL
         sync: false # Set your Neon DB connection string in Render dashboard
+      - key: MAIL_USER
+        value: sharadchandel2005@gmail.com
+      - key: MAIL_PASS
+        sync: false # Do NOT hardcode app passwords in Git! Enter in Render Dashboard UI
       - key: JWT_ACCESS_SECRET
-        generateValue: true # Generates base64 256-bit secret automatically
+        generateValue: true # Automatically generates a secure 256-bit random secret
       - key: JWT_REFRESH_SECRET
         generateValue: true

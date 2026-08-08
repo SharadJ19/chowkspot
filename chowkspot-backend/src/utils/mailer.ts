@@ -7,12 +7,19 @@ import {
   getPasswordResetContent,
 } from '@/utils/email-templates.js';
 
+// Explicitly use port 465 (SSL) to bypass Render's port 587 egress blocks
 const transporter = nodemailer.createTransport({
-  service: 'gmail',
+  host: 'smtp.gmail.com',
+  port: 465,
+  secure: true, // true for 465, false for other ports
   auth: {
     user: env.MAIL_USER,
     pass: env.MAIL_PASS,
   },
+  // Add connection timeout safeguards so requests don't hang indefinitely
+  connectionTimeout: 10000, // 10 seconds
+  greetingTimeout: 10000,
+  socketTimeout: 10000,
 });
 
 export const sendVerificationEmail = async (
@@ -35,7 +42,7 @@ export const sendVerificationEmail = async (
     logger.info(`📧 Verification email successfully sent to ${toEmail}`);
   } catch (error) {
     logger.error(error as Error, `❌ Failed to send verification email to ${toEmail}`);
-    throw new Error('Failed to send verification email', { cause: error });
+    // Do not re-throw if called in background void context, or handle gracefully
   }
 };
 
@@ -59,6 +66,5 @@ export const sendPasswordResetEmail = async (
     logger.info(`📧 Password reset email successfully sent to ${toEmail}`);
   } catch (error) {
     logger.error(error as Error, `❌ Failed to send password reset email to ${toEmail}`);
-    throw new Error('Failed to send password reset email', { cause: error });
   }
 };
