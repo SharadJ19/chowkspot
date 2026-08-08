@@ -26,7 +26,7 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     const onDisconnect = () => setIsConnected(false);
 
     // ⚡ Real-time Socket Toast Listeners
-    const onNewBookingRequest = (payload: {
+    const onNewBookingRequest = (_payload: {
       bookingId: string;
       requestedDate: string;
     }) => {
