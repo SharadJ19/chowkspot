@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import {
   Users,
   Wrench,
@@ -8,19 +8,34 @@ import {
   Trash2,
   ShieldCheck,
   AlertTriangle,
+  Search,
+  CheckCircle2,
+  XCircle,
 } from 'lucide-react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { adminApi } from '../api/admin.api';
 import { Spinner } from '@/components/ui/Spinner/Spinner';
 import { Badge } from '@/components/ui/Badge/Badge';
 import { Button } from '@/components/ui/Button/Button';
+import { Input } from '@/components/ui/Input/Input';
+import { Avatar } from '@/components/ui/Avatar/Avatar';
 import { Modal } from '@/components/ui/Modal/Modal';
+import { Pagination } from '@/components/ui/Pagination/Pagination';
 import type { AuthUser } from '@/types';
 import styles from './AdminDashboard.module.css';
+
+const USERS_PER_PAGE = 10;
 
 export const AdminDashboard: React.FC = () => {
   const queryClient = useQueryClient();
   const [userToDelete, setUserToDelete] = useState<AuthUser | null>(null);
+
+  // Directory filter & pagination state
+  const [searchQuery, setSearchQuery] = useState('');
+  const [roleFilter, setRoleFilter] = useState<'ALL' | 'USER' | 'WORKER' | 'ADMIN'>(
+    'ALL',
+  );
+  const [currentPage, setCurrentPage] = useState(1);
 
   const { data: stats, isLoading: statsLoading } = useQuery({
     queryKey: ['admin_stats'],
@@ -46,6 +61,40 @@ export const AdminDashboard: React.FC = () => {
       setUserToDelete(null);
     },
   });
+
+  // Filter users by search query and role filter
+  const filteredUsers = useMemo(() => {
+    if (!usersList) return [];
+    return usersList.filter((u) => {
+      const matchesRole = roleFilter === 'ALL' || u.role === roleFilter;
+      const query = searchQuery.toLowerCase().trim();
+      const matchesSearch =
+        !query ||
+        u.name.toLowerCase().includes(query) ||
+        u.email.toLowerCase().includes(query) ||
+        u.city.toLowerCase().includes(query) ||
+        u.phone.includes(query);
+
+      return matchesRole && matchesSearch;
+    });
+  }, [usersList, searchQuery, roleFilter]);
+
+  // Calculate paginated slice
+  const totalPages = Math.ceil(filteredUsers.length / USERS_PER_PAGE) || 1;
+  const paginatedUsers = useMemo(() => {
+    const start = (currentPage - 1) * USERS_PER_PAGE;
+    return filteredUsers.slice(start, start + USERS_PER_PAGE);
+  }, [filteredUsers, currentPage]);
+
+  const handleRoleTabChange = (role: 'ALL' | 'USER' | 'WORKER' | 'ADMIN') => {
+    setRoleFilter(role);
+    setCurrentPage(1);
+  };
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(e.target.value);
+    setCurrentPage(1);
+  };
 
   if (statsLoading || usersLoading) {
     return (
@@ -151,61 +200,133 @@ export const AdminDashboard: React.FC = () => {
         </div>
       </div>
 
-      {/* User Moderation Table */}
+      {/* User Moderation Directory Panel */}
       <div className={styles.panel}>
-        <h3 className={styles.panelTitle}>Registered User &amp; Worker Directory</h3>
+        <div className={styles.panelHeaderRow}>
+          <div>
+            <h3 className={styles.panelTitle}>Registered User Directory</h3>
+            <span className={styles.directoryCountText}>
+              Showing {filteredUsers.length} of {usersList?.length || 0} registered
+              accounts
+            </span>
+          </div>
+
+          {/* Search Input */}
+          <div className={styles.directorySearchWrapper}>
+            <Input
+              placeholder='Search name, email, city, phone...'
+              value={searchQuery}
+              onChange={handleSearchChange}
+              rightElement={<Search size={16} />}
+            />
+          </div>
+        </div>
+
+        {/* Role Filter Tabs */}
+        <div className={styles.tabsRow}>
+          {(['ALL', 'USER', 'WORKER', 'ADMIN'] as const).map((role) => (
+            <Button
+              key={role}
+              size='sm'
+              variant={roleFilter === role ? 'primary' : 'outline'}
+              onClick={() => handleRoleTabChange(role)}
+            >
+              {role === 'ALL'
+                ? 'All Accounts'
+                : role === 'USER'
+                  ? 'Customers'
+                  : role === 'WORKER'
+                    ? 'Workers'
+                    : 'Admins'}
+            </Button>
+          ))}
+        </div>
+
+        {/* Paginated User Table */}
         <div className={styles.tableWrapper}>
           <table className={styles.table}>
             <thead>
               <tr>
-                <th>Name</th>
+                <th>Account</th>
                 <th>Email</th>
                 <th>Phone</th>
                 <th>City</th>
                 <th>Role</th>
+                <th>Status</th>
                 <th>Actions</th>
               </tr>
             </thead>
             <tbody>
-              {usersList?.map((u) => (
-                <tr key={u.id}>
-                  <td style={{ fontWeight: 700 }}>{u.name}</td>
-                  <td>{u.email}</td>
-                  <td>{u.phone}</td>
-                  <td>{u.city}</td>
-                  <td>
-                    <Badge
-                      variant={
-                        u.role === 'ADMIN'
-                          ? 'danger'
-                          : u.role === 'WORKER'
-                            ? 'primary'
-                            : 'secondary'
-                      }
-                    >
-                      {u.role}
-                    </Badge>
-                  </td>
-                  <td>
-                    {u.role !== 'ADMIN' && (
-                      <Button
-                        variant='danger'
-                        size='sm'
-                        onClick={() => setUserToDelete(u)}
-                      >
-                        <Trash2 size={13} />
-                        <span>Remove</span>
-                      </Button>
-                    )}
+              {paginatedUsers.length === 0 ? (
+                <tr>
+                  <td colSpan={7} style={{ textAlign: 'center', padding: '2rem' }}>
+                    No accounts match your filter criteria.
                   </td>
                 </tr>
-              ))}
+              ) : (
+                paginatedUsers.map((u) => (
+                  <tr key={u.id}>
+                    <td>
+                      <div className={styles.userCell}>
+                        <Avatar name={u.name} src={u.avatarUrl} size='sm' />
+                        <span className={styles.userNameText}>{u.name}</span>
+                      </div>
+                    </td>
+                    <td>{u.email}</td>
+                    <td>{u.phone}</td>
+                    <td>{u.city}</td>
+                    <td>
+                      <Badge
+                        variant={
+                          u.role === 'ADMIN'
+                            ? 'danger'
+                            : u.role === 'WORKER'
+                              ? 'primary'
+                              : 'secondary'
+                        }
+                      >
+                        {u.role}
+                      </Badge>
+                    </td>
+                    <td>
+                      {u.isVerified ? (
+                        <span className={styles.verifiedTag}>
+                          <CheckCircle2 size={13} /> Verified
+                        </span>
+                      ) : (
+                        <span className={styles.unverifiedTag}>
+                          <XCircle size={13} /> Unverified
+                        </span>
+                      )}
+                    </td>
+                    <td>
+                      {u.role !== 'ADMIN' && (
+                        <Button
+                          variant='danger'
+                          size='sm'
+                          onClick={() => setUserToDelete(u)}
+                        >
+                          <Trash2 size={13} />
+                          <span>Remove</span>
+                        </Button>
+                      )}
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>
+
+        {/* Pagination Controls */}
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={(page) => setCurrentPage(page)}
+        />
       </div>
 
-      {/* Admin User Delete Confirmation Modal */}
+      {/* Account Deletion Confirmation Modal */}
       <Modal
         isOpen={!!userToDelete}
         onClose={() => setUserToDelete(null)}
