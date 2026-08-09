@@ -52,13 +52,19 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 52px;
-  height: 52px;
+  width: 56px;
+  height: 56px;
   background-color: var(--color-primary-50);
   color: var(--color-primary-600);
   border-radius: 16px;
   border: 1px solid var(--color-primary-200);
   flex-shrink: 0;
+}
+
+.warningIconWrapper {
+  background-color: #fef2f2 !important;
+  color: #dc2626 !important;
+  border-color: #fecaca !important;
 }
 
 .successIconWrapper {
@@ -95,7 +101,7 @@
 .descriptionBox {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
   background-color: var(--color-slate-50);
   border: 1px solid var(--color-border);
   border-radius: 16px;
@@ -107,6 +113,45 @@
   font-size: var(--font-size-xs);
   color: var(--color-slate-700);
   line-height: var(--line-height-relaxed);
+}
+
+/* ==================== CLEAN DELAYED ALERT BOX ==================== */
+.delayedAlertBox {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  background-color: #fffbeb;
+  border: 1px solid #fde68a;
+  border-radius: 12px;
+  padding: 14px 16px;
+}
+
+.alertIconPulse {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #d97706;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.alertTextGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.alertTitle {
+  font-size: var(--font-size-xs);
+  font-weight: 800;
+  color: #b45309;
+  letter-spacing: -0.01em;
+}
+
+.alertDesc {
+  font-size: var(--font-size-xs);
+  color: #92400e;
+  line-height: 1.4;
 }
 
 .progressBarTrack {
@@ -184,7 +229,7 @@
   margin-top: 2px;
 }
 
-/* ==================== MODIFIED FLOATING PILL STYLES ==================== */
+/* ==================== FLOATING PILL STYLES ==================== */
 .floatingPillContainer {
   position: fixed;
   bottom: 24px;
