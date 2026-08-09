@@ -25,9 +25,21 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           setUser(meRes.data.user);
         }
       }
-    } catch {
-      setAccessToken(null);
-      setUser(null);
+    } catch (err) {
+      const errMsg = (err as Error).message.toLowerCase();
+
+      // 💡 COLD-START GUARD: Do NOT clear user state if the error is a server cold-start / 502 / 503 / network drop
+      const isColdStartOrNetworkError =
+        errMsg.includes('cold start') ||
+        errMsg.includes('502') ||
+        errMsg.includes('503') ||
+        errMsg.includes('failed to fetch') ||
+        errMsg.includes('networkerror');
+
+      if (!isColdStartOrNetworkError) {
+        setAccessToken(null);
+        setUser(null);
+      }
     } finally {
       setIsLoading(false);
     }
@@ -36,7 +48,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   useEffect(() => {
     let isMounted = true;
 
-    // Asynchronous execution prevents synchronous setState during initial effect setup
     void (async () => {
       if (isMounted) {
         await checkAuth();

@@ -1,21 +1,28 @@
+// ============================================================================
+// FILE: src/modules/auth/auth.controller.ts
+// ============================================================================
 import { Request, Response, NextFunction } from 'express';
 import { AuthService } from '@/modules/auth/auth.service.js';
 import { env } from '@/config/env.js';
 import { ApiError } from '@/utils/ApiError.js';
 import { CONSTANTS } from '@/config/constants.js';
 
+const isProd = env.NODE_ENV === 'production';
+
+// Robust cookie options supporting cross-site Vercel <-> Render deployment
+const cookieOptions = {
+  httpOnly: true,
+  secure: isProd,
+  sameSite: isProd ? ('none' as const) : ('lax' as const),
+  maxAge: CONSTANTS.JWT.REFRESH_TOKEN_COOKIE_MAX_AGE,
+};
+
 export class AuthController {
   static async register(req: Request, res: Response, next: NextFunction) {
     try {
       const { user, accessToken, refreshToken } = await AuthService.register(req.body);
 
-      // Write Refresh Token to httpOnly Cookie
-      res.cookie(CONSTANTS.JWT.COOKIE_NAME, refreshToken, {
-        httpOnly: true,
-        secure: env.NODE_ENV === 'production',
-        sameSite: 'strict',
-        maxAge: CONSTANTS.JWT.REFRESH_TOKEN_COOKIE_MAX_AGE, // 7 days
-      });
+      res.cookie(CONSTANTS.JWT.COOKIE_NAME, refreshToken, cookieOptions);
 
       res.status(CONSTANTS.HTTP_STATUS.CREATED).json({
         success: true,
@@ -30,12 +37,7 @@ export class AuthController {
     try {
       const { user, accessToken, refreshToken } = await AuthService.login(req.body);
 
-      res.cookie(CONSTANTS.JWT.COOKIE_NAME, refreshToken, {
-        httpOnly: true,
-        secure: env.NODE_ENV === 'production',
-        sameSite: 'strict',
-        maxAge: CONSTANTS.JWT.REFRESH_TOKEN_COOKIE_MAX_AGE,
-      });
+      res.cookie(CONSTANTS.JWT.COOKIE_NAME, refreshToken, cookieOptions);
 
       res.status(CONSTANTS.HTTP_STATUS.OK).json({
         success: true,
@@ -51,7 +53,7 @@ export class AuthController {
       if (req.user?.userId) {
         await AuthService.logout(req.user.userId);
       }
-      res.clearCookie(CONSTANTS.JWT.COOKIE_NAME);
+      res.clearCookie(CONSTANTS.JWT.COOKIE_NAME, cookieOptions);
       res
         .status(CONSTANTS.HTTP_STATUS.OK)
         .json({ success: true, message: 'Logged out successfully' });
@@ -72,13 +74,7 @@ export class AuthController {
 
       const { accessToken, refreshToken } = await AuthService.refreshTokens(tokenCookie);
 
-      // Write rotated refresh token cookie
-      res.cookie(CONSTANTS.JWT.COOKIE_NAME, refreshToken, {
-        httpOnly: true,
-        secure: env.NODE_ENV === 'production',
-        sameSite: 'strict',
-        maxAge: CONSTANTS.JWT.REFRESH_TOKEN_COOKIE_MAX_AGE,
-      });
+      res.cookie(CONSTANTS.JWT.COOKIE_NAME, refreshToken, cookieOptions);
 
       res.status(CONSTANTS.HTTP_STATUS.OK).json({
         success: true,
