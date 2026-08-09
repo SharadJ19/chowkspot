@@ -13,7 +13,7 @@ interface AuthLayoutProps {
 export const AuthLayout: React.FC<AuthLayoutProps> = ({ title, subtitle, children }) => {
   return (
     <div className={styles.authContainer}>
-      {/* LEFT: Premium Full-Bleed Portrait Showcase Hero */}
+      {/* LEFT: Custom Luxury Branded Gradient Showcase Hero */}
       <div className={styles.heroCanvas}>
         <div className={styles.brandHeader}>
           <span className={styles.tagline}>ChowkSpot Verified Marketplace</span>
@@ -22,7 +22,7 @@ export const AuthLayout: React.FC<AuthLayoutProps> = ({ title, subtitle, childre
           </h2>
         </div>
 
-        {/* Full Portrait Plumber Hero Card */}
+        {/* Frosted Glass Portrait Plumber Hero Card */}
         <div className={styles.featuredWorkerCard}>
           <div className={styles.cardImageWrapper}>
             <img
@@ -63,7 +63,7 @@ export const AuthLayout: React.FC<AuthLayoutProps> = ({ title, subtitle, childre
           </div>
         </div>
 
-        {/* Clean Perks List */}
+        {/* Unique Glowing Perks List */}
         <div className={styles.perksList}>
           <div className={styles.perkItem}>
             <Zap size={16} className={styles.perkIcon} />
