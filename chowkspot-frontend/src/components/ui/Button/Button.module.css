@@ -14,6 +14,7 @@
   transition: var(--transition-fast);
   white-space: nowrap;
   user-select: none;
+  min-height: 44px; /* 👈 Enforces Apple/Android recommended minimum touch target height */
 }
 
 .button:focus-visible {
@@ -92,4 +93,11 @@
 .button:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+}
+
+@media (max-width: 480px) {
+  .button {
+    min-height: 44px;
+    padding: 0.75rem 1rem; /* Slightly larger thumb padding on mobile */
+  }
 }

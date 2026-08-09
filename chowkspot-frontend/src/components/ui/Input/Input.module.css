@@ -20,14 +20,15 @@
 
 .input {
   width: 100%;
-  padding: 0.625rem 0.875rem;
+  padding: 0.75rem 0.875rem; /* Slightly taller padding for mobile touch comfort */
   font-family: var(--font-sans);
-  font-size: var(--font-size-sm);
+  font-size: 16px !important; /* Forces 16px to prevent zoom */
   color: var(--color-text-main);
   background-color: var(--color-bg-surface);
   border: 1px solid var(--color-border-strong);
   border-radius: var(--radius-md);
   transition: var(--transition-fast);
+  min-height: 44px; /* 👈 Touch target compliance */
 }
 
 .input::placeholder {

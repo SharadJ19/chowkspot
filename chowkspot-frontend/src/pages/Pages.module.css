@@ -695,8 +695,16 @@
   box-shadow: 0 0 0 3px var(--color-primary-100);
 }
 
+.searchLayoutGrid {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: var(--spacing-xl);
+  align-items: start;
+}
+
 @media (max-width: 960px) {
   .searchLayoutGrid {
     grid-template-columns: 1fr !important;
+    gap: var(--spacing-md);
   }
 }

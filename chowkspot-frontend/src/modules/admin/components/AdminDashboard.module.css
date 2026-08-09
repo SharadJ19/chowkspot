@@ -24,6 +24,12 @@
   letter-spacing: -0.02em;
 }
 
+@media (max-width: 480px) {
+  .pageTitle {
+    font-size: 1.5rem;
+  }
+}
+
 .pageSubtitle {
   font-size: var(--font-size-xs);
   color: var(--color-text-muted);
@@ -35,6 +41,12 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: var(--spacing-md);
+}
+
+@media (max-width: 480px) {
+  .statsGrid {
+    grid-template-columns: 1fr;
+  }
 }
 
 .statCard {
@@ -49,12 +61,6 @@
   position: relative;
   overflow: hidden;
   transition: var(--transition-normal);
-}
-
-.statCard:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
-  border-color: var(--color-primary-300);
 }
 
 .statHeader {
@@ -99,18 +105,6 @@
 }
 
 /* --- Content Panels & Directory --- */
-.contentGrid {
-  display: grid;
-  grid-template-columns: 2fr 1fr;
-  gap: var(--spacing-lg);
-}
-
-@media (max-width: 960px) {
-  .contentGrid {
-    grid-template-columns: 1fr;
-  }
-}
-
 .panel {
   background-color: var(--color-bg-surface);
   border: 1px solid var(--color-border);
@@ -120,6 +114,12 @@
   display: flex;
   flex-direction: column;
   gap: var(--spacing-md);
+}
+
+@media (max-width: 480px) {
+  .panel {
+    padding: var(--spacing-md);
+  }
 }
 
 .panelHeaderRow {
@@ -156,10 +156,11 @@
   flex-wrap: wrap;
 }
 
-/* --- Users Table --- */
+/* --- Responsive Table / Mobile Card Conversion --- */
 .tableWrapper {
   width: 100%;
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .table {
@@ -217,7 +218,80 @@
   font-size: 0.72rem;
 }
 
-/* --- Modal & Loading States --- */
+/* ==================== MOBILE CARD VIEW FOR ADMIN TABLE (< 768px) ==================== */
+@media (max-width: 768px) {
+  .table thead {
+    display: none; /* Hide table headers on mobile */
+  }
+
+  .table,
+  .table tbody,
+  .table tr,
+  .table td {
+    display: block;
+    width: 100%;
+  }
+
+  .table tr {
+    margin-bottom: var(--spacing-md);
+    background-color: var(--color-bg-app);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    padding: var(--spacing-sm);
+  }
+
+  .table td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px var(--spacing-xs);
+    border-bottom: 1px dashed var(--color-border);
+    text-align: right;
+  }
+
+  .table td:last-child {
+    border-bottom: none;
+    padding-top: var(--spacing-xs);
+  }
+
+  /* Add pseudo-label tags for mobile stacked view */
+  .table td:nth-child(1)::before {
+    content: 'Account';
+    font-weight: bold;
+    color: var(--color-slate-500);
+  }
+  .table td:nth-child(2)::before {
+    content: 'Email';
+    font-weight: bold;
+    color: var(--color-slate-500);
+  }
+  .table td:nth-child(3)::before {
+    content: 'Phone';
+    font-weight: bold;
+    color: var(--color-slate-500);
+  }
+  .table td:nth-child(4)::before {
+    content: 'City';
+    font-weight: bold;
+    color: var(--color-slate-500);
+  }
+  .table td:nth-child(5)::before {
+    content: 'Role';
+    font-weight: bold;
+    color: var(--color-slate-500);
+  }
+  .table td:nth-child(6)::before {
+    content: 'Status';
+    font-weight: bold;
+    color: var(--color-slate-500);
+  }
+  .table td:nth-child(7)::before {
+    content: 'Action';
+    font-weight: bold;
+    color: var(--color-slate-500);
+  }
+}
+
 .centerLoading {
   display: flex;
   justify-content: center;

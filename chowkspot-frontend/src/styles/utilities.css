@@ -1,6 +1,5 @@
-/* Pure CSS utility helpers (screen-readers, etc.) */
+/* FILE: src/styles/utilities.css */
 
-/* Helper Classes */
 .sr-only {
   position: absolute;
   width: 1px;
@@ -13,6 +12,7 @@
   border: 0;
 }
 
+/* Fluid Container Padding optimized for 393px Redmi screen */
 .container {
   width: 100%;
   max-width: var(--container-max-width);
@@ -20,6 +20,13 @@
   margin-right: auto;
   padding-left: var(--spacing-md);
   padding-right: var(--spacing-md);
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
 }
 
 .flex-center {
@@ -34,7 +41,6 @@
   white-space: nowrap;
 }
 
-/* Layout & Alignment Helpers */
 .flex-col {
   display: flex;
   flex-direction: column;
@@ -46,93 +52,15 @@
   justify-content: space-between;
 }
 
-.flex-gap-xs {
-  gap: var(--spacing-xs);
-}
-.flex-gap-sm {
-  gap: var(--spacing-sm);
-}
-.flex-gap-md {
-  gap: var(--spacing-md);
-}
-.flex-gap-lg {
-  gap: var(--spacing-lg);
-}
-
-/* Responsive Grid Helper */
+/* Responsive Grid Helper - forces 1fr single column on small screens */
 .grid-auto-fit {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: var(--spacing-md);
 }
 
-/* Scrollbar Customization */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: var(--color-bg-app);
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--color-slate-300);
-  border-radius: var(--radius-full);
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--color-slate-400);
-}
-
-/* ==========================================================
-   CHOWKSPOT BRAND LIGHT TOAST OVERRIDES
-   ========================================================== */
-
-/* Force Sonner's Card Background & Text Colors */
-[data-sonner-toast] {
-  background-color: #ffffff !important;
-  color: var(--color-slate-900) !important;
-  border-radius: var(--radius-xl) !important;
-  border: 1px solid var(--color-border) !important;
-  box-shadow: var(--shadow-lg) !important;
-}
-
-/* Toast Header Title */
-[data-sonner-toast] [data-title] {
-  color: var(--color-slate-900) !important;
-  font-weight: var(--font-weight-bold) !important;
-  font-size: var(--font-size-xs) !important;
-}
-
-/* Toast Body Text */
-[data-sonner-toast] [data-description] {
-  color: var(--color-slate-600) !important;
-  font-size: 0.72rem !important;
-  line-height: 1.4 !important;
-}
-
-/* Close Button Styling */
-[data-sonner-toast] [data-close-button] {
-  background-color: var(--color-slate-100) !important;
-  border: 1px solid var(--color-border) !important;
-  color: var(--color-slate-500) !important;
-}
-
-/* Brand Status Left-Borders */
-[data-sonner-toast][data-type='success'],
-[data-sonner-toast]:not([data-type]) {
-  border-left: 5px solid var(--color-primary-500) !important;
-}
-
-[data-sonner-toast][data-type='info'] {
-  border-left: 5px solid var(--color-info) !important;
-}
-
-[data-sonner-toast][data-type='warning'] {
-  border-left: 5px solid var(--color-warning) !important;
-}
-
-[data-sonner-toast][data-type='error'] {
-  border-left: 5px solid var(--color-error) !important;
+@media (max-width: 480px) {
+  .grid-auto-fit {
+    grid-template-columns: 1fr;
+  }
 }
