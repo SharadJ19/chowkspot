@@ -8,7 +8,7 @@ import { WorkerSidebarFilters } from '@/modules/workers/components/WorkerSidebar
 import { Pagination } from '@/components/ui/Pagination/Pagination';
 import { Spinner } from '@/components/ui/Spinner/Spinner';
 import { Button } from '@/components/ui/Button/Button';
-import { BookingRequestModal } from '@/components/BookingRequestModal/BookingRequestModal';
+import { BookingRequestModal } from '@/modules/bookings/components/BookingRequestModal/BookingRequestModal';
 import type { WorkerSearchResult } from '@/types';
 import styles from './Pages.module.css';
 import sidebarStyles from '@/modules/workers/components/WorkerSidebarFilters/WorkerSidebarFilters.module.css';

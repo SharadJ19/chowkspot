@@ -4,7 +4,7 @@ import { useParams } from 'react-router';
 import { MapPin, Calendar, Briefcase, ShieldCheck } from 'lucide-react';
 import { useWorkerQueries } from '@/modules/workers/hooks/useWorkerQueries';
 import { useReviewQueries } from '@/modules/reviews/hooks/useReviewQueries';
-import { BookingRequestModal } from '@/components/BookingRequestModal/BookingRequestModal';
+import { BookingRequestModal } from '@/modules/bookings/components/BookingRequestModal/BookingRequestModal';
 import type { WorkerSearchResult } from '@/types';
 import { ReviewList } from '@/modules/reviews/components/ReviewList/ReviewList';
 import { Avatar } from '@/components/ui/Avatar/Avatar';
