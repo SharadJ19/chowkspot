@@ -1,22 +1,67 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Cpu, Terminal, Sparkles, CheckCircle2, AlertTriangle } from 'lucide-react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { useLocation } from 'react-router';
+import {
+  Cpu,
+  Terminal,
+  CheckCircle2,
+  AlertTriangle,
+  RefreshCw,
+  ChevronDown,
+  ChevronUp,
+  Clock,
+  AlertCircle,
+} from 'lucide-react';
 import { Spinner } from '@/components/ui/Spinner/Spinner';
+import { Button } from '@/components/ui/Button/Button';
 import type { HealthCheckResponse } from '@/types';
 import styles from './ServerWarmingBanner.module.css';
 
 const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || '/api').replace(/\/api$/, '');
-const MAX_ATTEMPTS = 22; // ~90 seconds timeout safety window
+const MAX_ATTEMPTS = 15; // 15 attempts * 4 seconds = 60 seconds strict timeout limit
+const SESSION_CACHE_KEY = 'chowkspot_server_warmed';
+const RENDER_IDLE_TIMEOUT_MS = 14 * 60 * 1000; // 14 minutes (just under Render's 15-min idle rule)
+
+const STRICT_ROUTES = [
+  '/search',
+  '/login',
+  '/register',
+  '/bookings',
+  '/profile',
+  '/admin',
+  '/verify-email',
+  '/forgot-password',
+  '/reset-password',
+];
+
+// Helper to check if session cache is still valid based on Render's 15m idle window
+const isServerRecentlyWarmed = (): boolean => {
+  try {
+    const cachedTimestamp = sessionStorage.getItem(SESSION_CACHE_KEY);
+    if (!cachedTimestamp) return false;
+    const parsedTime = parseInt(cachedTimestamp, 10);
+    const now = Date.now();
+    return now - parsedTime < RENDER_IDLE_TIMEOUT_MS;
+  } catch {
+    return false;
+  }
+};
 
 export const ServerWarmingBanner: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const [isReady, setIsReady] = useState<boolean>(false);
+  const location = useLocation();
+
+  // Initialize state directly from session storage to prevent unnecessary flashes on refresh
+  const [isReady, setIsReady] = useState<boolean>(isServerRecentlyWarmed());
   const [showWelcome, setShowWelcome] = useState<boolean>(false);
   const [hasTimedOut, setHasTimedOut] = useState<boolean>(false);
   const [elapsedSeconds, setElapsedSeconds] = useState<number>(0);
   const [requestCount, setRequestCount] = useState<number>(0);
+  const [showTechDetails, setShowTechDetails] = useState<boolean>(false);
 
-  const requestCountRef = useRef(0);
+  const isStrictRoute = STRICT_ROUTES.some((route) =>
+    location.pathname.startsWith(route),
+  );
 
   // Timer counter for elapsed seconds
   useEffect(() => {
@@ -29,55 +74,53 @@ export const ServerWarmingBanner: React.FC<{ children: React.ReactNode }> = ({
     return () => clearInterval(timer);
   }, [isReady, hasTimedOut]);
 
-  // Health check polling loop
-  useEffect(() => {
-    let isMounted = true;
-    let timeoutId: number;
+  // Robust manual and automated ping function
+  const pingServer = useCallback(async () => {
+    if (isReady || hasTimedOut) return;
 
-    const checkHealth = async () => {
-      if (!isMounted || isReady || hasTimedOut) return;
-
-      requestCountRef.current += 1;
-      setRequestCount(requestCountRef.current);
-
-      if (requestCountRef.current > MAX_ATTEMPTS) {
+    setRequestCount((prevCount) => {
+      const nextCount = prevCount + 1;
+      if (nextCount > MAX_ATTEMPTS) {
         setHasTimedOut(true);
-        return;
       }
+      return nextCount;
+    });
 
-      try {
-        const response = await fetch(`${API_BASE_URL}/health`, {
-          method: 'GET',
-          headers: { 'Content-Type': 'application/json' },
-        });
+    try {
+      const response = await fetch(`${API_BASE_URL}/health`, {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+      });
 
-        const data: HealthCheckResponse = await response.json();
+      const data: HealthCheckResponse = await response.json();
 
-        if (response.ok && data?.status === 'healthy' && isMounted) {
-          setIsReady(true);
-          setShowWelcome(true);
-          return; // Server is ready, stop polling!
-        } else {
-          throw new Error('Not healthy');
-        }
-      } catch {
-        if (isMounted) {
-          timeoutId = window.setTimeout(() => {
-            void checkHealth();
-          }, 4000);
+      if (response.ok && data?.status === 'healthy') {
+        setIsReady(true);
+        setShowWelcome(true);
+        // 🚀 Save timestamp to session storage to bypass future refreshes for 14 minutes!
+        try {
+          sessionStorage.setItem(SESSION_CACHE_KEY, Date.now().toString());
+        } catch {
+          // sessionStorage fallback restriction handling
         }
       }
-    };
-
-    void checkHealth();
-
-    return () => {
-      isMounted = false;
-      window.clearTimeout(timeoutId);
-    };
+    } catch {
+      // Silently catch and let interval handle next poll
+    }
   }, [isReady, hasTimedOut]);
 
-  // Dedicated standalone timer for the welcome screen duration (4.5 seconds)
+  // Automated background polling loop (every 4 seconds)
+  useEffect(() => {
+    if (isReady || hasTimedOut) return;
+
+    const pollInterval = window.setInterval(() => {
+      void pingServer();
+    }, 4000);
+
+    return () => clearInterval(pollInterval);
+  }, [isReady, hasTimedOut, pingServer]);
+
+  // Welcome screen duration timer (1.2 seconds)
   useEffect(() => {
     if (!showWelcome) return;
 
@@ -88,12 +131,11 @@ export const ServerWarmingBanner: React.FC<{ children: React.ReactNode }> = ({
     return () => window.clearTimeout(welcomeTimer);
   }, [showWelcome]);
 
-  // If fully loaded and welcome screen is finished, render application children normally
   if (isReady && !showWelcome) {
     return <>{children}</>;
   }
 
-  // If max timeout (~90s) reached, allow user to retry
+  // Timeout state (exceeded 60 seconds)
   if (hasTimedOut) {
     return (
       <>
@@ -115,40 +157,24 @@ export const ServerWarmingBanner: React.FC<{ children: React.ReactNode }> = ({
                 <span className={styles.tagline} style={{ color: '#991b1b' }}>
                   Connection Timeout
                 </span>
-                <h3 className={styles.title}>Server Is Taking Too Long</h3>
+                <h3 className={styles.title}>Server Is Taking Longer Than Usual</h3>
               </div>
             </div>
-
             <div className={styles.descriptionBox}>
               <p className={styles.descText}>
-                We couldn&apos;t reach the Render backend after 90 seconds. The service
-                might be experiencing an unexpected deployment delay or temporary platform
-                downtime.
+                The Render backend is taking more than 60 seconds to respond. Please check
+                your network connection or try reloading.
               </p>
             </div>
-
-            <button
-              onClick={() => window.location.reload()}
-              style={{
-                padding: '0.625rem 1.25rem',
-                backgroundColor: 'var(--color-primary-600)',
-                color: 'var(--color-text-inverse)',
-                fontWeight: 'bold',
-                borderRadius: 'var(--radius-md)',
-                cursor: 'pointer',
-                border: 'none',
-                width: '100%',
-              }}
-            >
+            <Button variant='primary' fullWidth onClick={() => window.location.reload()}>
               Retry Connection
-            </button>
+            </Button>
           </div>
         </div>
       </>
     );
   }
 
-  // If server responded healthy, show welcome screen
   if (isReady && showWelcome) {
     return (
       <>
@@ -163,23 +189,8 @@ export const ServerWarmingBanner: React.FC<{ children: React.ReactNode }> = ({
                 <span className={`${styles.tagline} ${styles.successTagline}`}>
                   All Systems Operational
                 </span>
-                <h3 className={styles.title}>You&apos;re Good to Go! 🚀</h3>
+                <h3 className={styles.title}>You&apos;re Good to Go!</h3>
               </div>
-            </div>
-
-            <div className={styles.descriptionBox}>
-              <p className={styles.descText}>
-                <strong>Render backend &amp; Neon DB cluster are fully active.</strong>{' '}
-                Experience lightning-fast worker matching, real-time booking updates, and
-                zero-commission direct P2P settlements without any friction.
-              </p>
-            </div>
-
-            <div className={styles.successFooterRow}>
-              <Sparkles size={14} className={styles.successSparkleIcon} />
-              <span className={styles.footerNoteText}>
-                Entering ChowkSpot Marketplace...
-              </span>
             </div>
           </div>
         </div>
@@ -187,7 +198,22 @@ export const ServerWarmingBanner: React.FC<{ children: React.ReactNode }> = ({
     );
   }
 
-  // While warming up (Cold start screen)
+  // Non-blocking light brand-themed floating pill for Homepage
+  if (!isStrictRoute) {
+    return (
+      <>
+        {children}
+        <div className={styles.floatingPill}>
+          <Spinner size='sm' color='primary' />
+          <span>Warming backend ({elapsedSeconds}s)...</span>
+        </div>
+      </>
+    );
+  }
+
+  const progressPercent = Math.min((elapsedSeconds / 30) * 100, 100);
+  const isTakingLonger = elapsedSeconds > 30;
+
   return (
     <>
       {children}
@@ -195,7 +221,7 @@ export const ServerWarmingBanner: React.FC<{ children: React.ReactNode }> = ({
         <div className={styles.card}>
           <div className={styles.headerRow}>
             <div className={styles.iconWrapper}>
-              <Cpu size={24} />
+              <Cpu size={26} />
             </div>
             <div className={styles.titleGroup}>
               <span className={styles.tagline}>Infrastructure Cold-Start</span>
@@ -205,18 +231,59 @@ export const ServerWarmingBanner: React.FC<{ children: React.ReactNode }> = ({
 
           <div className={styles.descriptionBox}>
             <p className={styles.descText}>
-              <strong>Please wait 30 to 60 seconds.</strong> The Node.js backend hosted on{' '}
-              <strong>Render</strong> spins down after inactivity. Once our API receives
-              this request, it wakes up and connects to our serverless{' '}
-              <strong>Neon DB</strong> database.
+              {isTakingLonger ? (
+                <span
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '4px',
+                    color: 'var(--color-warning)',
+                    fontWeight: 700,
+                  }}
+                >
+                  <AlertCircle size={14} /> This is taking a little longer than usual. The
+                  Render server is waking up from deep sleep...
+                </span>
+              ) : (
+                <>
+                  <strong>Please wait 20 to 30 seconds.</strong> The backend hosted on{' '}
+                  <strong>Render</strong> spins down after inactivity and is now
+                  reconnecting to <strong>Neon DB</strong>.
+                </>
+              )}
             </p>
+            <button
+              className={styles.accordionToggle}
+              onClick={() => setShowTechDetails(!showTechDetails)}
+            >
+              <span>
+                {showTechDetails ? 'Hide technical details' : 'What is happening?'}
+              </span>
+              {showTechDetails ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+            </button>
+            {showTechDetails && (
+              <p
+                className={styles.descText}
+                style={{ marginTop: '4px', color: 'var(--color-slate-500)' }}
+              >
+                Free-tier cloud hosting puts idle instances to sleep to conserve
+                resources. Your request sends an instant signal to boot the container back
+                up.
+              </p>
+            )}
+            <div className={styles.progressBarTrack}>
+              <div
+                className={styles.progressBarFill}
+                style={{ width: `${progressPercent}%` }}
+              />
+            </div>
           </div>
 
           <div className={styles.diagnosticGrid}>
             <div className={styles.diagnosticBox}>
               <span className={styles.diagnosticLabel}>Elapsed Time</span>
               <span className={styles.diagnosticValue}>
-                <span className={styles.pulseDot} />
+                <Clock size={12} style={{ color: 'var(--color-warning)' }} />
                 {elapsedSeconds}s elapsed
               </span>
             </div>
@@ -229,11 +296,16 @@ export const ServerWarmingBanner: React.FC<{ children: React.ReactNode }> = ({
             </div>
           </div>
 
-          <div className={styles.loadingFooterRow}>
-            <Spinner size='sm' color='primary' />
-            <span className={styles.footerNoteText}>
-              Pinging root /health endpoint every 4s...
-            </span>
+          <div className={styles.buttonRow}>
+            <Button
+              variant='primary'
+              size='md'
+              fullWidth
+              onClick={() => void pingServer()}
+            >
+              <RefreshCw size={16} />
+              <span>Wake Up Now</span>
+            </Button>
           </div>
         </div>
       </div>
