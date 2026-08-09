@@ -19,7 +19,7 @@ export const LogoIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
         <stop offset='100%' stopColor='#0f172a' />
       </linearGradient>
     </defs>
-    <g transform='translate(0, 0)'>
+    <g transform='translate(0, -5)'>
       <path
         d='M 50 15 C 25 15, 15 35, 15 50 C 15 72, 38 88, 50 95'
         fill='none'

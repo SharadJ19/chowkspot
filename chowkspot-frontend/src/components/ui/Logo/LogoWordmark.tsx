@@ -28,7 +28,7 @@ export const LogoWordmark: React.FC<LogoSvgProps> = ({
         <stop offset='100%' stopColor='#047857' />
       </linearGradient>
     </defs>
-    <g transform='translate(0, 58)'>
+    <g transform='translate(10, 58)'>
       <text
         x='0'
         y='0'
