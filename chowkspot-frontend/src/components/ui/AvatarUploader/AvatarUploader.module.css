@@ -1,3 +1,5 @@
+/* FILE: src/components/ui/AvatarUploader/AvatarUploader.module.css */
+
 .uploaderContainer {
   display: flex;
   align-items: center;
@@ -7,6 +9,17 @@
   border: 1px dashed var(--color-border-strong);
   border-radius: var(--radius-xl);
   width: 100%;
+}
+
+/* 👈 Force vertical stacking on narrow mobile viewports (< 480px) */
+@media (max-width: 480px) {
+  .uploaderContainer {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: var(--spacing-md);
+    padding: var(--spacing-lg) var(--spacing-sm);
+  }
 }
 
 .previewWrapper {
@@ -22,6 +35,13 @@
   gap: var(--spacing-2xs);
   flex: 1;
   min-width: 0;
+}
+
+@media (max-width: 480px) {
+  .uploadInfo {
+    align-items: center;
+    width: 100%;
+  }
 }
 
 .uploadTitle {
@@ -41,6 +61,15 @@
   align-items: center;
   gap: var(--spacing-xs);
   margin-top: 2px;
+  flex-wrap: wrap; /* 👈 Wrap buttons if screen is too narrow */
+}
+
+@media (max-width: 480px) {
+  .uploadActionRow {
+    justify-content: center;
+    width: 100%;
+    margin-top: var(--spacing-xs);
+  }
 }
 
 .fileInput {
@@ -50,6 +79,7 @@
 .uploadBtnLabel {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 6px;
   padding: 0.375rem 0.875rem;
   background-color: var(--color-bg-surface);
@@ -60,6 +90,7 @@
   font-weight: var(--font-weight-semibold);
   cursor: pointer;
   transition: var(--transition-fast);
+  min-height: 38px;
 }
 
 .uploadBtnLabel:hover {

@@ -23,7 +23,9 @@ body {
   color: var(--color-text-main);
   min-height: 100vh;
   text-rendering: optimizeSpeed;
-  overflow-x: hidden; /* Prevent horizontal body shaking on 393px mobile */
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden; /* 👈 Absolute guard against horizontal layout leaks */
 }
 
 /* CRITICAL MOBILE FIX: Force 16px+ font size on inputs to prevent mobile browser auto-zoom */
