@@ -198,14 +198,20 @@ export const ServerWarmingBanner: React.FC<{ children: React.ReactNode }> = ({
     );
   }
 
-  // Non-blocking light brand-themed floating pill for Homepage
+  // Non-blocking sleek floating status pill for Homepage & general navigation
   if (!isStrictRoute) {
     return (
       <>
         {children}
-        <div className={styles.floatingPill}>
-          <Spinner size='sm' color='primary' />
-          <span>Warming backend ({elapsedSeconds}s)...</span>
+        <div
+          className={styles.floatingPillContainer}
+          role='status'
+          aria-label='Warming server'
+        >
+          <span className={styles.pillDot} />
+          <span className={styles.pillText}>
+            Warming server backend <strong>({elapsedSeconds}s)</strong>...
+          </span>
         </div>
       </>
     );
