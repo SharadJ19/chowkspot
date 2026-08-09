@@ -1,6 +1,6 @@
 // FILE: src/pages/SearchPage.tsx
-import React, { useState } from 'react';
-import { Filter, X } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Filter } from 'lucide-react';
 import { useWorkerQueries } from '@/modules/workers/hooks/useWorkerQueries';
 import { useSearchFilters } from '@/hooks/useSearchFilters';
 import { WorkerCard } from '@/modules/workers/components/WorkerCard/WorkerCard';
@@ -16,6 +16,16 @@ import sidebarStyles from '@/modules/workers/components/WorkerSidebarFilters/Wor
 export const SearchPage: React.FC = () => {
   const { filters, setFilter, setPage, resetFilters } = useSearchFilters();
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
+  const [isDesktop, setIsDesktop] = useState(window.innerWidth > 960);
+
+  // Track screen resize cleanly to separate desktop sticky sidebar from mobile drawer
+  useEffect(() => {
+    const handleResize = () => {
+      setIsDesktop(window.innerWidth > 960);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const { searchWorkersQuery } = useWorkerQueries({
     name: filters.name,
@@ -38,7 +48,6 @@ export const SearchPage: React.FC = () => {
     totalPages: 1,
   };
 
-  // Count active filters for badge
   const activeFiltersCount = [
     filters.name,
     filters.category,
@@ -47,6 +56,8 @@ export const SearchPage: React.FC = () => {
     filters.minExperience,
     filters.maxPrice,
   ].filter(Boolean).length;
+
+  const showSidebar = isDesktop || isMobileFilterOpen;
 
   return (
     <div className={`container ${styles.pageContainer}`}>
@@ -57,7 +68,7 @@ export const SearchPage: React.FC = () => {
         </p>
       </div>
 
-      {/* Mobile Sticky Filter Bar Button (< 960px) */}
+      {/* Mobile Sticky Filter Bar Button (< 960px) - Closed by default */}
       <div className={sidebarStyles.mobileFilterTriggerBar}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           <Filter size={16} style={{ color: 'var(--color-primary-600)' }} />
@@ -70,78 +81,52 @@ export const SearchPage: React.FC = () => {
         </Button>
       </div>
 
-      {/* Mobile Backdrop Overlay */}
-      {isMobileFilterOpen && (
-        <div
-          className={sidebarStyles.mobileBackdrop}
-          onClick={() => setIsMobileFilterOpen(false)}
-        />
-      )}
-
       <div
         style={{
           display: 'grid',
-          gridTemplateColumns: '300px 1fr',
+          gridTemplateColumns: isDesktop ? '300px 1fr' : '1fr',
           gap: 'var(--spacing-xl)',
           alignItems: 'start',
         }}
         className='searchLayoutGrid'
       >
-        {/* Sidebar / Bottom Sheet Drawer */}
-        <div
-          style={
-            isMobileFilterOpen
-              ? { display: 'block' }
-              : { display: undefined } /* Controlled via CSS media queries for desktop */
-          }
-        >
-          <WorkerSidebarFilters
-            searchName={filters.name}
-            selectedCategory={filters.category}
-            selectedCity={filters.city}
-            availableOnly={filters.availableOnly}
-            minExperience={filters.minExperience || 0}
-            maxPrice={filters.maxPrice || 3000}
-            onSearchNameChange={(val) => setFilter('name', val)}
-            onCategoryChange={(val) => setFilter('category', val)}
-            onCityChange={(val) => setFilter('city', val)}
-            onAvailableOnlyChange={(val) => setFilter('availableOnly', val)}
-            onMinExperienceChange={(val) =>
-              setFilter('minExp', val > 0 ? val : undefined)
-            }
-            onMaxPriceChange={(val) =>
-              setFilter('maxPrice', val < 3000 ? val : undefined)
-            }
-            onReset={() => {
-              resetFilters();
-              setIsMobileFilterOpen(false);
-            }}
-            currentPage={pagination.page}
-            itemsPerPage={pagination.limit}
-            totalResults={pagination.total}
-          />
-
-          {/* Close button shown only inside mobile sheet drawer */}
-          {isMobileFilterOpen && (
-            <div
-              style={{
-                position: 'fixed',
-                top: '12px',
-                right: '12px',
-                zIndex: 2000,
-                display: 'none', // handled inside CSS if needed, or inline toggle
-              }}
-            >
-              <Button
-                variant='outline'
-                size='sm'
+        {/* Render Sidebar on Desktop, or inside an overlay Drawer on Mobile when toggled */}
+        {showSidebar && (
+          <div className='desktopSidebarWrapper'>
+            {!isDesktop && isMobileFilterOpen && (
+              <div
+                className={sidebarStyles.mobileBackdrop}
                 onClick={() => setIsMobileFilterOpen(false)}
-              >
-                <X size={16} /> Close
-              </Button>
-            </div>
-          )}
-        </div>
+              />
+            )}
+            <WorkerSidebarFilters
+              searchName={filters.name}
+              selectedCategory={filters.category}
+              selectedCity={filters.city}
+              availableOnly={filters.availableOnly}
+              minExperience={filters.minExperience || 0}
+              maxPrice={filters.maxPrice || 3000}
+              onSearchNameChange={(val) => setFilter('name', val)}
+              onCategoryChange={(val) => setFilter('category', val)}
+              onCityChange={(val) => setFilter('city', val)}
+              onAvailableOnlyChange={(val) => setFilter('availableOnly', val)}
+              onMinExperienceChange={(val) =>
+                setFilter('minExp', val > 0 ? val : undefined)
+              }
+              onMaxPriceChange={(val) =>
+                setFilter('maxPrice', val < 3000 ? val : undefined)
+              }
+              onReset={() => {
+                resetFilters();
+                setIsMobileFilterOpen(false);
+              }}
+              currentPage={pagination.page}
+              itemsPerPage={pagination.limit}
+              totalResults={pagination.total}
+              onCloseMobileDrawer={() => setIsMobileFilterOpen(false)}
+            />
+          </div>
+        )}
 
         <div>
           {searchWorkersQuery.isLoading ? (

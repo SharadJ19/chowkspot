@@ -1,5 +1,6 @@
+// FILE: src/modules/workers/components/WorkerSidebarFilters/WorkerSidebarFilters.tsx
 import React, { useState } from 'react';
-import { Filter, RotateCcw } from 'lucide-react';
+import { Filter, RotateCcw, X } from 'lucide-react';
 import { APP_CONSTANTS } from '@/config/constants';
 import { Input } from '@/components/ui/Input/Input';
 import { Button } from '@/components/ui/Button/Button';
@@ -19,9 +20,10 @@ export interface WorkerSidebarFiltersProps {
   onMinExperienceChange: (exp: number) => void;
   onMaxPriceChange: (price: number) => void;
   onReset: () => void;
-  currentPage: number; // 👈 Added
-  itemsPerPage: number; // 👈 Added
+  currentPage: number;
+  itemsPerPage: number;
   totalResults: number;
+  onCloseMobileDrawer?: () => void; // 👈 Added close handler
 }
 
 export const WorkerSidebarFilters: React.FC<WorkerSidebarFiltersProps> = ({
@@ -41,6 +43,7 @@ export const WorkerSidebarFilters: React.FC<WorkerSidebarFiltersProps> = ({
   currentPage,
   itemsPerPage,
   totalResults,
+  onCloseMobileDrawer,
 }) => {
   const [skillSearchQuery, setSkillSearchQuery] = useState('');
   const [citySearchQuery, setCitySearchQuery] = useState('');
@@ -53,7 +56,6 @@ export const WorkerSidebarFilters: React.FC<WorkerSidebarFiltersProps> = ({
     city.toLowerCase().includes(citySearchQuery.toLowerCase()),
   );
 
-  // Calculate current range (e.g. 1–12, 13–24)
   const startItem = totalResults === 0 ? 0 : (currentPage - 1) * itemsPerPage + 1;
   const endItem = Math.min(currentPage * itemsPerPage, totalResults);
 
@@ -64,9 +66,21 @@ export const WorkerSidebarFilters: React.FC<WorkerSidebarFiltersProps> = ({
           <Filter size={18} style={{ color: 'var(--color-primary-600)' }} />
           <h3 className={styles.title}>Filter Marketplace</h3>
         </div>
-        <Button variant='ghost' size='sm' onClick={onReset} title='Reset Filters'>
-          <RotateCcw size={14} />
-        </Button>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+          <Button variant='ghost' size='sm' onClick={onReset} title='Reset Filters'>
+            <RotateCcw size={14} />
+          </Button>
+          {onCloseMobileDrawer && (
+            <Button
+              variant='outline'
+              size='sm'
+              className={styles.mobileCloseBtn}
+              onClick={onCloseMobileDrawer}
+            >
+              <X size={16} />
+            </Button>
+          )}
+        </div>
       </div>
 
       {/* 1. Search Provider Name */}
