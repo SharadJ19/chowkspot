@@ -1,10 +1,86 @@
 import { db } from '@/db/index.js';
 import { users, bookings, reviews } from '@/db/schema/index.js';
-import { sql, eq, desc } from 'drizzle-orm';
+import { sql, eq, desc, ilike, and, or } from 'drizzle-orm';
 import { ApiError } from '@/utils/ApiError.js';
 import { CONSTANTS } from '@/config/constants.js';
 
+export interface AdminUsersQueryParams {
+  page?: number;
+  limit?: number;
+  role?: string;
+  search?: string;
+}
+
 export class AdminService {
+  static async getAllUsers(params: AdminUsersQueryParams) {
+    const page = params.page || 1;
+    const limit = params.limit || 10;
+    const offset = (page - 1) * limit;
+
+    const conditions = [];
+
+    // Role filter
+    if (params.role && params.role !== 'ALL') {
+      const validRoles = ['USER', 'WORKER', 'ADMIN'] as const;
+      if (validRoles.includes(params.role as (typeof validRoles)[number])) {
+        conditions.push(eq(users.role, params.role as 'USER' | 'WORKER' | 'ADMIN'));
+      }
+    }
+
+    // Search query (name, email, phone, city)
+    if (params.search) {
+      const searchTerm = `%${params.search}%`;
+      conditions.push(
+        or(
+          ilike(users.name, searchTerm),
+          ilike(users.email, searchTerm),
+          ilike(users.city, searchTerm),
+          ilike(users.phone, searchTerm),
+        ),
+      );
+    }
+
+    const whereClause = conditions.length > 0 ? and(...conditions) : undefined;
+
+    // Execute count and paginated data queries concurrently
+    const [countResult, paginatedUsers] = await Promise.all([
+      db
+        .select({ total: sql<number>`cast(count(*) as integer)` })
+        .from(users)
+        .where(whereClause),
+      db
+        .select({
+          id: users.id,
+          name: users.name,
+          email: users.email,
+          phone: users.phone,
+          role: users.role,
+          city: users.city,
+          avatarUrl: users.avatarUrl,
+          isVerified: users.isVerified,
+          createdAt: users.createdAt,
+        })
+        .from(users)
+        .where(whereClause)
+        .orderBy(desc(users.createdAt))
+        .limit(limit)
+        .offset(offset),
+    ]);
+
+    const total = countResult[0]?.total ?? 0;
+    const totalPages = Math.ceil(total / limit) || 1;
+
+    return {
+      users: paginatedUsers,
+      pagination: {
+        total,
+        page,
+        limit,
+        totalPages,
+      },
+    };
+  }
+
   static async getPlatformStats() {
     const [userCountRes] = await db
       .select({ count: sql<number>`cast(count(*) as integer)` })
@@ -45,23 +121,6 @@ export class AdminService {
       totalReviews: reviewCountRes?.count ?? 0,
       recentBookings,
     };
-  }
-
-  static async getAllUsers() {
-    return await db
-      .select({
-        id: users.id,
-        name: users.name,
-        email: users.email,
-        phone: users.phone,
-        role: users.role,
-        city: users.city,
-        avatarUrl: users.avatarUrl,
-        isVerified: users.isVerified,
-        createdAt: users.createdAt,
-      })
-      .from(users)
-      .orderBy(desc(users.createdAt));
   }
 
   static async deleteUser(userId: string) {

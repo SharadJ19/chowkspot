@@ -1,5 +1,4 @@
-// FILE: src/modules/admin/components/AdminDashboard.tsx
-import React, { useState, useMemo } from 'react';
+import React, { useState } from 'react';
 import {
   Users,
   Wrench,
@@ -13,8 +12,14 @@ import {
   XCircle,
   AlertTriangle,
 } from 'lucide-react';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import {
+  useQuery,
+  useMutation,
+  useQueryClient,
+  keepPreviousData,
+} from '@tanstack/react-query';
 import { adminApi } from '../api/admin.api';
+import { useDebounce } from '@/hooks/useDebounce';
 import { toast } from 'sonner';
 import { Spinner } from '@/components/ui/Spinner/Spinner';
 import { Badge } from '@/components/ui/Badge/Badge';
@@ -34,6 +39,7 @@ export const AdminDashboard: React.FC = () => {
   const [userToDelete, setUserToDelete] = useState<AuthUser | null>(null);
 
   const [searchQuery, setSearchQuery] = useState('');
+  const debouncedSearch = useDebounce(searchQuery, 300); // Debounces typing by 300ms
   const [roleFilter, setRoleFilter] = useState<'ALL' | 'USER' | 'WORKER' | 'ADMIN'>(
     'ALL',
   );
@@ -47,13 +53,32 @@ export const AdminDashboard: React.FC = () => {
     },
   });
 
-  const { data: usersList, isLoading: usersLoading } = useQuery({
-    queryKey: ['admin_users'],
+  const { data: usersData, isLoading: usersLoading } = useQuery({
+    queryKey: ['admin_users', currentPage, roleFilter, debouncedSearch],
     queryFn: async () => {
-      const res = await adminApi.getUsers();
-      return res.data || [];
+      const res = await adminApi.getUsers({
+        page: currentPage,
+        limit: USERS_PER_PAGE,
+        role: roleFilter,
+        search: debouncedSearch,
+      });
+      return (
+        res.data || {
+          users: [],
+          pagination: { total: 0, page: 1, limit: USERS_PER_PAGE, totalPages: 1 },
+        }
+      );
     },
+    placeholderData: keepPreviousData, // 👈 Keeps previous data stable during background typing fetch
   });
+
+  const usersList = usersData?.users || [];
+  const pagination = usersData?.pagination || {
+    total: 0,
+    page: 1,
+    limit: USERS_PER_PAGE,
+    totalPages: 1,
+  };
 
   const deleteUserMutation = useMutation({
     mutationFn: (userId: string) => adminApi.deleteUser(userId),
@@ -70,28 +95,6 @@ export const AdminDashboard: React.FC = () => {
     },
   });
 
-  const filteredUsers = useMemo(() => {
-    if (!usersList) return [];
-    return usersList.filter((u) => {
-      const matchesRole = roleFilter === 'ALL' || u.role === roleFilter;
-      const query = searchQuery.toLowerCase().trim();
-      const matchesSearch =
-        !query ||
-        u.name.toLowerCase().includes(query) ||
-        u.email.toLowerCase().includes(query) ||
-        u.city.toLowerCase().includes(query) ||
-        u.phone.includes(query);
-
-      return matchesRole && matchesSearch;
-    });
-  }, [usersList, searchQuery, roleFilter]);
-
-  const totalPages = Math.ceil(filteredUsers.length / USERS_PER_PAGE) || 1;
-  const paginatedUsers = useMemo(() => {
-    const start = (currentPage - 1) * USERS_PER_PAGE;
-    return filteredUsers.slice(start, start + USERS_PER_PAGE);
-  }, [filteredUsers, currentPage]);
-
   const handleRoleTabChange = (role: 'ALL' | 'USER' | 'WORKER' | 'ADMIN') => {
     setRoleFilter(role);
     setCurrentPage(1);
@@ -102,7 +105,7 @@ export const AdminDashboard: React.FC = () => {
     setCurrentPage(1);
   };
 
-  if (statsLoading || usersLoading) {
+  if (statsLoading) {
     return (
       <div className={modStyles.centerLoading}>
         <Spinner size='lg' />
@@ -184,8 +187,7 @@ export const AdminDashboard: React.FC = () => {
           <div>
             <h3 className={styles.panelTitle}>Registered User Directory</h3>
             <span className={styles.directoryCountText}>
-              Showing {filteredUsers.length} of {usersList?.length || 0} registered
-              accounts
+              Showing {usersList.length} of {pagination.total} registered accounts
             </span>
           </div>
 
@@ -232,14 +234,20 @@ export const AdminDashboard: React.FC = () => {
               </tr>
             </thead>
             <tbody>
-              {paginatedUsers.length === 0 ? (
+              {usersLoading ? (
+                <tr>
+                  <td colSpan={7} className={modStyles.tableEmptyCell}>
+                    <Spinner size='sm' /> Searching directory...
+                  </td>
+                </tr>
+              ) : usersList.length === 0 ? (
                 <tr>
                   <td colSpan={7} className={modStyles.tableEmptyCell}>
                     No accounts match your filter criteria.
                   </td>
                 </tr>
               ) : (
-                paginatedUsers.map((u) => (
+                usersList.map((u) => (
                   <tr key={u.id}>
                     <td>
                       <div className={styles.userCell}>
@@ -294,8 +302,8 @@ export const AdminDashboard: React.FC = () => {
         </div>
 
         <Pagination
-          currentPage={currentPage}
-          totalPages={totalPages}
+          currentPage={pagination.page}
+          totalPages={pagination.totalPages}
           onPageChange={(page) => setCurrentPage(page)}
         />
       </div>

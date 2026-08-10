@@ -70,7 +70,8 @@ export const SEED_USERS = [
     phone: '+919711111111',
     city: 'Solan',
     role: 'USER' as const,
-    avatarUrl: 'https://iili.io/C44u1zg.md.png',
+    avatarUrl:
+      'https://res.cloudinary.com/demo/image/upload/v1/samples/people/woman-profile',
   },
 
   // --- Complete Unified Worker List ---

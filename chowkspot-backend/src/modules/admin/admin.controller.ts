@@ -13,10 +13,15 @@ export class AdminController {
     }
   }
 
-  static async getUsers(_req: Request, res: Response, next: NextFunction) {
+  static async getUsers(req: Request, res: Response, next: NextFunction) {
     try {
-      const allUsers = await AdminService.getAllUsers();
-      res.status(CONSTANTS.HTTP_STATUS.OK).json({ success: true, data: allUsers });
+      const page = req.query.page ? parseInt(req.query.page as string, 10) : 1;
+      const limit = req.query.limit ? parseInt(req.query.limit as string, 10) : 10;
+      const role = (req.query.role as string) || 'ALL';
+      const search = (req.query.search as string) || '';
+
+      const result = await AdminService.getAllUsers({ page, limit, role, search });
+      res.status(CONSTANTS.HTTP_STATUS.OK).json({ success: true, data: result });
     } catch (err) {
       next(err);
     }
