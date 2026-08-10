@@ -1,9 +1,10 @@
 // FILE: src/modules/workers/components/WorkerSidebarFilters/WorkerSidebarFilters.tsx
-import React, { useState } from 'react';
+import React from 'react';
 import { Filter, RotateCcw, X } from 'lucide-react';
 import { APP_CONSTANTS } from '@/config/constants';
 import { Input } from '@/components/ui/Input/Input';
 import { Button } from '@/components/ui/Button/Button';
+import { Autocomplete } from '@/components/ui/Autocomplete/Autocomplete'; // 👈 Import component
 import styles from './WorkerSidebarFilters.module.css';
 
 export interface WorkerSidebarFiltersProps {
@@ -23,7 +24,7 @@ export interface WorkerSidebarFiltersProps {
   currentPage: number;
   itemsPerPage: number;
   totalResults: number;
-  onCloseMobileDrawer?: () => void; // 👈 Added close handler
+  onCloseMobileDrawer?: () => void;
 }
 
 export const WorkerSidebarFilters: React.FC<WorkerSidebarFiltersProps> = ({
@@ -45,17 +46,6 @@ export const WorkerSidebarFilters: React.FC<WorkerSidebarFiltersProps> = ({
   totalResults,
   onCloseMobileDrawer,
 }) => {
-  const [skillSearchQuery, setSkillSearchQuery] = useState('');
-  const [citySearchQuery, setCitySearchQuery] = useState('');
-
-  const filteredCategories = APP_CONSTANTS.CATEGORIES.filter((cat) =>
-    cat.toLowerCase().includes(skillSearchQuery.toLowerCase()),
-  );
-
-  const filteredCities = APP_CONSTANTS.CITIES.filter((city) =>
-    city.toLowerCase().includes(citySearchQuery.toLowerCase()),
-  );
-
   const startItem = totalResults === 0 ? 0 : (currentPage - 1) * itemsPerPage + 1;
   const endItem = Math.min(currentPage * itemsPerPage, totalResults);
 
@@ -146,74 +136,26 @@ export const WorkerSidebarFilters: React.FC<WorkerSidebarFiltersProps> = ({
         </label>
       </div>
 
-      {/* 5. Categories Picker */}
+      {/* 5. Autocomplete Category Search */}
       <div className={styles.section}>
-        <label className={styles.sectionLabel}>Skills &amp; Trades</label>
-        <Input
-          placeholder='Filter 80+ skills...'
-          value={skillSearchQuery}
-          onChange={(e) => setSkillSearchQuery(e.target.value)}
-          style={{ marginBottom: '4px', fontSize: '12px', padding: '6px 10px' }}
+        <Autocomplete
+          label='Service Trade'
+          options={APP_CONSTANTS.CATEGORIES}
+          value={selectedCategory}
+          onChange={onCategoryChange}
+          placeholder='Type to search skills...'
         />
-        <div className={styles.scrollableList}>
-          <label className={styles.checkboxItem}>
-            <input
-              type='radio'
-              name='category_radio'
-              checked={!selectedCategory}
-              onChange={() => onCategoryChange('')}
-              className={styles.checkbox}
-            />
-            <strong>All Skills ({APP_CONSTANTS.CATEGORIES.length})</strong>
-          </label>
-          {filteredCategories.map((cat) => (
-            <label key={cat} className={styles.checkboxItem}>
-              <input
-                type='radio'
-                name='category_radio'
-                checked={selectedCategory === cat}
-                onChange={() => onCategoryChange(cat)}
-                className={styles.checkbox}
-              />
-              <span>{cat}</span>
-            </label>
-          ))}
-        </div>
       </div>
 
-      {/* 6. Cities Picker */}
+      {/* 6. Autocomplete City Search */}
       <div className={styles.section}>
-        <label className={styles.sectionLabel}>Service City</label>
-        <Input
-          placeholder='Filter 85+ cities...'
-          value={citySearchQuery}
-          onChange={(e) => setCitySearchQuery(e.target.value)}
-          style={{ marginBottom: '4px', fontSize: '12px', padding: '6px 10px' }}
+        <Autocomplete
+          label='Service City'
+          options={APP_CONSTANTS.CITIES}
+          value={selectedCity}
+          onChange={onCityChange}
+          placeholder='Type to search cities...'
         />
-        <div className={styles.scrollableList}>
-          <label className={styles.checkboxItem}>
-            <input
-              type='radio'
-              name='city_radio'
-              checked={!selectedCity}
-              onChange={() => onCityChange('')}
-              className={styles.checkbox}
-            />
-            <strong>All Cities ({APP_CONSTANTS.CITIES.length})</strong>
-          </label>
-          {filteredCities.map((city) => (
-            <label key={city} className={styles.checkboxItem}>
-              <input
-                type='radio'
-                name='city_radio'
-                checked={selectedCity === city}
-                onChange={() => onCityChange(city)}
-                className={styles.checkbox}
-              />
-              <span>{city}</span>
-            </label>
-          ))}
-        </div>
       </div>
 
       {/* Footer Info Displaying Paginated Range */}

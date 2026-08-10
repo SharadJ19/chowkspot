@@ -60,7 +60,7 @@ To explore and evaluate all core marketplace features instantly without being bl
   - **Role**: `WORKER` (Electrician profile, active in Tricity/Parwanoo, receives real-time job requests and handles booking state changes)
 
 - **👤 Customer Account**
-  - **Email**: `sachit.rajpal@gmail.com`
+  - **Email**: `user@test.com`
   - **Password**: `Password123!`
   - **Role**: `USER` (Customer profile capable of discovering workers, submitting booking requests, making direct UPI payments, and leaving verified reviews)
 
