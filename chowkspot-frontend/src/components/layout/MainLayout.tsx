@@ -1,4 +1,3 @@
-// FILE: src/components/layout/MainLayout.tsx
 import React from 'react';
 import { Outlet, useLocation } from 'react-router';
 import { Navbar } from './Navbar/Navbar';

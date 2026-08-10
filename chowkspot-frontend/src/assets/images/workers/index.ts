@@ -1,4 +1,3 @@
-// FILE: src/assets/images/workers/index.ts
 import safalVaradhan from './safal-varadhan.webp';
 import ashokChitkara from './ashok-chitkara.webp';
 

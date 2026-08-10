@@ -1,8 +1,7 @@
-/* FILE: src/pages/BookingsPage.module.css */
 .pageContainer {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-2xl); /* Increased layout spacing */
+  gap: var(--spacing-2xl);
 }
 
 .centerLoading {
@@ -50,9 +49,7 @@
 .cardsList {
   display: flex;
   flex-direction: column;
-  gap: var(
-    --spacing-lg
-  ); /* 👈 Increased gap from md to lg for distinct card separation */
+  gap: var(--spacing-lg);
 }
 
 .reviewModalContent {

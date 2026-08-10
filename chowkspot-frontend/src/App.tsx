@@ -18,7 +18,7 @@ export default function App() {
               <AppRouter />
             </ServerWarmingBanner>
           </BrowserRouter>
-          {/* Light Mode Toast using ChowkSpot Design Tokens */}
+
           <Toaster
             theme='light'
             position='bottom-right'

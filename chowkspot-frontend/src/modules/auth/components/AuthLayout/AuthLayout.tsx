@@ -1,4 +1,3 @@
-// FILE: src/modules/auth/components/AuthLayout/AuthLayout.tsx
 import React from 'react';
 import { WORKER_IMAGES } from '@/assets/images/workers';
 import styles from './AuthLayout.module.css';
@@ -12,7 +11,6 @@ interface AuthLayoutProps {
 export const AuthLayout: React.FC<AuthLayoutProps> = ({ title, subtitle, children }) => {
   return (
     <div className={styles.authContainer}>
-      {/* LEFT: Solid Deep Emerald Hero */}
       <div className={styles.heroCanvas}>
         <div className={styles.brandHeader}>
           <span className={styles.tagline}>ChowkSpot Verified Marketplace</span>
@@ -25,7 +23,6 @@ export const AuthLayout: React.FC<AuthLayoutProps> = ({ title, subtitle, childre
           </p>
         </div>
 
-        {/* Solid Quote Box */}
         <div className={styles.quoteCard}>
           <p className={styles.quoteText}>
             &ldquo;Clients contact me directly, and I keep 100% of my service earnings
@@ -44,7 +41,6 @@ export const AuthLayout: React.FC<AuthLayoutProps> = ({ title, subtitle, childre
           </div>
         </div>
 
-        {/* Trust Metrics Footer */}
         <div className={styles.trustFooter}>
           <div className={styles.trustMetric}>
             <strong>0%</strong>
@@ -61,7 +57,6 @@ export const AuthLayout: React.FC<AuthLayoutProps> = ({ title, subtitle, childre
         </div>
       </div>
 
-      {/* RIGHT: Compact Form Container */}
       <div className={styles.formContainer}>
         <div className={styles.formBox}>
           <div className={styles.formHeader}>

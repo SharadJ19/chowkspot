@@ -1,5 +1,3 @@
-// Type-safe route path string constants
-
 export const ROUTES = {
   HOME: '/',
   LOGIN: '/login',

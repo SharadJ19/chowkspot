@@ -1,4 +1,3 @@
-// FILE: src/components/BookingRequestModal/BookingRequestModal.tsx
 import React, { useState } from 'react';
 import { toast } from 'sonner';
 import { useAuth } from '@/hooks/useAuth';

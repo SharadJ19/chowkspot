@@ -181,7 +181,6 @@
   color: var(--color-text-muted);
 }
 
-/* --- City Badges Container --- */
 .citiesList {
   display: flex;
   align-items: center;

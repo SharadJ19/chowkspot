@@ -1,6 +1,6 @@
 import React from 'react';
 import { Smartphone, ExternalLink } from 'lucide-react';
-import { QRCodeSVG } from 'qrcode.react'; // 👈 Client-side dynamic SVG QR code renderer
+import { QRCodeSVG } from 'qrcode.react';
 import { Modal } from '@/components/ui/Modal/Modal';
 import { Button } from '@/components/ui/Button/Button';
 import styles from './UpiQrModal.module.css';
@@ -30,7 +30,6 @@ export const UpiQrModal: React.FC<UpiQrModalProps> = ({
           to pay <strong>{payeeName}</strong> directly.
         </p>
 
-        {/* Dynamic On-The-Fly QR Code Box */}
         <div className={styles.qrCodeBox}>
           <QRCodeSVG
             value={upiUri}

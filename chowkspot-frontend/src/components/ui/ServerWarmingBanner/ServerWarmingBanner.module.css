@@ -115,7 +115,6 @@
   line-height: var(--line-height-relaxed);
 }
 
-/* ==================== CLEAN DELAYED ALERT BOX ==================== */
 .delayedAlertBox {
   display: flex;
   align-items: flex-start;
@@ -229,7 +228,6 @@
   margin-top: 2px;
 }
 
-/* ==================== FLOATING PILL STYLES ==================== */
 .floatingPillContainer {
   position: fixed;
   bottom: 24px;

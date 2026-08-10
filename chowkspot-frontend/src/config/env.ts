@@ -1,5 +1,3 @@
-// Type-safe import.meta.env validation
-
 import { z } from 'zod';
 
 const envSchema = z.object({

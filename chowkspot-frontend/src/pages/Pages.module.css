@@ -1,4 +1,3 @@
-/* Base Container Layouts */
 .pageContainer {
   display: flex;
   flex-direction: column;
@@ -18,10 +17,6 @@
   color: var(--color-text-muted);
 }
 
-/* ==========================================================
-   HOMEPAGE SPECIFIC MODULE STYLES
-   ========================================================== */
-
 .homeWrapper {
   display: flex;
   flex-direction: column;
@@ -29,7 +24,6 @@
   padding-bottom: var(--spacing-2xl);
 }
 
-/* --- 1. Hero Section --- */
 .heroSection {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -123,7 +117,6 @@
   }
 }
 
-/* --- Hero Visual Showcase (Polished Card Showcase) --- */
 .heroVisualShowcase {
   position: relative;
   display: flex;
@@ -258,7 +251,6 @@
   font-weight: 700;
 }
 
-/* Floating Feature Badges */
 .floatingPill {
   position: absolute;
   z-index: 3;
@@ -330,7 +322,6 @@
   color: var(--color-slate-500);
 }
 
-/* --- 2. Stats Strip --- */
 .statsStrip {
   background-color: var(--color-slate-900);
   color: var(--color-text-inverse);
@@ -376,7 +367,6 @@
   }
 }
 
-/* --- General Section Blocks --- */
 .sectionBlock {
   display: flex;
   flex-direction: column;
@@ -401,7 +391,6 @@
   margin-top: var(--spacing-3xs);
 }
 
-/* --- 3. Enhanced Category Grid with Covers --- */
 .categoryGrid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
@@ -495,7 +484,6 @@
   transform: translateX(4px);
 }
 
-/* --- 4. How It Works & Value Section --- */
 .howItWorksSection {
   background-color: var(--color-bg-surface);
   border-top: 1px solid var(--color-border);
@@ -566,7 +554,6 @@
   line-height: var(--line-height-relaxed);
 }
 
-/* --- 5. Value Proposition Strip --- */
 .valueGrid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -605,7 +592,6 @@
   margin-top: 2px;
 }
 
-/* --- 6. CTA Banner --- */
 .ctaBannerSection {
   background: linear-gradient(135deg, var(--color-slate-900) 0%, #1e293b 100%);
   color: var(--color-text-inverse);
@@ -642,7 +628,7 @@
 }
 
 .ctaTitle {
-  font-size: 1.25rem; /* 👈 Compact mobile-friendly size */
+  font-size: 1.25rem;
   font-weight: 800;
   line-height: 1.3;
 }

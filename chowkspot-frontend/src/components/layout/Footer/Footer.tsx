@@ -20,7 +20,6 @@ export const Footer: React.FC = () => {
   return (
     <footer className={styles.footer}>
       <div className={`container ${styles.container}`}>
-        {/* ==================== 1. TOP HIGHLIGHTS BAR ==================== */}
         <div className={styles.featureBar}>
           <div className={styles.featureItem}>
             <div className={styles.featureIconWrapper}>
@@ -71,9 +70,7 @@ export const Footer: React.FC = () => {
           </div>
         </div>
 
-        {/* ==================== 2. MAIN CONTENT GRID ==================== */}
         <div className={styles.mainGrid}>
-          {/* Brand & Live Network Status Column */}
           <div className={styles.brandColumn}>
             <Link to='/' className={styles.brandLogo} aria-label='ChowkSpot Home'>
               <Logo variant='wordmark' size='md' color='var(--color-slate-100)' />
@@ -106,7 +103,6 @@ export const Footer: React.FC = () => {
             </div>
           </div>
 
-          {/* Popular Services Column */}
           <div className={styles.linkColumn}>
             <h3 className={styles.columnTitle}>Popular Trades</h3>
             <ul className={styles.linkList}>
@@ -123,7 +119,6 @@ export const Footer: React.FC = () => {
             </ul>
           </div>
 
-          {/* More Skilled Services Column */}
           <div className={styles.linkColumn}>
             <h3 className={styles.columnTitle}>More Services</h3>
             <ul className={styles.linkList}>
@@ -140,7 +135,6 @@ export const Footer: React.FC = () => {
             </ul>
           </div>
 
-          {/* Marketplace Quick Navigation Column */}
           <div className={styles.linkColumn}>
             <h3 className={styles.columnTitle}>Marketplace</h3>
             <ul className={styles.linkList}>
@@ -173,7 +167,6 @@ export const Footer: React.FC = () => {
           </div>
         </div>
 
-        {/* ==================== 3. BOTTOM LEGAL BAR ==================== */}
         <div className={styles.bottomRow}>
           <p className={styles.copyright}>
             &copy; {new Date().getFullYear()} ChowkSpot Service Marketplace. All rights

@@ -28,7 +28,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     } catch (err) {
       const errMsg = (err as Error).message.toLowerCase();
 
-      // 💡 COLD-START GUARD: Do NOT clear user state if the error is a server cold-start / 502 / 503 / network drop
       const isColdStartOrNetworkError =
         errMsg.includes('cold start') ||
         errMsg.includes('502') ||

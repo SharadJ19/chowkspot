@@ -1,4 +1,3 @@
-// src/modules/auth/api/auth.api.ts
 import { fetchClient } from '@/lib/fetchClient';
 import type { LoginInput, RegisterInput, AuthUser } from '@/types';
 

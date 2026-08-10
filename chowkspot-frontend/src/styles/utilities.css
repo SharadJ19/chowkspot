@@ -1,5 +1,3 @@
-/* FILE: src/styles/utilities.css */
-
 .sr-only {
   position: absolute;
   width: 1px;
@@ -12,7 +10,6 @@
   border: 0;
 }
 
-/* Fluid Container Padding optimized for 393px Redmi screen */
 .container {
   width: 100%;
   max-width: var(--container-max-width);
@@ -52,7 +49,6 @@
   justify-content: space-between;
 }
 
-/* Responsive Grid Helper - forces 1fr single column on small screens */
 .grid-auto-fit {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));

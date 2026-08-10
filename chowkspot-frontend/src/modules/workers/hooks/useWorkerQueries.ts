@@ -1,4 +1,3 @@
-// FILE: src/modules/workers/hooks/useWorkerQueries.ts
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { workersApi } from '../api/workers.api';
 import type { WorkerSearchQueryParams, CreateWorkerProfileInput } from '@/types';

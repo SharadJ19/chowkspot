@@ -1,5 +1,3 @@
-// TanStack Query v5 client configuration
-
 import { QueryClient } from '@tanstack/react-query';
 
 export const queryClient = new QueryClient({

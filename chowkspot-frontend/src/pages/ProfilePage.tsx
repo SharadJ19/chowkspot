@@ -1,4 +1,3 @@
-// FILE: src/pages/ProfilePage.tsx
 import React from 'react';
 import { CheckCircle2, Shield, Wrench, Trash2, AlertTriangle } from 'lucide-react';
 import { useProfileForm } from '@/modules/users/hooks/useProfileForm';

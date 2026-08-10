@@ -3,7 +3,6 @@ import { useSearchParams } from 'react-router';
 export function useSearchFilters() {
   const [searchParams, setSearchParams] = useSearchParams();
 
-  // Read current query values with clean fallbacks
   const filters = {
     category: searchParams.get('category') || '',
     city: searchParams.get('city') || '',
@@ -18,7 +17,6 @@ export function useSearchFilters() {
     page: parseInt(searchParams.get('page') || '1', 10),
   };
 
-  // Helper to update any filter key and automatically reset page to 1
   const setFilter = (
     key: string,
     value: string | number | boolean | undefined,
@@ -39,7 +37,6 @@ export function useSearchFilters() {
     setSearchParams(updated);
   };
 
-  // Helper to specifically change page without resetting page counter
   const setPage = (newPage: number) => {
     const updated = new URLSearchParams(searchParams);
     updated.set('page', String(newPage));
@@ -47,7 +44,6 @@ export function useSearchFilters() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  // Reset all search parameters
   const resetFilters = () => {
     setSearchParams({});
   };

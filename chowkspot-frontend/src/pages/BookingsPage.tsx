@@ -1,4 +1,3 @@
-// FILE: src/pages/BookingsPage.tsx
 import React from 'react';
 import { Wrench, Calendar as CalendarIcon } from 'lucide-react';
 import { useBookingsPageLogic } from '@/modules/bookings/hooks/useBookingsPageLogic';

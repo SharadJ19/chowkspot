@@ -1,4 +1,3 @@
-// FILE: src/modules/bookings/components/BookingCard/BookingCard.tsx
 import React from 'react';
 import {
   MapPin,
@@ -45,11 +44,9 @@ export const BookingCard: React.FC<BookingCardProps> = ({
   const { booking } = item;
   const isCustomer = !isWorkerRole;
 
-  // Extract worker profile (if customer view) or customer user info (if worker view)
   const workerProf = (item as CustomerBookingItem).workerProfile;
   const customerUser = (item as WorkerBookingItem).user;
 
-  // Intelligent Title & Subtitle based on active role
   const title = isCustomer
     ? workerProf?.category || 'Professional Service'
     : customerUser?.name || 'Customer';
@@ -62,7 +59,6 @@ export const BookingCard: React.FC<BookingCardProps> = ({
 
   const avatarSrc = isCustomer ? undefined : customerUser?.avatarUrl;
 
-  // Workers need direct customer phone numbers to coordinate job dispatch
   const contactPhone = isCustomer ? undefined : customerUser?.phone;
   const upiId = isCustomer ? workerProf?.paymentIdentifier : undefined;
 
@@ -79,7 +75,6 @@ export const BookingCard: React.FC<BookingCardProps> = ({
         <BookingStatusBadge status={booking.status} />
       </div>
 
-      {/* Real-life status tracker tailored per role */}
       <BookingTimeline status={booking.status} isWorkerRole={isWorkerRole} />
 
       <div className={styles.metaGrid}>
@@ -142,7 +137,6 @@ export const BookingCard: React.FC<BookingCardProps> = ({
         </Button>
 
         <div className={styles.actionButtonGroup}>
-          {/* ================= WORKER ACTIONS ================= */}
           {isWorkerRole && booking.status === 'PENDING' && (
             <>
               <Button
@@ -186,7 +180,6 @@ export const BookingCard: React.FC<BookingCardProps> = ({
             </Button>
           )}
 
-          {/* ================= CUSTOMER ACTIONS ================= */}
           {isCustomer &&
             (booking.status === 'PENDING' || booking.status === 'ACCEPTED') && (
               <Button

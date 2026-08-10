@@ -1,5 +1,3 @@
-// Responsive layout breakpoint listener
-
 import { useSyncExternalStore } from 'react';
 
 export function useMediaQuery(query: string): boolean {

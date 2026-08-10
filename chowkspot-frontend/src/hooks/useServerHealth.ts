@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import type { HealthCheckResponse } from '@/types';
 
-// Pull the base backend URL from Vite environment variables, stripping any trailing /api if present
 const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || '/api').replace(/\/api$/, '');
 
 export const useServerHealth = () => {
@@ -24,7 +23,6 @@ export const useServerHealth = () => {
 
     const checkHealth = async () => {
       try {
-        // Direct fetch request to the root /health endpoint (bypassing /api prefix)
         const response = await fetch(`${API_BASE_URL}/health`, {
           method: 'GET',
           headers: { 'Content-Type': 'application/json' },
@@ -40,7 +38,6 @@ export const useServerHealth = () => {
         }
       } catch {
         if (isMounted) {
-          // Poll again after 4 seconds until Render spins up
           setTimeout(checkHealth, 4000);
         }
       }

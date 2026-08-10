@@ -36,7 +36,6 @@ export const WorkerFilters: React.FC<WorkerFiltersProps> = ({
   return (
     <div className={styles.filterContainer}>
       <div className={styles.filterGrid}>
-        {/* Category Filter */}
         <div className={styles.fieldGroup}>
           <label className={styles.fieldLabel}>Service Trade</label>
           <select
@@ -53,7 +52,6 @@ export const WorkerFilters: React.FC<WorkerFiltersProps> = ({
           </select>
         </div>
 
-        {/* City Filter */}
         <div className={styles.fieldGroup}>
           <label className={styles.fieldLabel}>Service City / Hub</label>
           <select
@@ -70,7 +68,6 @@ export const WorkerFilters: React.FC<WorkerFiltersProps> = ({
           </select>
         </div>
 
-        {/* Rate Type Filter */}
         <div className={styles.fieldGroup}>
           <label className={styles.fieldLabel}>Pricing Model</label>
           <select
@@ -85,7 +82,6 @@ export const WorkerFilters: React.FC<WorkerFiltersProps> = ({
           </select>
         </div>
 
-        {/* Minimum Rating Filter */}
         <div className={styles.fieldGroup}>
           <label className={styles.fieldLabel}>Minimum Rating</label>
           <select

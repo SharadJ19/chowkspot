@@ -25,19 +25,18 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     const onConnect = () => setIsConnected(true);
     const onDisconnect = () => setIsConnected(false);
 
-    // ⚡ Real-time Socket Toast Listeners
     const onNewBookingRequest = (_payload: {
       bookingId: string;
       requestedDate: string;
     }) => {
-      toast.success('🎉 New Booking Request Received!', {
+      toast.success('New Booking Request Received!', {
         description:
           'A customer submitted a new service request. Check "My Bookings" to respond.',
       });
     };
 
     const onBookingStatusUpdated = (payload: { bookingId: string; status: string }) => {
-      toast.info(`📋 Booking Status Updated: ${payload.status.replace('_', ' ')}`, {
+      toast.info(`Booking Status Updated: ${payload.status.replace('_', ' ')}`, {
         description: 'The status of one of your service bookings has changed.',
       });
     };

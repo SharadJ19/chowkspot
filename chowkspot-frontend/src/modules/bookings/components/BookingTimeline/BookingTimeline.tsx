@@ -1,4 +1,3 @@
-// FILE: src/modules/bookings/components/BookingTimeline/BookingTimeline.tsx
 import React from 'react';
 import { Clock, CheckCircle2, ShieldCheck, PlayCircle, AlertCircle } from 'lucide-react';
 import type { BookingStatus } from '@/types';
@@ -13,7 +12,6 @@ export const BookingTimeline: React.FC<BookingTimelineProps> = ({
   status,
   isWorkerRole = false,
 }) => {
-  // Handle terminal/cancelled states
   if (status === 'CANCELLED' || status === 'REJECTED') {
     return (
       <div
@@ -36,7 +34,6 @@ export const BookingTimeline: React.FC<BookingTimelineProps> = ({
     );
   }
 
-  // Real-life platform status configuration matrix (Microcopy tailored for consumer vs worker)
   const getStatusDetails = () => {
     switch (status) {
       case 'PENDING':

@@ -1,4 +1,3 @@
-// FILE: src/components/ui/Autocomplete/Autocomplete.tsx
 import React, { useState, useRef, useEffect } from 'react';
 import { Search, X, Check } from 'lucide-react';
 import { Input } from '@/components/ui/Input/Input';
@@ -30,7 +29,6 @@ export const Autocomplete: React.FC<AutocompleteProps> = ({
     opt.toLowerCase().includes(query.toLowerCase()),
   );
 
-  // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
@@ -55,7 +53,6 @@ export const Autocomplete: React.FC<AutocompleteProps> = ({
     setIsOpen(false);
   };
 
-  // 💡 Keyboard navigation handler (ArrowDown, ArrowUp, Enter, Escape)
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (!isOpen && (e.key === 'ArrowDown' || e.key === 'ArrowUp')) {
       setIsOpen(true);
@@ -89,7 +86,7 @@ export const Autocomplete: React.FC<AutocompleteProps> = ({
         value={query}
         onChange={(e) => {
           setTypedQuery(e.target.value);
-          setHighlightedIndex(0); // 👈 Reset index inline on change instead of using an effect!
+          setHighlightedIndex(0);
           setIsOpen(true);
           if (e.target.value === '') onChange('');
         }}

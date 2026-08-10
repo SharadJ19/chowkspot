@@ -1,4 +1,3 @@
-// FILE: src/utils/upi.ts
 interface UpiPaymentParams {
   upiId: string;
   payeeName: string;

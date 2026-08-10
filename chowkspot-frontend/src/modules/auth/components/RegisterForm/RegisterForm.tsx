@@ -1,4 +1,3 @@
-// FILE: src/modules/auth/components/RegisterForm/RegisterForm.tsx
 import React, { useState } from 'react';
 import { useNavigate, useSearchParams, Link } from 'react-router';
 import { AlertCircle, User, Wrench, Eye, EyeOff } from 'lucide-react';
@@ -115,7 +114,6 @@ export const RegisterForm: React.FC = () => {
         }
       />
 
-      {/* 👈 Sleek Autocomplete Combobox for City Selection */}
       <div className={styles.fieldGroup}>
         <Autocomplete
           label='City Location'

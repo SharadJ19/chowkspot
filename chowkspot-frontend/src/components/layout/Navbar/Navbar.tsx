@@ -1,4 +1,3 @@
-// FILE: src/components/layout/Navbar/Navbar.tsx
 import React, { useState } from 'react';
 import { NavLink, Link, useNavigate, useLocation } from 'react-router';
 import { Search, Calendar, ShieldAlert, LogOut, Menu, X, User, Home } from 'lucide-react';
@@ -25,12 +24,9 @@ export const Navbar: React.FC = () => {
   return (
     <header className={styles.navbar}>
       <div className={styles.container}>
-        {/* Brand Logo */}
         <Link to='/' className={styles.brand} aria-label='ChowkSpot Home'>
           <Logo variant='full' size='md' />
         </Link>
-
-        {/* Central Navigation Links (Desktop) */}
         <nav className={styles.navLinks}>
           <NavLink
             to='/'
@@ -75,8 +71,6 @@ export const Navbar: React.FC = () => {
             </NavLink>
           )}
         </nav>
-
-        {/* Right Authentication / User Profile Group (Desktop) */}
         <div className={styles.authGroup}>
           {isAuthenticated && user ? (
             <div className={styles.authGroup}>
@@ -112,8 +106,6 @@ export const Navbar: React.FC = () => {
             </>
           )}
         </div>
-
-        {/* Mobile Hamburger Trigger Button */}
         <button
           className={styles.hamburgerBtn}
           onClick={() => setIsMobileMenuOpen(true)}
@@ -122,8 +114,6 @@ export const Navbar: React.FC = () => {
           <Menu size={24} />
         </button>
       </div>
-
-      {/* ==================== MOBILE SLIDE-OUT DRAWER ==================== */}
       {isMobileMenuOpen && (
         <>
           <div
@@ -143,7 +133,6 @@ export const Navbar: React.FC = () => {
               </button>
             </div>
 
-            {/* Authenticated User Banner inside Mobile Drawer */}
             {isAuthenticated && user && (
               <Link
                 to='/profile'

@@ -2,7 +2,7 @@ import React from 'react';
 import styles from './Avatar.module.css';
 
 export interface AvatarProps {
-  src?: string | null | undefined; // Accepts string, null, or undefined explicitly
+  src?: string | null | undefined;
   name: string;
   size?: 'sm' | 'md' | 'lg' | 'xl';
   className?: string;

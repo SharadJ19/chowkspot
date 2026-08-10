@@ -1,4 +1,3 @@
-// FILE: src/pages/SearchPage.tsx
 import React, { useState, useEffect } from 'react';
 import { Filter } from 'lucide-react';
 import { useWorkerQueries } from '@/modules/workers/hooks/useWorkerQueries';
@@ -18,7 +17,6 @@ export const SearchPage: React.FC = () => {
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
   const [isDesktop, setIsDesktop] = useState(window.innerWidth > 960);
 
-  // Track screen resize cleanly to separate desktop sticky sidebar from mobile drawer
   useEffect(() => {
     const handleResize = () => {
       setIsDesktop(window.innerWidth > 960);
@@ -68,7 +66,6 @@ export const SearchPage: React.FC = () => {
         </p>
       </div>
 
-      {/* Mobile Sticky Filter Bar Button (< 960px) - Closed by default */}
       <div className={sidebarStyles.mobileFilterTriggerBar}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           <Filter size={16} style={{ color: 'var(--color-primary-600)' }} />
@@ -90,7 +87,6 @@ export const SearchPage: React.FC = () => {
         }}
         className='searchLayoutGrid'
       >
-        {/* Render Sidebar on Desktop, or inside an overlay Drawer on Mobile when toggled */}
         {showSidebar && (
           <div className='desktopSidebarWrapper'>
             {!isDesktop && isMobileFilterOpen && (

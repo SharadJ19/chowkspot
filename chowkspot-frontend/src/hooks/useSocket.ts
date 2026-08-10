@@ -1,5 +1,3 @@
-// Hook to listen for realtime backend events
-
 import { useContext, useEffect } from 'react';
 import { SocketContext } from '@/context/socketContext';
 

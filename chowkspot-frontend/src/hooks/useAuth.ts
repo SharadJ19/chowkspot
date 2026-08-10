@@ -1,4 +1,3 @@
-// Hook to consume AuthContext easily
 import { useContext } from 'react';
 import { AuthContext } from '@/context/authContext';
 

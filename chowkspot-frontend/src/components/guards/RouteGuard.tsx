@@ -1,4 +1,3 @@
-// FILE: src/components/guards/RouteGuard.tsx
 import React from 'react';
 import { Navigate, Outlet } from 'react-router';
 import { useAuth } from '@/hooks/useAuth';

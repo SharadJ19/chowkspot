@@ -81,7 +81,6 @@ export const LoginForm: React.FC = () => {
         }
       />
 
-      {/* Forgot Password Link Row */}
       <div className={styles.forgotPasswordRow}>
         <Link to='/forgot-password' className={styles.forgotPasswordLink}>
           Forgot password?

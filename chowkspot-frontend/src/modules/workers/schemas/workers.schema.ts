@@ -7,7 +7,7 @@ export const createWorkerProfileSchema = z.object({
   rateType: z.enum(['HOURLY', 'FIXED', 'INSPECTION_FIRST']),
   baseRate: z.string().regex(/^\d+(\.\d{1,2})?$/, 'Provide a valid base rate amount'),
   serviceCities: z.array(z.string()).min(1, 'Select at least one city'),
-  // Flexible UPI identifier: Accepts either standard VPA or mobile number
+
   paymentIdentifier: z
     .string()
     .min(5, 'Provide a valid UPI ID or Phone Number')

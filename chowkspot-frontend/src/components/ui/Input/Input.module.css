@@ -20,7 +20,7 @@
 
 .input {
   width: 100%;
-  padding: 0.5rem 0.75rem; /* 👈 Reduced height padding for cleaner proportions */
+  padding: 0.5rem 0.75rem;
   font-family: var(--font-sans);
   font-size: 16px !important;
   color: var(--color-text-main);
@@ -28,7 +28,7 @@
   border: 1px solid var(--color-border-strong);
   border-radius: var(--radius-md);
   transition: var(--transition-fast);
-  min-height: 40px; /* 👈 Compact touch target */
+  min-height: 40px;
 }
 
 .input::placeholder {

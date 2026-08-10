@@ -32,7 +32,6 @@ export const LogoFull: React.FC<LogoSvgProps> = ({
         <stop offset='100%' stopColor='#0f172a' />
       </linearGradient>
     </defs>
-    {/* Scaled and shifted icon group to match text height perfectly */}
     <g transform='translate(5, 22) scale(0.68)'>
       <path
         d='M 50 15 C 25 15, 15 35, 15 50 C 15 72, 38 88, 50 95'

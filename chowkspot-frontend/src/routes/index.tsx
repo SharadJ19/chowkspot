@@ -1,5 +1,3 @@
-// React Router v8 tree setup
-
 import { Routes, Route } from 'react-router';
 import { MainLayout } from '@/components/layout/MainLayout';
 import { RouteGuard } from '@/components/guards/RouteGuard';

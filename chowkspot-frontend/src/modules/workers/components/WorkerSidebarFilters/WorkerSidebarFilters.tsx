@@ -1,4 +1,3 @@
-// FILE: src/modules/workers/components/WorkerSidebarFilters/WorkerSidebarFilters.tsx
 import React from 'react';
 import { Filter, RotateCcw, X } from 'lucide-react';
 import { APP_CONSTANTS } from '@/config/constants';
@@ -73,7 +72,6 @@ export const WorkerSidebarFilters: React.FC<WorkerSidebarFiltersProps> = ({
         </div>
       </div>
 
-      {/* 1. Search Provider Name */}
       <div className={styles.section}>
         <label className={styles.sectionLabel}>Search Provider</label>
         <Input
@@ -83,7 +81,6 @@ export const WorkerSidebarFilters: React.FC<WorkerSidebarFiltersProps> = ({
         />
       </div>
 
-      {/* 2. Experience Years Slider */}
       <div className={styles.section}>
         <label className={styles.sectionLabel}>
           Minimum Experience: <strong>{minExperience} Years</strong>
@@ -103,7 +100,6 @@ export const WorkerSidebarFilters: React.FC<WorkerSidebarFiltersProps> = ({
         </div>
       </div>
 
-      {/* 3. Price Range Slider */}
       <div className={styles.section}>
         <label className={styles.sectionLabel}>
           Max Rate: <strong>₹{maxPrice}</strong>
@@ -123,7 +119,6 @@ export const WorkerSidebarFilters: React.FC<WorkerSidebarFiltersProps> = ({
         </div>
       </div>
 
-      {/* 4. Availability Toggle */}
       <div className={styles.section}>
         <label className={styles.checkboxItem}>
           <input
@@ -136,7 +131,6 @@ export const WorkerSidebarFilters: React.FC<WorkerSidebarFiltersProps> = ({
         </label>
       </div>
 
-      {/* 5. Autocomplete Category Search */}
       <div className={styles.section}>
         <Autocomplete
           label='Service Trade'
@@ -147,7 +141,6 @@ export const WorkerSidebarFilters: React.FC<WorkerSidebarFiltersProps> = ({
         />
       </div>
 
-      {/* 6. Autocomplete City Search */}
       <div className={styles.section}>
         <Autocomplete
           label='Service City'
@@ -158,7 +151,6 @@ export const WorkerSidebarFilters: React.FC<WorkerSidebarFiltersProps> = ({
         />
       </div>
 
-      {/* Footer Info Displaying Paginated Range */}
       <div
         style={{
           paddingTop: '8px',
