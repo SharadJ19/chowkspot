@@ -40,8 +40,7 @@ export const SEED_USERS = [
     phone: '+919877777777',
     city: 'Mohali',
     role: 'USER' as const,
-    avatarUrl:
-      'https://res.cloudinary.com/demo/image/upload/v1/samples/people/bicycle.jpg',
+    avatarUrl: 'https://iili.io/C4iBYU7.png',
   },
   {
     name: 'Sneha Sharma',
@@ -50,8 +49,7 @@ export const SEED_USERS = [
     phone: '+919888888888',
     city: 'Panchkula',
     role: 'USER' as const,
-    avatarUrl:
-      'https://res.cloudinary.com/demo/image/upload/v1/samples/people/woman-a.jpg',
+    avatarUrl: 'https://iili.io/C4iFVae.png',
   },
   {
     name: 'Rohit Sharma',
@@ -60,8 +58,7 @@ export const SEED_USERS = [
     phone: '+919899999999',
     city: 'Parwanoo',
     role: 'USER' as const,
-    avatarUrl:
-      'https://res.cloudinary.com/demo/image/upload/v1/samples/people/kitchen-bar.jpg',
+    avatarUrl: 'https://iili.io/C4iBGxj.png',
   },
   {
     name: 'Simran Sharma',
@@ -70,8 +67,7 @@ export const SEED_USERS = [
     phone: '+919711111111',
     city: 'Solan',
     role: 'USER' as const,
-    avatarUrl:
-      'https://res.cloudinary.com/demo/image/upload/v1/samples/people/woman-profile',
+    avatarUrl: 'https://iili.io/C4iKoAb.png',
   },
 
   // --- Complete Unified Worker List ---
@@ -85,7 +81,7 @@ export const SEED_USERS = [
     baseRate: '400.00',
     isAvailable: true,
     serviceCities: ['Chandigarh', 'Mohali', 'Panchkula', 'Kalka', 'Parwanoo'],
-    paymentIdentifier: 'smarth.sharda@upi',
+    paymentIdentifier: 'smarthsharda14@oksbi',
     password: 'Password123!',
     phone: '+919811111111',
     city: 'Chandigarh',
@@ -102,7 +98,7 @@ export const SEED_USERS = [
     baseRate: '600.00',
     isAvailable: true,
     serviceCities: ['Mohali', 'Chandigarh', 'Panchkula', 'Zirakpur'],
-    paymentIdentifier: 'rudar.partap@okaxis',
+    paymentIdentifier: '8168535087@kotak811',
     password: 'Password123!',
     phone: '+919822222222',
     city: 'Mohali',
@@ -119,7 +115,7 @@ export const SEED_USERS = [
     baseRate: '250.00',
     isAvailable: true,
     serviceCities: ['Parwanoo', 'Kalka', 'Pinjore', 'Solan'],
-    paymentIdentifier: 'mohit.thakur@ybl',
+    paymentIdentifier: '8307823497@ibl',
     password: 'Password123!',
     phone: '+919833333333',
     city: 'Parwanoo',
@@ -136,7 +132,7 @@ export const SEED_USERS = [
     baseRate: '750.00',
     isAvailable: true,
     serviceCities: ['Kalka', 'Parwanoo', 'Panchkula', 'Pinjore'],
-    paymentIdentifier: 'bipin.awasthi@paytm',
+    paymentIdentifier: 'bipinawasthi2004@okaxis',
     password: 'Password123!',
     phone: '+919844444444',
     city: 'Kalka',
