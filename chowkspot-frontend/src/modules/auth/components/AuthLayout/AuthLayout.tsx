@@ -1,6 +1,5 @@
 // FILE: src/modules/auth/components/AuthLayout/AuthLayout.tsx
 import React from 'react';
-import { Zap, ShieldCheck, Heart, Star, MapPin, CheckCircle2 } from 'lucide-react';
 import { WORKER_IMAGES } from '@/assets/images/workers';
 import styles from './AuthLayout.module.css';
 
@@ -13,74 +12,56 @@ interface AuthLayoutProps {
 export const AuthLayout: React.FC<AuthLayoutProps> = ({ title, subtitle, children }) => {
   return (
     <div className={styles.authContainer}>
-      {/* LEFT: Custom Luxury Branded Gradient Showcase Hero */}
+      {/* LEFT: Solid Deep Emerald Hero */}
       <div className={styles.heroCanvas}>
         <div className={styles.brandHeader}>
           <span className={styles.tagline}>ChowkSpot Verified Marketplace</span>
           <h2 className={styles.brandHeading}>
             Direct &amp; Zero-Commission Local Expertise
           </h2>
+          <p className={styles.brandDesc}>
+            Connecting residents directly with verified neighborhood professionals across
+            Himachal and Tricity with 0% platform cuts.
+          </p>
         </div>
 
-        {/* Frosted Glass Portrait Plumber Hero Card */}
-        <div className={styles.featuredWorkerCard}>
-          <div className={styles.cardImageWrapper}>
+        {/* Solid Quote Box */}
+        <div className={styles.quoteCard}>
+          <p className={styles.quoteText}>
+            &ldquo;Clients contact me directly, and I keep 100% of my service earnings
+            with zero middleman fees or escrow holds.&rdquo;
+          </p>
+          <div className={styles.quoteAuthorRow}>
             <img
               src={WORKER_IMAGES.ashokChitkara}
-              alt='Ashok Chitkara - Master Plumber'
-              className={styles.workerHeroImg}
+              alt='Ashok Chitkara'
+              className={styles.authorAvatar}
             />
-            <div className={styles.verifiedPill}>
-              <CheckCircle2 size={13} />
-              <span>Verified Pro</span>
-            </div>
-            <div className={styles.imageBottomGradient} />
-          </div>
-
-          <div className={styles.cardBody}>
-            <div className={styles.workerInfoRow}>
-              <div>
-                <h4 className={styles.workerName}>Ashok Chitkara</h4>
-                <span className={styles.workerTrade}>
-                  <Zap size={13} /> Master Plumber • Chandigarh Hub
-                </span>
-              </div>
-              <div className={styles.ratingBadge}>
-                <Star size={12} fill='currentColor' />
-                <span>4.9</span>
-              </div>
-            </div>
-
-            <p className={styles.quote}>
-              &ldquo;Customers connect with me directly on ChowkSpot, and I keep 100% of
-              my earnings with zero middleman commissions.&rdquo;
-            </p>
-
-            <div className={styles.locationFooter}>
-              <MapPin size={12} />
-              <span>Serving clients across Chandigarh, Mohali & Panchkula</span>
+            <div className={styles.authorMeta}>
+              <span className={styles.authorName}>Ashok Chitkara</span>
+              <span className={styles.authorRole}>Master Plumber • Chandigarh Hub</span>
             </div>
           </div>
         </div>
 
-        {/* Unique Glowing Perks List */}
-        <div className={styles.perksList}>
-          <div className={styles.perkItem}>
-            <Zap size={16} className={styles.perkIcon} />
-            <span>0% Platform Commission — Direct UPI Pay</span>
+        {/* Trust Metrics Footer */}
+        <div className={styles.trustFooter}>
+          <div className={styles.trustMetric}>
+            <strong>0%</strong>
+            <span>Commission Fee</span>
           </div>
-          <div className={styles.perkItem}>
-            <ShieldCheck size={16} className={styles.perkIcon} />
-            <span>Verified Customer Reviews &amp; Ratings</span>
+          <div className={styles.trustMetric}>
+            <strong>85+</strong>
+            <span>Active Cities</span>
           </div>
-          <div className={styles.perkItem}>
-            <Heart size={16} className={styles.perkIcon} />
-            <span>Empowering Independent Local Pros</span>
+          <div className={styles.trustMetric}>
+            <strong>100%</strong>
+            <span>Direct P2P UPI</span>
           </div>
         </div>
       </div>
 
-      {/* RIGHT: Perfectly Centered Responsive Form */}
+      {/* RIGHT: Compact Form Container */}
       <div className={styles.formContainer}>
         <div className={styles.formBox}>
           <div className={styles.formHeader}>

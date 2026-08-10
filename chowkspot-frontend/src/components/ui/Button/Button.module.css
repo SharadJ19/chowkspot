@@ -79,8 +79,9 @@
 
 .md {
   padding: 0.5rem 1rem;
-  font-size: var(--font-size-sm);
-  min-height: 40px;
+  font-size: var(--font-size-xs);
+  min-height: 38px;
+  font-weight: var(--font-weight-bold);
 }
 
 .lg {
