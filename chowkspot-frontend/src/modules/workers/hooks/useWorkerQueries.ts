@@ -5,6 +5,18 @@ import type { WorkerSearchQueryParams, CreateWorkerProfileInput } from '@/types'
 
 export const WORKERS_QUERY_KEY = 'workers_search';
 
+export const useSingleWorkerQuery = (workerId?: string) => {
+  return useQuery({
+    queryKey: ['worker_detail', workerId],
+    queryFn: async () => {
+      if (!workerId) return null;
+      const res = await workersApi.getWorkerById(workerId);
+      return res.data || null;
+    },
+    enabled: !!workerId,
+  });
+};
+
 export const useWorkerQueries = (params?: WorkerSearchQueryParams) => {
   const queryClient = useQueryClient();
 

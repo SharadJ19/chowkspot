@@ -6,6 +6,7 @@ import type {
   WorkerProfile,
   CreateWorkerProfileInput,
   UpdateAvailabilityInput,
+  WorkerSearchResult,
 } from '@/types';
 
 export const workersApi = {
@@ -25,7 +26,7 @@ export const workersApi = {
 
     return fetchClient<PaginatedWorkersResponse>(`/workers/search?${query.toString()}`);
   },
-
+  getWorkerById: (id: string) => fetchClient<WorkerSearchResult>(`/workers/${id}`),
   upsertProfile: (data: CreateWorkerProfileInput) =>
     fetchClient<WorkerProfile>('/workers/profile', {
       method: 'POST',

@@ -10,6 +10,38 @@ import {
 } from '@/modules/workers/workers.schema.js';
 
 export class WorkerService {
+  static async getWorkerById(workerId: string) {
+    const [worker] = await db
+      .select({
+        id: workerProfiles.id,
+        category: workerProfiles.category,
+        bio: workerProfiles.bio,
+        experienceYears: workerProfiles.experienceYears,
+        rateType: workerProfiles.rateType,
+        baseRate: workerProfiles.baseRate,
+        isAvailable: workerProfiles.isAvailable,
+        serviceCities: workerProfiles.serviceCities,
+        paymentIdentifier: workerProfiles.paymentIdentifier,
+        avgRating: workerProfiles.avgRating,
+        totalReviews: workerProfiles.totalReviews,
+        user: {
+          name: users.name,
+          phone: users.phone,
+          city: users.city,
+          avatarUrl: users.avatarUrl,
+        },
+      })
+      .from(workerProfiles)
+      .innerJoin(users, eq(workerProfiles.userId, users.id))
+      .where(eq(workerProfiles.id, workerId));
+
+    if (!worker) {
+      throw new ApiError(CONSTANTS.HTTP_STATUS.NOT_FOUND, 'Worker profile not found');
+    }
+
+    return worker;
+  }
+
   static async createOrUpdateProfile(userId: string, input: CreateWorkerProfileInput) {
     const [user] = await db.select().from(users).where(eq(users.id, userId));
     if (!user) {

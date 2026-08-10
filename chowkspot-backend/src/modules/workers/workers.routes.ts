@@ -11,6 +11,7 @@ const router = Router();
 
 // Public worker search route
 router.get('/search', WorkerController.search);
+router.get('/:id', WorkerController.getById);
 
 // Authenticated worker profile routes
 router.post(

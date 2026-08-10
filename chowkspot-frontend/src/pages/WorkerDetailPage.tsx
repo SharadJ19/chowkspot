@@ -1,11 +1,9 @@
-// FILE: src/pages/WorkerDetailPage.tsx
 import React, { useState } from 'react';
 import { useParams } from 'react-router';
 import { MapPin, Calendar, Briefcase, ShieldCheck } from 'lucide-react';
-import { useWorkerQueries } from '@/modules/workers/hooks/useWorkerQueries';
+import { useSingleWorkerQuery } from '@/modules/workers/hooks/useWorkerQueries';
 import { useReviewQueries } from '@/modules/reviews/hooks/useReviewQueries';
 import { BookingRequestModal } from '@/modules/bookings/components/BookingRequestModal/BookingRequestModal';
-import type { WorkerSearchResult } from '@/types';
 import { ReviewList } from '@/modules/reviews/components/ReviewList/ReviewList';
 import { Avatar } from '@/components/ui/Avatar/Avatar';
 import { Badge } from '@/components/ui/Badge/Badge';
@@ -17,16 +15,12 @@ import styles from './WorkerDetailPage.module.css';
 
 export const WorkerDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const { searchWorkersQuery } = useWorkerQueries();
+  const { data: worker, isLoading } = useSingleWorkerQuery(id);
   const { reviewsQuery } = useReviewQueries(id);
 
   const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
 
-  const worker = searchWorkersQuery.data?.workers.find(
-    (w: WorkerSearchResult) => w.id === id,
-  );
-
-  if (searchWorkersQuery.isLoading) {
+  if (isLoading) {
     return (
       <div className={styles.centerLoading}>
         <Spinner size='lg' />
@@ -44,7 +38,6 @@ export const WorkerDetailPage: React.FC = () => {
 
   return (
     <div className={`container ${styles.detailContainer}`}>
-      {/* Streamlined Profile Card */}
       <div className={styles.profileCard}>
         <div className={styles.profileMainInfo}>
           <Avatar name={worker.user.name} src={worker.user.avatarUrl} size='xl' />
@@ -57,7 +50,6 @@ export const WorkerDetailPage: React.FC = () => {
             </div>
             <span className={styles.categoryText}>{worker.category}</span>
 
-            {/* Service Hub Badges */}
             <div className={styles.citiesList}>
               <MapPin
                 size={13}
@@ -104,13 +96,9 @@ export const WorkerDetailPage: React.FC = () => {
         </div>
       </div>
 
-      {/* About & Experience Section */}
       <div className={styles.contentSection}>
         <h3 className={styles.sectionHeading}>About &amp; Experience</h3>
-        <p className={styles.bioText}>
-          {worker.bio ||
-            'Experienced professional available for direct hire with zero platform commission.'}
-        </p>
+        <p className={styles.bioText}>{worker.bio}</p>
         <div
           style={{
             display: 'flex',
@@ -133,7 +121,6 @@ export const WorkerDetailPage: React.FC = () => {
         </div>
       </div>
 
-      {/* Verified Reviews Section */}
       <div className={styles.contentSection}>
         <h3 className={styles.sectionHeading}>Verified Customer Reviews</h3>
         {reviewsQuery.isLoading ? (
@@ -143,7 +130,6 @@ export const WorkerDetailPage: React.FC = () => {
         )}
       </div>
 
-      {/* Shared Booking Request Modal */}
       <BookingRequestModal
         worker={worker}
         isOpen={isBookingModalOpen}
