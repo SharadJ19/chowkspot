@@ -1,9 +1,11 @@
+// FILE: src/modules/auth/components/RegisterForm/RegisterForm.tsx
 import React, { useState } from 'react';
 import { useNavigate, useSearchParams, Link } from 'react-router';
 import { AlertCircle, User, Wrench, Eye, EyeOff } from 'lucide-react';
 import { useAuthMutations } from '../../hooks/useAuthMutations';
 import { Input } from '@/components/ui/Input/Input';
 import { Button } from '@/components/ui/Button/Button';
+import { Autocomplete } from '@/components/ui/Autocomplete/Autocomplete'; // 👈 Import Autocomplete
 import { registerSchema } from '../../schemas/auth.schema';
 import { APP_CONSTANTS } from '@/config/constants';
 import loginStyles from '../LoginForm/LoginForm.module.css';
@@ -28,7 +30,7 @@ export const RegisterForm: React.FC = () => {
     email: '',
     password: '',
     phone: '',
-    city: APP_CONSTANTS.CITIES[0],
+    city: APP_CONSTANTS.CITIES[0] || 'Parwanoo',
     role: initialRole,
   });
 
@@ -113,19 +115,20 @@ export const RegisterForm: React.FC = () => {
         }
       />
 
+      {/* 👈 Sleek Autocomplete Combobox for City Selection */}
       <div className={styles.fieldGroup}>
-        <label className={styles.fieldLabel}>City Location</label>
-        <select
+        <Autocomplete
+          label='City Location'
+          options={APP_CONSTANTS.CITIES}
           value={formData.city}
-          onChange={(e) => setFormData({ ...formData, city: e.target.value })}
-          className={styles.selectInput}
-        >
-          {APP_CONSTANTS.CITIES.map((c) => (
-            <option key={c} value={c}>
-              {c}
-            </option>
-          ))}
-        </select>
+          onChange={(city) => setFormData({ ...formData, city })}
+          placeholder='Type to search 85+ cities...'
+        />
+        {fieldErrors.city && (
+          <span style={{ fontSize: 'var(--font-size-xs)', color: 'var(--color-error)' }}>
+            {fieldErrors.city}
+          </span>
+        )}
       </div>
 
       <div className={styles.fieldGroup}>
