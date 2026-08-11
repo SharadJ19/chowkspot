@@ -32,7 +32,6 @@ app.use(express.urlencoded({ extended: true, limit: '10kb' }));
 
 app.use(cookieParser());
 app.use(xssSanitizer);
-app.use(globalRateLimiter);
 
 // Health check endpoint
 app.get('/health', async (_req: Request, res: Response) => {
@@ -54,6 +53,8 @@ app.get('/health', async (_req: Request, res: Response) => {
     });
   }
 });
+
+app.use(globalRateLimiter);
 
 // API Routes
 // Apply strict rate limiter ONLY to login and register routes
