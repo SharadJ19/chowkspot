@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🛠️ ChowkSpot
+<img src="chowkspot-frontend/public/social-preview.png" alt="ChowkSpot Social Preview" width="45%" />
 
 ### Direct, Zero-Commission Local Service Marketplace
 
