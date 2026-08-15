@@ -16,7 +16,13 @@
 *.db
 **/uploads/
 
-# 5. OS & Editor Junk
+# 5. Playwright Testing Artifacts
+**/test-results/
+**/playwright-report/
+**/blob-report/
+**/.playwright/
+
+# 6. OS & Editor Junk
 .DS_Store
 .vscode/
 .idea/

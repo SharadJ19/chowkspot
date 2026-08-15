@@ -48,8 +48,10 @@ export const ServerWarmingBanner: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const location = useLocation();
+  const isBypassed = import.meta.env.DEV || import.meta.env.MODE === 'test';
+
   const [isReady, setIsReady] = useState<boolean>(
-    import.meta.env.DEV ? true : isServerRecentlyWarmed(),
+    isBypassed ? true : isServerRecentlyWarmed(),
   );
   const [showWelcome, setShowWelcome] = useState<boolean>(false);
   const [hasTimedOut, setHasTimedOut] = useState<boolean>(false);
@@ -62,17 +64,17 @@ export const ServerWarmingBanner: React.FC<{ children: React.ReactNode }> = ({
   );
 
   useEffect(() => {
-    if (import.meta.env.DEV || isReady || hasTimedOut) return;
+    if (isBypassed || isReady || hasTimedOut) return;
 
     const timer = window.setInterval(() => {
       setElapsedSeconds((prev) => prev + 1);
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [isReady, hasTimedOut]);
+  }, [isBypassed, isReady, hasTimedOut]);
 
   const pingServer = useCallback(async () => {
-    if (import.meta.env.DEV || isReady || hasTimedOut) return;
+    if (isBypassed || isReady || hasTimedOut) return;
 
     setRequestCount((prevCount) => {
       const nextCount = prevCount + 1;
@@ -102,29 +104,29 @@ export const ServerWarmingBanner: React.FC<{ children: React.ReactNode }> = ({
     } catch {
       // Silently catch
     }
-  }, [isReady, hasTimedOut]);
+  }, [isBypassed, isReady, hasTimedOut]);
 
   useEffect(() => {
-    if (import.meta.env.DEV || isReady || hasTimedOut) return;
+    if (isBypassed || isReady || hasTimedOut) return;
 
     const pollInterval = window.setInterval(() => {
       void pingServer();
     }, 4000);
 
     return () => clearInterval(pollInterval);
-  }, [isReady, hasTimedOut, pingServer]);
+  }, [isBypassed, isReady, hasTimedOut, pingServer]);
 
   useEffect(() => {
-    if (import.meta.env.DEV || !showWelcome) return;
+    if (isBypassed || !showWelcome) return;
 
     const welcomeTimer = window.setTimeout(() => {
       setShowWelcome(false);
     }, 1200);
 
     return () => window.clearTimeout(welcomeTimer);
-  }, [showWelcome]);
+  }, [isBypassed, showWelcome]);
 
-  if (import.meta.env.DEV || (isReady && !showWelcome)) {
+  if (isBypassed || (isReady && !showWelcome)) {
     return <>{children}</>;
   }
 

@@ -27,7 +27,7 @@ export default defineConfig(
   // schemas, Drizzle ORM definitions, Socket.io handlers, and JWT utilities.
   // =========================================================================
   {
-    files: ['src/**/*.ts'],
+    files: ['src/**/*.ts', '*.config.ts'],
     languageOptions: {
       parser: tsParser,
       ecmaVersion: 'latest',
@@ -44,6 +44,15 @@ export default defineConfig(
         setInterval: true,
         clearInterval: true,
         global: true,
+        // Added Vitest/Jest testing globals so test files don't trigger undef/lint warnings
+        describe: 'readonly',
+        it: 'readonly',
+        test: 'readonly',
+        expect: 'readonly',
+        beforeAll: 'readonly',
+        afterAll: 'readonly',
+        beforeEach: 'readonly',
+        afterEach: 'readonly',
       },
     },
     plugins: {

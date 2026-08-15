@@ -44,6 +44,8 @@ EXCLUDED_DIRS = {
     ".vscode",
     ".tmp",
     ".cache",
+    "test-results",
+    "playwright-report",
 }
 
 EXCLUDED_FILES = {
@@ -54,6 +56,7 @@ EXCLUDED_FILES = {
     "copy_project.py",
     ".DS_Store",
     "Thumbs.db",
+    "index.html",
 }
 
 
