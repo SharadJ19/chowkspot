@@ -3,14 +3,16 @@ import { Filter } from 'lucide-react';
 import { useWorkerQueries } from '@/modules/workers/hooks/useWorkerQueries';
 import { useSearchFilters } from '@/hooks/useSearchFilters';
 import { WorkerCard } from '@/modules/workers/components/WorkerCard/WorkerCard';
+import { WorkerCardSkeleton } from '@/modules/workers/components/WorkerCard/WorkerCardSkeleton';
 import { WorkerSidebarFilters } from '@/modules/workers/components/WorkerSidebarFilters/WorkerSidebarFilters';
 import { Pagination } from '@/components/ui/Pagination/Pagination';
-import { Spinner } from '@/components/ui/Spinner/Spinner';
 import { Button } from '@/components/ui/Button/Button';
 import { BookingRequestModal } from '@/modules/bookings/components/BookingRequestModal/BookingRequestModal';
 import type { WorkerSearchResult } from '@/types';
 import styles from './Pages.module.css';
 import sidebarStyles from '@/modules/workers/components/WorkerSidebarFilters/WorkerSidebarFilters.module.css';
+
+const SKELETON_COUNT = 6;
 
 export const SearchPage: React.FC = () => {
   const { filters, setFilter, setPage, resetFilters } = useSearchFilters();
@@ -126,8 +128,10 @@ export const SearchPage: React.FC = () => {
 
         <div>
           {searchWorkersQuery.isLoading ? (
-            <div className={styles.centerLoading}>
-              <Spinner size='lg' />
+            <div className='grid-auto-fit'>
+              {Array.from({ length: SKELETON_COUNT }).map((_, index) => (
+                <WorkerCardSkeleton key={`skeleton-${index}`} />
+              ))}
             </div>
           ) : workers.length > 0 ? (
             <>
