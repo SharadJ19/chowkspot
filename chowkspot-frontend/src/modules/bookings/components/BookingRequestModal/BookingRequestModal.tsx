@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { toast } from 'sonner';
+import { ShieldAlert } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { useBookingQueries } from '@/modules/bookings/hooks/useBookingQueries';
 import { Modal } from '@/components/ui/Modal/Modal';
@@ -66,6 +67,8 @@ export const BookingRequestModal: React.FC<BookingRequestModalProps> = ({
     }
   };
 
+  const isAdmin = user?.role === 'ADMIN';
+
   return (
     <Modal
       isOpen={isOpen}
@@ -74,6 +77,31 @@ export const BookingRequestModal: React.FC<BookingRequestModalProps> = ({
     >
       {!isAuthenticated ? (
         <p className={styles.unauthText}>Please log in to submit a booking request.</p>
+      ) : isAdmin ? (
+        <div className={styles.verificationBox}>
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: 'var(--color-error)',
+              gap: '6px',
+            }}
+          >
+            <ShieldAlert size={20} />
+            <p className={styles.errorText} style={{ margin: 0 }}>
+              Admin Account Restricted
+            </p>
+          </div>
+          <p className={styles.emailText}>
+            Administrator accounts cannot initiate marketplace bookings. To hire service
+            professionals or test customer flows, please sign in with a standard{' '}
+            <strong>USER</strong> customer account.
+          </p>
+          <Button variant='outline' onClick={handleClose} style={{ marginTop: '8px' }}>
+            Close
+          </Button>
+        </div>
       ) : !user?.isVerified ? (
         <div className={styles.verificationBox}>
           <p className={styles.errorText}>Email Verification Required</p>

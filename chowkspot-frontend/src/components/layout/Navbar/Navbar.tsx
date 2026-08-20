@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { NavLink, Link, useLocation } from 'react-router';
-import { Search, Calendar, ShieldAlert, Menu, X, User, Home } from 'lucide-react';
+import { Search, Calendar, ShieldAlert, Menu, X, Home } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { Avatar } from '@/components/ui/Avatar/Avatar';
 import { Button } from '@/components/ui/Button/Button';
@@ -13,6 +13,9 @@ export const Navbar: React.FC = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const closeMenu = () => setIsMobileMenuOpen(false);
+
+  const isCustomerOrWorker =
+    isAuthenticated && (user?.role === 'USER' || user?.role === 'WORKER');
 
   return (
     <header className={styles.navbar}>
@@ -39,7 +42,7 @@ export const Navbar: React.FC = () => {
             <span>Find Workers</span>
           </NavLink>
 
-          {isAuthenticated && (
+          {isCustomerOrWorker && (
             <NavLink
               to='/bookings'
               className={({ isActive }) =>
@@ -175,7 +178,7 @@ export const Navbar: React.FC = () => {
                 <span>Find Workers</span>
               </Link>
 
-              {isAuthenticated && (
+              {isCustomerOrWorker && (
                 <Link
                   to='/bookings'
                   onClick={closeMenu}
@@ -204,7 +207,7 @@ export const Navbar: React.FC = () => {
               {isAuthenticated ? (
                 <Link to='/profile' onClick={closeMenu}>
                   <Button variant='outline' fullWidth>
-                    <User size={16} /> View Profile &amp; Settings
+                    View Profile &amp; Settings
                   </Button>
                 </Link>
               ) : (

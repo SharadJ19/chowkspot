@@ -28,9 +28,13 @@ export const AppRouter = () => {
         <Route path='/forgot-password' element={<ForgotPasswordPage />} />
         <Route path='/reset-password' element={<ResetPasswordPage />} />
 
-        {/* Standard Protected Authenticated Routes */}
-        <Route element={<RouteGuard />}>
+        {/* Customer & Worker Booking Management Route */}
+        <Route element={<RouteGuard allowedRoles={['USER', 'WORKER']} />}>
           <Route path='/bookings' element={<BookingsPage />} />
+        </Route>
+
+        {/* General Authenticated Profile Management */}
+        <Route element={<RouteGuard />}>
           <Route path='/profile' element={<ProfilePage />} />
         </Route>
 
