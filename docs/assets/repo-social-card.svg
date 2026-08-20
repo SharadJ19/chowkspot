@@ -1,95 +1,154 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 640" width="1280" height="640" aria-label="ChowkSpot Balanced GitHub Social Preview">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 640" width="1280" height="640" aria-label="ChowkSpot GitHub Social Preview">
   <defs>
     <style>
-      @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;600;800&amp;display=swap');
+      @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&amp;display=swap');
       .brand-font {
-        font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       }
     </style>
-    
-    <!-- Gradients -->
-    <linearGradient id="emeraldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#34d399" />
-      <stop offset="100%" stop-color="#059669" />
+
+    <!-- Gradients matching official ChowkSpot Logo spec -->
+    <linearGradient id="emerald" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#10b981" />
+      <stop offset="100%" stop-color="#047857" />
     </linearGradient>
 
     <linearGradient id="darkSlate" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#334155" />
       <stop offset="100%" stop-color="#0f172a" />
     </linearGradient>
+
+    <linearGradient id="glowGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#10b981" stop-opacity="0.15" />
+      <stop offset="100%" stop-color="#10b981" stop-opacity="0" />
+    </linearGradient>
+
+    <!-- Subtle Dot Pattern for Background Depth -->
+    <pattern id="dotGrid" x="0" y="0" width="32" height="32" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="1.5" fill="#e2e8f0" />
+    </pattern>
   </defs>
 
-  <!-- Clean Light Background -->
+  <!-- Clean Background with Subtle Tech Grid -->
   <rect width="1280" height="640" fill="#ffffff" />
+  <rect width="1280" height="640" fill="url(#dotGrid)" />
 
-  <!-- Top Brand Accent Bar -->
-  <rect x="0" y="0" width="1280" height="8" fill="url(#emeraldGrad)" />
+  <!-- Ambient Glow Centered behind Logo Area -->
+  <circle cx="480" cy="240" r="300" fill="url(#glowGrad)" />
 
-  <!-- TOP-LEFT: GitHub Repository Badge (Perfected Standard Icon Box) -->
-  <g transform="translate(80, 65)">
-    <rect x="0" y="0" width="310" height="46" rx="23" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5" />
+  <!-- Top Emerald Accent Bar -->
+  <rect x="0" y="0" width="1280" height="10" fill="url(#emerald)" />
+
+  <!-- Top GitHub Repo Badge -->
+  <g transform="translate(80, 56)">
+    <rect x="0" y="0" width="350" height="52" rx="26" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.8" filter="drop-shadow(0 2px 4px rgba(15, 23, 42, 0.04))" />
     
-    <!-- Standardized GitHub Icon (24x24 box perfectly centered at y=11) -->
-    <svg x="20" y="11" width="24" height="24" viewBox="0 0 24 24" fill="#0f172a">
+    <!-- GitHub Mark -->
+    <svg x="18" y="13" width="26" height="26" viewBox="0 0 24 24" fill="#0f172a">
       <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
     </svg>
 
-    <text x="54" y="29" class="brand-font" font-weight="700" font-size="15" fill="#1e293b">SharadJ19 / chowkspot</text>
+    <text x="56" y="33" class="brand-font" font-weight="700" font-size="17" fill="#0f172a" letter-spacing="-0.2">
+      SharadJ19 <tspan fill="#94a3b8" font-weight="400">/</tspan> chowkspot
+    </text>
   </g>
 
-  <!-- CENTERED MAIN BLOCK -->
-  <g transform="translate(80, 160)">
-    
-    <!-- Logo Mark & Wordmark -->
+  <!-- OFFICIAL CHOWKSPOT LOGO MARK & WORDMARK (Uniform 1.65x Scaled Matrix) -->
+  <g transform="translate(80, 150) scale(1.65)">
+    <!-- Location Pin Icon -->
+    <g transform="translate(5, 22) scale(0.68)">
+      <path
+        d="M 50 15 C 25 15, 15 35, 15 50 C 15 72, 38 88, 50 95"
+        fill="none"
+        stroke="url(#darkSlate)"
+        stroke-width="7"
+        stroke-linecap="round"
+      />
+      <path
+        d="M 50 15 C 75 15, 85 35, 85 50 C 85 72, 62 88, 50 95"
+        fill="none"
+        stroke="url(#emerald)"
+        stroke-width="7"
+        stroke-linecap="round"
+      />
+      <circle cx="50" cy="45" r="7" fill="url(#emerald)" />
+    </g>
+
+    <!-- Wordmark & Exact Positioned Dot -->
+    <g transform="translate(100, 75)">
+      <text
+        x="0"
+        y="0"
+        class="brand-font"
+        font-weight="800"
+        font-size="54"
+        letter-spacing="-2"
+        fill="#0f172a"
+      >
+        chowk
+      </text>
+      <text
+        x="176"
+        y="0"
+        class="brand-font"
+        font-weight="300"
+        font-size="54"
+        letter-spacing="-2"
+        fill="#0f172a"
+      >
+        spot
+      </text>
+      <!-- Perfect Brand Dot over the letter 't' -->
+      <circle cx="277.5" cy="-42" r="4" fill="url(#emerald)" />
+    </g>
+  </g>
+
+  <!-- Crisp, High-Contrast Tagline -->
+  <text x="80" y="375" class="brand-font" font-weight="800" font-size="44" fill="#0f172a" letter-spacing="-1">
+    Hyperlocal Zero-Commission Service Marketplace
+  </text>
+
+  <!-- Clean Single-Sentence Description -->
+  <text x="80" y="425" class="brand-font" font-weight="400" font-size="23" fill="#475569" letter-spacing="-0.3">
+    Connecting residents directly with skilled local trade professionals with direct P2P UPI settlements.
+  </text>
+
+  <!-- Stack & Key Architecture Badges -->
+  <g transform="translate(80, 485)">
+    <!-- React 19 -->
     <g transform="translate(0, 0)">
-      <!-- Location Pin Vector Icon -->
-      <g transform="translate(0, -5) scale(0.9)">
-        <path d="M 50 15 C 25 15, 15 35, 15 50 C 15 72, 38 88, 50 95" fill="none" stroke="url(#darkSlate)" stroke-width="8" stroke-linecap="round" />
-        <path d="M 50 15 C 75 15, 85 35, 85 50 C 85 72, 62 88, 50 95" fill="none" stroke="url(#emeraldGrad)" stroke-width="8" stroke-linecap="round" />
-        <circle cx="50" cy="45" r="8" fill="url(#emeraldGrad)" />
-      </g>
-
-      <!-- Wordmark -->
-      <text x="110" y="62" class="brand-font" font-weight="800" font-size="68" letter-spacing="-1" fill="#0f172a">chowk</text>
-      <text x="330" y="62" class="brand-font" font-weight="300" font-size="68" letter-spacing="-1" fill="#475569">spot</text>
-      <circle cx="472" cy="12" r="7" fill="#059669" />
+      <rect width="140" height="52" rx="14" fill="#e0f2fe" stroke="#bae6fd" stroke-width="1.5" />
+      <text x="70" y="33" class="brand-font" font-weight="700" font-size="17" fill="#0369a1" text-anchor="middle">React 19</text>
     </g>
 
-    <!-- Headline Tagline -->
-    <text x="0" y="155" class="brand-font" font-weight="800" font-size="38" fill="#0f172a" letter-spacing="-0.5">
-      Direct, Zero-Commission Local Service Marketplace
-    </text>
-
-    <!-- Description -->
-    <text x="0" y="200" class="brand-font" font-weight="300" font-size="19" fill="#64748b">
-      Connecting residents directly with skilled neighborhood tradespeople—eliminating middleman
-    </text>
-    <text x="0" y="230" class="brand-font" font-weight="300" font-size="19" fill="#64748b">
-      platform fees, delays, and discovery friction across Himachal Pradesh &amp; Tricity.
-    </text>
-
-    <!-- Tech Stack & Feature Pills -->
-    <g transform="translate(0, 290)">
-      <!-- React 19 -->
-      <rect x="0" y="0" width="135" height="42" rx="10" fill="#e0f2fe" />
-      <text x="67.5" y="27" class="brand-font" font-weight="600" font-size="14" fill="#0369a1" text-anchor="middle">React 19</text>
-
-      <!-- TypeScript -->
-      <rect x="150" y="0" width="150" height="42" rx="10" fill="#dbeafe" />
-      <text x="225" y="27" class="brand-font" font-weight="600" font-size="14" fill="#1d4ed8" text-anchor="middle">TypeScript</text>
-
-      <!-- Node / Express -->
-      <rect x="315" y="0" width="170" height="42" rx="10" fill="#dcfce7" />
-      <text x="400" y="27" class="brand-font" font-weight="600" font-size="14" fill="#15803d" text-anchor="middle">Node / Express</text>
-
-      <!-- PostgreSQL + Drizzle -->
-      <rect x="500" y="0" width="205" height="42" rx="10" fill="#fae8ff" />
-      <text x="602.5" y="27" class="brand-font" font-weight="600" font-size="14" fill="#86198f" text-anchor="middle">PostgreSQL + Drizzle</text>
-
-      <!-- Zero-Commission Badge -->
-      <rect x="720" y="0" width="185" height="42" rx="10" fill="#fef3c7" />
-      <text x="812.5" y="27" class="brand-font" font-weight="700" font-size="14" fill="#b45309" text-anchor="middle">⚡ 0% Commission</text>
+    <!-- TypeScript -->
+    <g transform="translate(156, 0)">
+      <rect width="155" height="52" rx="14" fill="#eff6ff" stroke="#bfdbfe" stroke-width="1.5" />
+      <text x="77.5" y="33" class="brand-font" font-weight="700" font-size="17" fill="#1d4ed8" text-anchor="middle">TypeScript</text>
     </g>
 
+    <!-- Node & Express -->
+    <g transform="translate(327, 0)">
+      <rect width="175" height="52" rx="14" fill="#f0fdf4" stroke="#bbf7d0" stroke-width="1.5" />
+      <text x="87.5" y="33" class="brand-font" font-weight="700" font-size="17" fill="#15803d" text-anchor="middle">Node / Express</text>
+    </g>
+
+    <!-- Drizzle & PostgreSQL -->
+    <g transform="translate(518, 0)">
+      <rect width="215" height="52" rx="14" fill="#faf5ff" stroke="#e9d5ff" stroke-width="1.5" />
+      <text x="107.5" y="33" class="brand-font" font-weight="700" font-size="17" fill="#7e22ce" text-anchor="middle">Drizzle + Postgres</text>
+    </g>
+
+    <!-- Socket.io Realtime -->
+    <g transform="translate(749, 0)">
+      <rect width="145" height="52" rx="14" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5" />
+      <text x="72.5" y="33" class="brand-font" font-weight="700" font-size="17" fill="#334155" text-anchor="middle">Socket.io</text>
+    </g>
+
+    <!-- 0% Commission Badge -->
+    <g transform="translate(910, 0)">
+      <rect width="190" height="52" rx="14" fill="#ecfdf5" stroke="#a7f3d0" stroke-width="1.5" />
+      <text x="95" y="33" class="brand-font" font-weight="800" font-size="17" fill="#047857" text-anchor="middle">⚡ 0% Fee P2P</text>
+    </g>
   </g>
 </svg>
