@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { NavLink, Link, useNavigate, useLocation } from 'react-router';
-import { Search, Calendar, ShieldAlert, LogOut, Menu, X, User, Home } from 'lucide-react';
+import { NavLink, Link, useLocation } from 'react-router';
+import { Search, Calendar, ShieldAlert, Menu, X, User, Home } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { Avatar } from '@/components/ui/Avatar/Avatar';
 import { Button } from '@/components/ui/Button/Button';
@@ -8,16 +8,9 @@ import { Logo } from '@/components/ui/Logo/Logo';
 import styles from './Navbar.module.css';
 
 export const Navbar: React.FC = () => {
-  const { user, isAuthenticated, logout } = useAuth();
-  const navigate = useNavigate();
+  const { user, isAuthenticated } = useAuth();
   const location = useLocation();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
-  const handleLogout = async () => {
-    setIsMobileMenuOpen(false);
-    await logout();
-    navigate('/login');
-  };
 
   const closeMenu = () => setIsMobileMenuOpen(false);
 
@@ -73,24 +66,13 @@ export const Navbar: React.FC = () => {
         </nav>
         <div className={styles.authGroup}>
           {isAuthenticated && user ? (
-            <div className={styles.authGroup}>
-              <Link to='/profile' className={styles.userMenu}>
-                <Avatar name={user.name} src={user.avatarUrl} size='sm' />
-                <div className={styles.userInfo}>
-                  <span className={styles.userName}>{user.name}</span>
-                  <span className={styles.userRole}>{user.role}</span>
-                </div>
-              </Link>
-              <Button
-                variant='ghost'
-                size='sm'
-                onClick={handleLogout}
-                className={styles.logoutBtn}
-              >
-                <LogOut size={16} />
-                <span>Logout</span>
-              </Button>
-            </div>
+            <Link to='/profile' className={styles.userMenu}>
+              <Avatar name={user.name} src={user.avatarUrl} size='sm' />
+              <div className={styles.userInfo}>
+                <span className={styles.userName}>{user.name}</span>
+                <span className={styles.userRole}>{user.role}</span>
+              </div>
+            </Link>
           ) : (
             <>
               <Link to='/login'>
@@ -220,16 +202,11 @@ export const Navbar: React.FC = () => {
 
             <div className={styles.mobileAuthSection}>
               {isAuthenticated ? (
-                <>
-                  <Link to='/profile' onClick={closeMenu}>
-                    <Button variant='outline' fullWidth>
-                      <User size={16} /> Edit Profile
-                    </Button>
-                  </Link>
-                  <Button variant='danger' onClick={handleLogout} fullWidth>
-                    <LogOut size={16} /> Logout
+                <Link to='/profile' onClick={closeMenu}>
+                  <Button variant='outline' fullWidth>
+                    <User size={16} /> View Profile &amp; Settings
                   </Button>
-                </>
+                </Link>
               ) : (
                 <>
                   <Link to='/login' onClick={closeMenu}>

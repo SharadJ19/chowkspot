@@ -1,5 +1,12 @@
 import React from 'react';
-import { CheckCircle2, Shield, Wrench, Trash2, AlertTriangle } from 'lucide-react';
+import {
+  CheckCircle2,
+  Shield,
+  Wrench,
+  Trash2,
+  AlertTriangle,
+  LogOut,
+} from 'lucide-react';
 import { useProfileForm } from '@/modules/users/hooks/useProfileForm';
 import { Input } from '@/components/ui/Input/Input';
 import { Button } from '@/components/ui/Button/Button';
@@ -24,6 +31,7 @@ export const ProfilePage: React.FC = () => {
     baseRate,
     paymentIdentifier,
     isSaving,
+    isLoggingOut,
     successMessage,
     isDeleteModalOpen,
     isDeleting,
@@ -41,13 +49,20 @@ export const ProfilePage: React.FC = () => {
     setIsDeleteModalOpen,
     setDeleteConfirmationText,
     handleProfileSubmit,
+    handleLogout,
     handleSelfAccountDelete,
   } = useProfileForm();
 
   return (
     <div className={`container ${styles.profileContainer}`}>
       <form onSubmit={handleProfileSubmit} className={styles.profileForm}>
-        <div className={styles.flexBetween} style={{ alignItems: 'flex-start' }}>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'flex-start',
+          }}
+        >
           <div>
             <h2
               className={styles.formTitle}
@@ -193,21 +208,42 @@ export const ProfilePage: React.FC = () => {
         </Button>
       </form>
 
-      <div className={styles.dangerZoneCard}>
-        <h3 className={styles.dangerZoneTitle}>Danger Zone</h3>
-        <p className={styles.dangerZoneDesc}>
-          Permanently delete your account and all associated data from ChowkSpot.
-        </p>
-        <Button
-          variant='danger'
-          onClick={() => {
-            setDeleteConfirmationText('');
-            setIsDeleteModalOpen(true);
-          }}
-        >
-          <Trash2 size={16} />
-          <span>Delete My Account</span>
-        </Button>
+      <div className={styles.accountActionsCard}>
+        <div className={styles.actionSection}>
+          <div className={styles.actionTextGroup}>
+            <span className={styles.actionTitle}>Log Out of Session</span>
+            <span className={styles.actionDesc}>
+              Securely end your current session on this device.
+            </span>
+          </div>
+          <Button variant='outline' onClick={handleLogout} isLoading={isLoggingOut}>
+            <LogOut size={16} />
+            <span>Log Out</span>
+          </Button>
+        </div>
+
+        <div className={styles.divider} />
+
+        <div className={styles.actionSection}>
+          <div className={styles.actionTextGroup}>
+            <span className={styles.actionTitle} style={{ color: 'var(--color-error)' }}>
+              Danger Zone
+            </span>
+            <span className={styles.actionDesc}>
+              Permanently delete your account and all associated marketplace data.
+            </span>
+          </div>
+          <Button
+            variant='danger'
+            onClick={() => {
+              setDeleteConfirmationText('');
+              setIsDeleteModalOpen(true);
+            }}
+          >
+            <Trash2 size={16} />
+            <span>Delete Account</span>
+          </Button>
+        </div>
       </div>
 
       <Modal

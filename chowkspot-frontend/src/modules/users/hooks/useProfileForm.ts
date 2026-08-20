@@ -26,6 +26,7 @@ export const useProfileForm = () => {
   const [paymentIdentifier, setPaymentIdentifier] = useState('');
 
   const [isSaving, setIsSaving] = useState(false);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -90,6 +91,18 @@ export const useProfileForm = () => {
     }
   };
 
+  const handleLogout = async () => {
+    setIsLoggingOut(true);
+    try {
+      await logout();
+      navigate('/login');
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsLoggingOut(false);
+    }
+  };
+
   const handleSelfAccountDelete = async () => {
     if (deleteConfirmationText !== 'DELETE') return;
     setIsDeleting(true);
@@ -119,6 +132,7 @@ export const useProfileForm = () => {
     baseRate,
     paymentIdentifier,
     isSaving,
+    isLoggingOut,
     successMessage,
     isDeleteModalOpen,
     isDeleting,
@@ -136,6 +150,7 @@ export const useProfileForm = () => {
     setIsDeleteModalOpen,
     setDeleteConfirmationText,
     handleProfileSubmit,
+    handleLogout,
     handleSelfAccountDelete,
   };
 };
