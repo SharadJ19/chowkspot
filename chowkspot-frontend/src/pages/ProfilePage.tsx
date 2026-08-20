@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   CheckCircle2,
   Shield,
@@ -6,6 +6,9 @@ import {
   Trash2,
   AlertTriangle,
   LogOut,
+  X,
+  MapPin,
+  Clock,
 } from 'lucide-react';
 import { useProfileForm } from '@/modules/users/hooks/useProfileForm';
 import { Input } from '@/components/ui/Input/Input';
@@ -13,6 +16,7 @@ import { Button } from '@/components/ui/Button/Button';
 import { Badge } from '@/components/ui/Badge/Badge';
 import { Modal } from '@/components/ui/Modal/Modal';
 import { AvatarUploader } from '@/components/ui/AvatarUploader/AvatarUploader';
+import { Autocomplete } from '@/components/ui/Autocomplete/Autocomplete';
 import { APP_CONSTANTS } from '@/config/constants';
 import styles from './ProfilePage.module.css';
 
@@ -30,7 +34,10 @@ export const ProfilePage: React.FC = () => {
     rateType,
     baseRate,
     paymentIdentifier,
+    isAvailable,
+    serviceCities,
     isSaving,
+    isTogglingAvailability,
     isLoggingOut,
     successMessage,
     isDeleteModalOpen,
@@ -46,12 +53,17 @@ export const ProfilePage: React.FC = () => {
     setRateType,
     setBaseRate,
     setPaymentIdentifier,
+    handleAddServiceCity,
+    handleRemoveServiceCity,
+    handleToggleAvailability,
     setIsDeleteModalOpen,
     setDeleteConfirmationText,
     handleProfileSubmit,
     handleLogout,
     handleSelfAccountDelete,
   } = useProfileForm();
+
+  const [selectedAddCity, setSelectedAddCity] = useState('');
 
   return (
     <div className={`container ${styles.profileContainer}`}>
@@ -93,6 +105,47 @@ export const ProfilePage: React.FC = () => {
           </div>
         )}
 
+        {isWorker && (
+          <div className={styles.availabilityCard}>
+            <div className={styles.availabilityTextGroup}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <Clock
+                  size={16}
+                  style={{
+                    color: isAvailable ? 'var(--color-success)' : 'var(--color-error)',
+                  }}
+                />
+                <span className={styles.availabilityTitle}>
+                  Dispatch Availability: {isAvailable ? 'AVAILABLE' : 'BUSY'}
+                </span>
+              </div>
+              <span className={styles.availabilityDesc}>
+                {isAvailable
+                  ? 'Your profile is visible and receiving new booking requests.'
+                  : 'Booking requests are paused. You appear as busy in search.'}
+              </span>
+            </div>
+            <div className={styles.toggleButtonGroup}>
+              <button
+                type='button'
+                disabled={isTogglingAvailability}
+                className={`${styles.toggleBtn} ${isAvailable ? styles.toggleBtnActiveAvailable : ''}`}
+                onClick={() => handleToggleAvailability(true)}
+              >
+                Available
+              </button>
+              <button
+                type='button'
+                disabled={isTogglingAvailability}
+                className={`${styles.toggleBtn} ${!isAvailable ? styles.toggleBtnActiveBusy : ''}`}
+                onClick={() => handleToggleAvailability(false)}
+              >
+                Busy
+              </button>
+            </div>
+          </div>
+        )}
+
         <div className={styles.formArea}>
           <label className={styles.formLabel}>Profile Photo / Avatar</label>
           <AvatarUploader
@@ -117,18 +170,16 @@ export const ProfilePage: React.FC = () => {
         />
 
         <div className={styles.formArea}>
-          <label className={styles.formLabel}>Primary Base City</label>
-          <select
+          <Autocomplete
+            label='Primary Base City'
+            options={APP_CONSTANTS.CITIES}
             value={city}
-            onChange={(e) => setCity(e.target.value)}
-            className={styles.selectInput}
-          >
-            {APP_CONSTANTS.CITIES.map((c) => (
-              <option key={c} value={c}>
-                {c}
-              </option>
-            ))}
-          </select>
+            onChange={(selectedCity) => {
+              setCity(selectedCity);
+              if (isWorker) handleAddServiceCity(selectedCity);
+            }}
+            placeholder='Select primary base city...'
+          />
         </div>
 
         {isWorker && (
@@ -150,6 +201,40 @@ export const ProfilePage: React.FC = () => {
                   </option>
                 ))}
               </select>
+            </div>
+
+            <div className={styles.formArea}>
+              <label className={styles.formLabel}>
+                <MapPin size={13} style={{ display: 'inline', marginRight: 4 }} />
+                Active Service Cities Covered ({serviceCities.length} selected)
+              </label>
+              <div className={styles.cityChipContainer}>
+                {serviceCities.map((svcCity) => (
+                  <span key={svcCity} className={styles.cityChip}>
+                    {svcCity}
+                    <button
+                      type='button'
+                      onClick={() => handleRemoveServiceCity(svcCity)}
+                      className={styles.cityChipRemoveBtn}
+                      aria-label={`Remove ${svcCity}`}
+                    >
+                      <X size={12} />
+                    </button>
+                  </span>
+                ))}
+              </div>
+
+              <div style={{ marginTop: '6px' }}>
+                <Autocomplete
+                  options={APP_CONSTANTS.CITIES.filter((c) => !serviceCities.includes(c))}
+                  value={selectedAddCity}
+                  onChange={(newCity) => {
+                    handleAddServiceCity(newCity);
+                    setSelectedAddCity('');
+                  }}
+                  placeholder='+ Add another regional service city...'
+                />
+              </div>
             </div>
 
             <div className={styles.formArea}>
