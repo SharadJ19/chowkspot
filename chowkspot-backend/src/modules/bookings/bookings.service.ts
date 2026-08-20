@@ -34,7 +34,24 @@ export class BookingService {
   };
 
   static async createBooking(userId: string, input: CreateBookingInput) {
-    // 1. Verify worker profile exists
+    // 1. Verify user exists and block ADMIN accounts from booking
+    const [requestingUser] = await db
+      .select({ role: users.role })
+      .from(users)
+      .where(eq(users.id, userId));
+
+    if (!requestingUser) {
+      throw new ApiError(CONSTANTS.HTTP_STATUS.NOT_FOUND, 'User not found');
+    }
+
+    if (requestingUser.role === CONSTANTS.ROLES.ADMIN) {
+      throw new ApiError(
+        CONSTANTS.HTTP_STATUS.FORBIDDEN,
+        'Administrators cannot create service bookings. Please use a regular customer account.',
+      );
+    }
+
+    // 2. Verify worker profile exists
     const [worker] = await db
       .select()
       .from(workerProfiles)
@@ -44,7 +61,7 @@ export class BookingService {
       throw new ApiError(CONSTANTS.HTTP_STATUS.NOT_FOUND, 'Worker profile not found');
     }
 
-    // 2. Prevent user from booking themselves
+    // 3. Prevent user from booking themselves
     if (worker.userId === userId) {
       throw new ApiError(
         CONSTANTS.HTTP_STATUS.BAD_REQUEST,
@@ -52,7 +69,7 @@ export class BookingService {
       );
     }
 
-    // 3. Create booking
+    // 4. Create booking
     const [newBooking] = await db
       .insert(bookings)
       .values({
@@ -72,7 +89,7 @@ export class BookingService {
       );
     }
 
-    // ⚡ REALTIME NOTIFICATION: Notify the worker of new booking request
+    // Realtime notification dispatch to worker
     sendRealtimeNotification(worker.userId, 'NEW_BOOKING_REQUEST', {
       bookingId: newBooking.id,
       userId,
