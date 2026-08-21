@@ -7,7 +7,6 @@ import { Modal } from '@/components/ui/Modal/Modal';
 import { Input } from '@/components/ui/Input/Input';
 import { Button } from '@/components/ui/Button/Button';
 import type { WorkerSearchResult } from '@/types';
-import pagesStyles from '@/pages/Pages.module.css';
 import styles from './BookingRequestModal.module.css';
 
 export interface BookingRequestModalProps {
@@ -115,7 +114,7 @@ export const BookingRequestModal: React.FC<BookingRequestModalProps> = ({
           {bookingError && <div className={styles.bannerError}>{bookingError}</div>}
 
           <Input
-            label='Requested Date & Time'
+            label='Requested Date &amp; Time'
             type='datetime-local'
             value={requestedDate}
             onChange={(e) => setRequestedDate(e.target.value)}
@@ -130,14 +129,14 @@ export const BookingRequestModal: React.FC<BookingRequestModalProps> = ({
             required
           />
 
-          <div className={pagesStyles.formArea}>
-            <label className={pagesStyles.formLabel}>Notes / Task Description</label>
+          <div className={styles.formArea}>
+            <label className={styles.formLabel}>Notes / Task Description</label>
             <textarea
               rows={3}
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
               placeholder='Describe the repair or installation requirements...'
-              className={pagesStyles.textareaInput}
+              className={styles.textareaInput}
             />
           </div>
 
