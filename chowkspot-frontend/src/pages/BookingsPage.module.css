@@ -52,6 +52,7 @@
   gap: var(--spacing-lg);
 }
 
+/* Modal Form Styles */
 .reviewModalContent {
   display: flex;
   flex-direction: column;

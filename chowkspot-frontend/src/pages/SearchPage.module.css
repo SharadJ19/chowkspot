@@ -1,0 +1,37 @@
+.pageContainer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xl);
+}
+
+.sectionTitle {
+  font-size: var(--font-size-2xl);
+  font-weight: 700;
+  color: var(--color-slate-900);
+}
+
+.sectionSubtitle {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  margin-top: var(--spacing-3xs);
+}
+
+.searchLayoutGrid {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: var(--spacing-xl);
+  align-items: start;
+}
+
+@media (max-width: 960px) {
+  .searchLayoutGrid {
+    grid-template-columns: 1fr !important;
+    gap: var(--spacing-md);
+  }
+}
+
+.emptyMessage {
+  text-align: center;
+  padding: var(--spacing-3xl);
+  color: var(--color-text-muted);
+}

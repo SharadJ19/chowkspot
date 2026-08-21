@@ -10,8 +10,7 @@ import { RatingStars } from '@/components/ui/RatingStars/RatingStars';
 import { Button } from '@/components/ui/Button/Button';
 import { Badge } from '@/components/ui/Badge/Badge';
 import { formatDate } from '@/utils/formatDate';
-import styles from './Pages.module.css';
-import modStyles from './BookingsPage.module.css';
+import styles from './BookingsPage.module.css';
 
 export const BookingsPage: React.FC = () => {
   const {
@@ -50,7 +49,7 @@ export const BookingsPage: React.FC = () => {
 
   return (
     <div className={`container ${styles.pageContainer}`}>
-      <div className={styles.flexBetween} style={{ flexWrap: 'wrap', gap: '1rem' }}>
+      <div className={styles.headerRow}>
         <div
           style={{ display: 'flex', alignItems: 'flex-start', gap: 'var(--spacing-md)' }}
         >
@@ -91,7 +90,7 @@ export const BookingsPage: React.FC = () => {
         </Badge>
       </div>
 
-      <div className={modStyles.tabsContainer}>
+      <div className={styles.tabsContainer}>
         {['ALL', 'PENDING', 'ACCEPTED', 'IN_PROGRESS', 'COMPLETED', 'CANCELLED'].map(
           (tab) => {
             const count =
@@ -119,10 +118,7 @@ export const BookingsPage: React.FC = () => {
             : 'You have no service bookings under this filter category.'}
         </p>
       ) : (
-        <div
-          className={modStyles.cardsList}
-          style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-lg)' }}
-        >
+        <div className={styles.cardsList}>
           {paginatedItems.map((item) => (
             <BookingCard
               key={item.booking.id}
@@ -158,13 +154,13 @@ export const BookingsPage: React.FC = () => {
         onClose={() => setReviewBookingId(null)}
         title='Leave a Verified Review'
       >
-        <div className={modStyles.reviewModalContent}>
-          <div className={modStyles.ratingCenterBox}>
+        <div className={styles.reviewModalContent}>
+          <div className={styles.ratingCenterBox}>
             <span className={styles.formLabel}>Rating (1 to 5 Stars)</span>
             <RatingStars rating={rating} interactive onChange={(r) => setRating(r)} />
           </div>
 
-          <div className={styles.formArea}>
+          <div className={styles.reviewModalContent}>
             <label className={styles.formLabel}>Written Review (Verified Booking)</label>
             <textarea
               rows={3}
@@ -187,33 +183,29 @@ export const BookingsPage: React.FC = () => {
         title='Booking Full Summary & Audit'
       >
         {selectedDetailItem && (
-          <div className={modStyles.detailModalContent}>
-            <div className={modStyles.detailHeaderRow}>
+          <div className={styles.detailModalContent}>
+            <div className={styles.detailHeaderRow}>
               <strong>Current Status:</strong>
               <Badge variant='success'>{selectedDetailItem.booking.status}</Badge>
             </div>
             <div>
               <strong>Service Address:</strong>
-              <p className={modStyles.detailSubText}>
-                {selectedDetailItem.booking.address}
-              </p>
+              <p className={styles.detailSubText}>{selectedDetailItem.booking.address}</p>
             </div>
             <div>
               <strong>Requested Slot Timestamp:</strong>
-              <p className={modStyles.detailSubText}>
+              <p className={styles.detailSubText}>
                 {formatDate(selectedDetailItem.booking.requestedDate, 'datetime')}
               </p>
             </div>
             {selectedDetailItem.booking.notes && (
               <div>
                 <strong>Task Instructions / Notes:</strong>
-                <p className={modStyles.detailSubText}>
-                  {selectedDetailItem.booking.notes}
-                </p>
+                <p className={styles.detailSubText}>{selectedDetailItem.booking.notes}</p>
               </div>
             )}
-            <div className={modStyles.detailDivider}>
-              <span className={modStyles.detailIdText}>
+            <div className={styles.detailDivider}>
+              <span className={styles.detailIdText}>
                 Booking ID: {selectedDetailItem.booking.id}
               </span>
             </div>

@@ -9,7 +9,7 @@ import { Pagination } from '@/components/ui/Pagination/Pagination';
 import { Button } from '@/components/ui/Button/Button';
 import { BookingRequestModal } from '@/modules/bookings/components/BookingRequestModal/BookingRequestModal';
 import type { WorkerSearchResult } from '@/types';
-import styles from './Pages.module.css';
+import styles from './SearchPage.module.css';
 import sidebarStyles from '@/modules/workers/components/WorkerSidebarFilters/WorkerSidebarFilters.module.css';
 
 const SKELETON_COUNT = 6;
@@ -80,17 +80,9 @@ export const SearchPage: React.FC = () => {
         </Button>
       </div>
 
-      <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: isDesktop ? '300px 1fr' : '1fr',
-          gap: 'var(--spacing-xl)',
-          alignItems: 'start',
-        }}
-        className='searchLayoutGrid'
-      >
+      <div className={styles.searchLayoutGrid}>
         {showSidebar && (
-          <div className='desktopSidebarWrapper'>
+          <div>
             {!isDesktop && isMobileFilterOpen && (
               <div
                 className={sidebarStyles.mobileBackdrop}
