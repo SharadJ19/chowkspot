@@ -1,75 +1,21 @@
 import React from 'react';
 import { Link } from 'react-router';
 import {
-  ShieldCheck,
   Mail,
   Phone,
   MapPin,
-  Zap,
   HelpCircle,
   FileText,
   Lock,
-  Globe,
-  Clock,
 } from 'lucide-react';
 import { Logo } from '@/components/ui/Logo/Logo';
 import { APP_CONSTANTS } from '@/config/constants';
-import styles from './Footer.module.css';
+import styles from './footer.module.css';
 
 export const Footer: React.FC = () => {
   return (
     <footer className={styles.footer}>
       <div className={`container ${styles.container}`}>
-        <div className={styles.featureBar}>
-          <div className={styles.featureItem}>
-            <div className={styles.featureIconWrapper}>
-              <Zap size={20} />
-            </div>
-            <div>
-              <h4 className={styles.featureTitle}>0% Platform Commission</h4>
-              <p className={styles.featureDesc}>
-                100% direct peer-to-peer settlement via UPI or Cash
-              </p>
-            </div>
-          </div>
-
-          <div className={styles.featureItem}>
-            <div className={styles.featureIconWrapper}>
-              <ShieldCheck size={20} />
-            </div>
-            <div>
-              <h4 className={styles.featureTitle}>Verified Pro Reviews</h4>
-              <p className={styles.featureDesc}>
-                Feedback submitted strictly for completed booking records
-              </p>
-            </div>
-          </div>
-
-          <div className={styles.featureItem}>
-            <div className={styles.featureIconWrapper}>
-              <Clock size={20} />
-            </div>
-            <div>
-              <h4 className={styles.featureTitle}>Real-time Socket Dispatch</h4>
-              <p className={styles.featureDesc}>
-                Instant booking notifications and live status tracking
-              </p>
-            </div>
-          </div>
-
-          <div className={styles.featureItem}>
-            <div className={styles.featureIconWrapper}>
-              <Globe size={20} />
-            </div>
-            <div>
-              <h4 className={styles.featureTitle}>85+ Cities Covered</h4>
-              <p className={styles.featureDesc}>
-                Active skilled trades across Himachal Pradesh & Tricity belt
-              </p>
-            </div>
-          </div>
-        </div>
-
         <div className={styles.mainGrid}>
           <div className={styles.brandColumn}>
             <Link to='/' className={styles.brandLogo} aria-label='ChowkSpot Home'>
@@ -192,3 +138,4 @@ export const Footer: React.FC = () => {
     </footer>
   );
 };
+

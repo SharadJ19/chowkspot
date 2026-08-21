@@ -14,52 +14,6 @@
   gap: var(--spacing-lg);
 }
 
-.featureBar {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: var(--spacing-md);
-  padding-bottom: var(--spacing-xl);
-  border-bottom: 1px solid var(--color-slate-800);
-}
-
-@media (max-width: 768px) {
-  .featureBar {
-    display: none;
-  }
-}
-
-.featureItem {
-  display: flex;
-  align-items: flex-start;
-  gap: var(--spacing-sm);
-}
-
-.featureIconWrapper {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 36px;
-  height: 36px;
-  background-color: var(--color-slate-800);
-  border: 1px solid var(--color-slate-700);
-  border-radius: var(--radius-lg);
-  color: var(--color-primary-400);
-  flex-shrink: 0;
-}
-
-.featureTitle {
-  font-size: var(--font-size-xs);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-slate-100);
-  margin-bottom: 2px;
-}
-
-.featureDesc {
-  font-size: 0.68rem;
-  color: var(--color-slate-400);
-  line-height: var(--line-height-normal);
-}
-
 .mainGrid {
   display: grid;
   grid-template-columns: 2fr repeat(3, 1fr);
