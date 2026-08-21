@@ -29,11 +29,13 @@ export const AuthLayout: React.FC<AuthLayoutProps> = ({ title, subtitle, childre
             with zero middleman fees or escrow holds.&rdquo;
           </p>
           <div className={styles.quoteAuthorRow}>
-            <img
-              src={WORKER_IMAGES.ashokChitkara}
-              alt='Ashok Chitkara'
-              className={styles.authorAvatar}
-            />
+            <div className={styles.avatarWrapper}>
+              <img
+                src={WORKER_IMAGES.ashokChitkara}
+                alt='Ashok Chitkara'
+                className={styles.authorAvatar}
+              />
+            </div>
             <div className={styles.authorMeta}>
               <span className={styles.authorName}>Ashok Chitkara</span>
               <span className={styles.authorRole}>Master Plumber • Chandigarh Hub</span>
