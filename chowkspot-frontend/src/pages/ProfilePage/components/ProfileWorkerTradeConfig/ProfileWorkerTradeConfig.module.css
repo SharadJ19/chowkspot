@@ -1,0 +1,40 @@
+.formTitle {
+  font-size: var(--font-size-lg);
+  font-weight: 700;
+  color: var(--color-slate-900);
+  border-bottom: 1px solid var(--color-border);
+  padding-bottom: var(--spacing-xs);
+  margin-top: var(--spacing-md);
+}
+
+.formArea {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2xs);
+}
+
+.formLabel {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-slate-700);
+}
+
+.selectInput,
+.textareaInput {
+  width: 100%;
+  padding: 0.625rem 0.875rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border-strong);
+  font-family: var(--font-sans);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-main);
+  background-color: var(--color-bg-surface);
+  transition: var(--transition-fast);
+}
+
+.selectInput:focus,
+.textareaInput:focus {
+  outline: none;
+  border-color: var(--color-primary-500);
+  box-shadow: 0 0 0 3px var(--color-primary-100);
+}

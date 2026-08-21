@@ -1,0 +1,65 @@
+.availabilityCard {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--color-border);
+  background-color: var(--color-slate-50);
+}
+
+.availabilityTextGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.titleRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.availabilityTitle {
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+  color: var(--color-slate-900);
+}
+
+.availabilityDesc {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+}
+
+.toggleButtonGroup {
+  display: flex;
+  gap: 4px;
+  background-color: var(--color-slate-200);
+  padding: 4px;
+  border-radius: var(--radius-full);
+}
+
+.toggleBtn {
+  padding: 0.25rem 0.75rem;
+  font-size: var(--font-size-xs);
+  font-weight: 700;
+  border-radius: var(--radius-full);
+  border: none;
+  cursor: pointer;
+  transition: var(--transition-fast);
+  color: var(--color-slate-600);
+  background: transparent;
+}
+
+.toggleBtnActiveAvailable {
+  background-color: var(--color-status-completed-bg);
+  color: var(--color-status-completed-text);
+  box-shadow: var(--shadow-xs);
+}
+
+.toggleBtnActiveBusy {
+  background-color: var(--color-status-rejected-bg);
+  color: var(--color-status-rejected-text);
+  box-shadow: var(--shadow-xs);
+}

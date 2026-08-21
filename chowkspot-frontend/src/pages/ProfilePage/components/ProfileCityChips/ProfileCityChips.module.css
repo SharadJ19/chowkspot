@@ -1,0 +1,51 @@
+.formArea {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2xs);
+}
+
+.formLabel {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-slate-700);
+}
+
+.cityChipContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: var(--spacing-xs);
+  background-color: var(--color-slate-50);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  min-height: 42px;
+  align-items: center;
+}
+
+.cityChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0.25rem 0.625rem;
+  background-color: var(--color-primary-100);
+  color: var(--color-primary-800);
+  border: 1px solid var(--color-primary-200);
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+}
+
+.cityChipRemoveBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  color: var(--color-primary-700);
+  cursor: pointer;
+  padding: 0;
+}
+
+.cityChipRemoveBtn:hover {
+  color: var(--color-error);
+}
