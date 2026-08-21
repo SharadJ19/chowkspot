@@ -1,0 +1,105 @@
+.stepBody {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  animation: fadeIn 0.2s ease-out;
+}
+
+.stepHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-bottom: var(--spacing-2xs);
+}
+
+.stepSubheading {
+  font-size: 0.65rem;
+  font-weight: 800;
+  color: var(--color-primary-600);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.stepTitle {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--color-slate-900);
+  letter-spacing: -0.01em;
+}
+
+.stepDescription {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  line-height: var(--line-height-normal);
+}
+
+.roleSelectionGrid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  margin-top: 4px;
+}
+
+.roleCard {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-md);
+  background-color: var(--color-bg-surface);
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.roleCard:hover {
+  border-color: var(--color-primary-300);
+  background-color: var(--color-slate-50);
+}
+
+.roleCardActive {
+  border-color: var(--color-primary-600) !important;
+  background-color: var(--color-primary-50) !important;
+  box-shadow: 0 0 0 1px var(--color-primary-600);
+}
+
+.roleIconWrapper {
+  width: 42px;
+  height: 42px;
+  border-radius: var(--radius-lg);
+  background-color: var(--color-primary-100);
+  color: var(--color-primary-700);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.roleInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.roleTitle {
+  font-size: var(--font-size-sm);
+  font-weight: 800;
+  color: var(--color-slate-900);
+}
+
+.roleDescription {
+  font-size: 0.72rem;
+  color: var(--color-slate-600);
+  line-height: 1.35;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

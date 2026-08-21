@@ -1,0 +1,61 @@
+.stepBody {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  animation: fadeIn 0.2s ease-out;
+}
+
+.stepHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-bottom: var(--spacing-2xs);
+}
+
+.stepSubheading {
+  font-size: 0.65rem;
+  font-weight: 800;
+  color: var(--color-primary-600);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.stepTitle {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--color-slate-900);
+  letter-spacing: -0.01em;
+}
+
+.stepDescription {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  line-height: var(--line-height-normal);
+}
+
+.eyeBtn {
+  background: none;
+  border: none;
+  padding: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-slate-400);
+  transition: var(--transition-fast);
+}
+
+.eyeBtn:hover {
+  color: var(--color-primary-600);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

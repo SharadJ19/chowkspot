@@ -1,0 +1,69 @@
+.stepIndicatorList {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  margin-bottom: var(--spacing-xs);
+  padding: 0 var(--spacing-2xs);
+  width: 100%;
+}
+
+.stepItem {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  position: relative;
+  flex: 1;
+}
+
+.stepItem:last-child {
+  flex: 0;
+}
+
+.stepCircle {
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-slate-100);
+  color: var(--color-slate-500);
+  border: 2px solid var(--color-slate-200);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.72rem;
+  font-weight: 800;
+  flex-shrink: 0;
+  transition: var(--transition-normal);
+}
+
+.stepCircleActive {
+  background-color: var(--color-primary-50);
+  border-color: var(--color-primary-600);
+  color: var(--color-primary-700);
+  box-shadow: 0 0 0 3px var(--color-primary-100);
+}
+
+.stepCircleCompleted {
+  background-color: var(--color-primary-600);
+  border-color: var(--color-primary-600);
+  color: #ffffff;
+}
+
+.stepLabel {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--color-slate-400);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.stepLabelActive {
+  color: var(--color-slate-900);
+}
+
+.stepConnector {
+  flex: 1;
+  height: 2px;
+  background-color: var(--color-slate-200);
+  margin: 0 6px;
+}
