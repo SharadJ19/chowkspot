@@ -48,7 +48,7 @@ export interface CreateWorkerProfileInput {
   rateType: RateType;
   baseRate: string;
   serviceCities: string[];
-  paymentIdentifier?: string;
+  paymentIdentifier?: string | undefined;
 }
 
 export interface WorkerSearchQueryParams {
