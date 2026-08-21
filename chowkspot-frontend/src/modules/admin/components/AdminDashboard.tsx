@@ -1,17 +1,5 @@
 import React, { useState } from 'react';
-import {
-  Users,
-  Wrench,
-  CalendarCheck,
-  Star,
-  Activity,
-  Trash2,
-  ShieldCheck,
-  Search,
-  CheckCircle2,
-  XCircle,
-  AlertTriangle,
-} from 'lucide-react';
+import { Activity, Search } from 'lucide-react';
 import {
   useQuery,
   useMutation,
@@ -25,12 +13,14 @@ import { Spinner } from '@/components/ui/Spinner/Spinner';
 import { Badge } from '@/components/ui/Badge/Badge';
 import { Button } from '@/components/ui/Button/Button';
 import { Input } from '@/components/ui/Input/Input';
-import { Avatar } from '@/components/ui/Avatar/Avatar';
-import { Modal } from '@/components/ui/Modal/Modal';
 import { Pagination } from '@/components/ui/Pagination/Pagination';
+
+import { AdminStatsGrid } from './AdminStatsGrid/AdminStatsGrid';
+import { AdminUserTable } from './AdminUserTable/AdminUserTable';
+import { AdminDeleteModal } from './AdminDeleteModal/AdminDeleteModal';
+
 import type { AuthUser } from '@/types';
 import styles from './AdminDashboard.module.css';
-import modStyles from './AdminDashboard.module.css';
 
 const USERS_PER_PAGE = 10;
 
@@ -39,7 +29,7 @@ export const AdminDashboard: React.FC = () => {
   const [userToDelete, setUserToDelete] = useState<AuthUser | null>(null);
 
   const [searchQuery, setSearchQuery] = useState('');
-  const debouncedSearch = useDebounce(searchQuery, 300); // Debounces typing by 300ms
+  const debouncedSearch = useDebounce(searchQuery, 300);
   const [roleFilter, setRoleFilter] = useState<'ALL' | 'USER' | 'WORKER' | 'ADMIN'>(
     'ALL',
   );
@@ -69,7 +59,7 @@ export const AdminDashboard: React.FC = () => {
         }
       );
     },
-    placeholderData: keepPreviousData, // 👈 Keeps previous data stable during background typing fetch
+    placeholderData: keepPreviousData,
   });
 
   const usersList = usersData?.users || [];
@@ -107,7 +97,7 @@ export const AdminDashboard: React.FC = () => {
 
   if (statsLoading) {
     return (
-      <div className={modStyles.centerLoading}>
+      <div className={styles.centerLoading}>
         <Spinner size='lg' />
       </div>
     );
@@ -128,59 +118,7 @@ export const AdminDashboard: React.FC = () => {
         </Badge>
       </div>
 
-      <div className={styles.statsGrid}>
-        <div className={styles.statCard}>
-          <div className={styles.statHeader}>
-            <span className={styles.statLabel}>Total Customers</span>
-            <div className={styles.iconWrapper}>
-              <Users size={20} />
-            </div>
-          </div>
-          <span className={styles.statValue}>{stats?.totalUsers ?? 0}</span>
-          <span className={styles.statFooter}>
-            <ShieldCheck size={12} /> Verified Accounts
-          </span>
-        </div>
-
-        <div className={styles.statCard}>
-          <div className={styles.statHeader}>
-            <span className={styles.statLabel}>Skilled Workers</span>
-            <div className={styles.iconWrapper}>
-              <Wrench size={20} />
-            </div>
-          </div>
-          <span className={styles.statValue}>{stats?.totalWorkers ?? 0}</span>
-          <span className={styles.statFooter}>
-            <ShieldCheck size={12} /> Active Regional Hubs
-          </span>
-        </div>
-
-        <div className={styles.statCard}>
-          <div className={styles.statHeader}>
-            <span className={styles.statLabel}>Total Bookings</span>
-            <div className={styles.iconWrapper}>
-              <CalendarCheck size={20} />
-            </div>
-          </div>
-          <span className={styles.statValue}>{stats?.totalBookings ?? 0}</span>
-          <span className={styles.statFooter}>
-            <ShieldCheck size={12} /> {stats?.completedBookings ?? 0} Completed
-          </span>
-        </div>
-
-        <div className={styles.statCard}>
-          <div className={styles.statHeader}>
-            <span className={styles.statLabel}>Verified Reviews</span>
-            <div className={styles.iconWrapper}>
-              <Star size={20} />
-            </div>
-          </div>
-          <span className={styles.statValue}>{stats?.totalReviews ?? 0}</span>
-          <span className={styles.statFooter}>
-            <ShieldCheck size={12} /> Strict Booking Guard
-          </span>
-        </div>
-      </div>
+      <AdminStatsGrid stats={stats} />
 
       <div className={styles.panel}>
         <div className={styles.panelHeaderRow}>
@@ -220,86 +158,11 @@ export const AdminDashboard: React.FC = () => {
           ))}
         </div>
 
-        <div className={styles.tableWrapper}>
-          <table className={styles.table}>
-            <thead>
-              <tr>
-                <th>Account</th>
-                <th>Email</th>
-                <th>Phone</th>
-                <th>City</th>
-                <th>Role</th>
-                <th>Status</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {usersLoading ? (
-                <tr>
-                  <td colSpan={7} className={modStyles.tableEmptyCell}>
-                    <Spinner size='sm' /> Searching directory...
-                  </td>
-                </tr>
-              ) : usersList.length === 0 ? (
-                <tr>
-                  <td colSpan={7} className={modStyles.tableEmptyCell}>
-                    No accounts match your filter criteria.
-                  </td>
-                </tr>
-              ) : (
-                usersList.map((u) => (
-                  <tr key={u.id}>
-                    <td>
-                      <div className={styles.userCell}>
-                        <Avatar name={u.name} src={u.avatarUrl} size='sm' />
-                        <span className={styles.userNameText}>{u.name}</span>
-                      </div>
-                    </td>
-                    <td>{u.email}</td>
-                    <td>{u.phone}</td>
-                    <td>{u.city}</td>
-                    <td>
-                      <Badge
-                        variant={
-                          u.role === 'ADMIN'
-                            ? 'danger'
-                            : u.role === 'WORKER'
-                              ? 'primary'
-                              : 'secondary'
-                        }
-                      >
-                        {u.role}
-                      </Badge>
-                    </td>
-                    <td>
-                      {u.isVerified ? (
-                        <span className={styles.verifiedTag}>
-                          <CheckCircle2 size={13} /> Verified
-                        </span>
-                      ) : (
-                        <span className={styles.unverifiedTag}>
-                          <XCircle size={13} /> Unverified
-                        </span>
-                      )}
-                    </td>
-                    <td>
-                      {u.role !== 'ADMIN' && (
-                        <Button
-                          variant='danger'
-                          size='sm'
-                          onClick={() => setUserToDelete(u)}
-                        >
-                          <Trash2 size={13} />
-                          <span>Remove</span>
-                        </Button>
-                      )}
-                    </td>
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
-        </div>
+        <AdminUserTable
+          users={usersList}
+          isLoading={usersLoading}
+          onSelectDelete={(user) => setUserToDelete(user)}
+        />
 
         <Pagination
           currentPage={pagination.page}
@@ -308,41 +171,13 @@ export const AdminDashboard: React.FC = () => {
         />
       </div>
 
-      <Modal
+      <AdminDeleteModal
+        userToDelete={userToDelete}
         isOpen={!!userToDelete}
+        isPending={deleteUserMutation.isPending}
         onClose={() => setUserToDelete(null)}
-        title='Confirm User Account Removal'
-      >
-        {userToDelete && (
-          <div className={modStyles.modalContent}>
-            <div className={modStyles.warningBox}>
-              <AlertTriangle size={24} />
-              <p className={modStyles.warningText}>
-                Warning: Removing <strong>{userToDelete.name}</strong> (
-                {userToDelete.email}) will permanently delete their profile, active worker
-                listings, bookings, and submitted reviews.
-              </p>
-            </div>
-
-            <div className={modStyles.modalButtonRow}>
-              <Button
-                variant='outline'
-                onClick={() => setUserToDelete(null)}
-                disabled={deleteUserMutation.isPending}
-              >
-                Cancel
-              </Button>
-              <Button
-                variant='danger'
-                isLoading={deleteUserMutation.isPending}
-                onClick={() => deleteUserMutation.mutate(userToDelete.id)}
-              >
-                Permanently Remove
-              </Button>
-            </div>
-          </div>
-        )}
-      </Modal>
+        onConfirm={(userId) => deleteUserMutation.mutate(userId)}
+      />
     </div>
   );
 };
