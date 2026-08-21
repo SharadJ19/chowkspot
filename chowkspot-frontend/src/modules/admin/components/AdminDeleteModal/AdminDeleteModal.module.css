@@ -1,0 +1,27 @@
+.modalContent {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.warningBox {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm);
+  background-color: var(--color-status-rejected-bg);
+  color: var(--color-status-rejected-text);
+  border-radius: var(--radius-md);
+}
+
+.warningText {
+  font-size: var(--font-size-xs);
+  margin: 0;
+}
+
+.modalButtonRow {
+  display: flex;
+  gap: var(--spacing-sm);
+  justify-content: flex-end;
+  margin-top: var(--spacing-xs);
+}
