@@ -16,7 +16,7 @@ import {
 } from 'lucide-react';
 import { APP_CONSTANTS } from '@/config/constants';
 import { CATEGORY_IMAGES } from '@/assets/images/categories';
-import styles from '@/pages/Pages.module.css';
+import styles from './CategoryGrid.module.css';
 
 const CATEGORY_MEDIA: Record<string, { icon: React.ReactNode; image: string }> = {
   Electrician: { icon: <Zap size={18} />, image: CATEGORY_IMAGES.electrician },
@@ -83,7 +83,7 @@ export const CategoryGrid: React.FC = () => {
               <div className={styles.categoryCardContent}>
                 <span className={styles.categoryTitle}>{cat}</span>
                 <div className={styles.categoryActionRow}>
-                  <span className={styles.categoryExploreText}>Explore Providers</span>
+                  <span>Explore Providers</span>
                   <ArrowRight size={14} className={styles.arrowIcon} />
                 </div>
               </div>

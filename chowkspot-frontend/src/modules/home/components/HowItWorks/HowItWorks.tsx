@@ -7,7 +7,7 @@ import {
   Clock,
   CheckCircle2,
 } from 'lucide-react';
-import styles from '@/pages/Pages.module.css';
+import styles from './HowItWorks.module.css';
 
 export const HowItWorks: React.FC = () => {
   return (

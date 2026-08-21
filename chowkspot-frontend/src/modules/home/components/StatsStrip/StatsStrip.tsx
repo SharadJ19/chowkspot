@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from '@/pages/Pages.module.css';
+import styles from './StatsStrip.module.css';
 
 export const StatsStrip: React.FC = () => {
   return (

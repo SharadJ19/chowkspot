@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router';
 import { Search, UserPlus, Sparkle, CheckCircle, Zap, MapPin, Star } from 'lucide-react';
 import { Button } from '@/components/ui/Button/Button';
 import { WORKER_IMAGES } from '@/assets/images/workers';
-import styles from '@/pages/Pages.module.css';
+import styles from './HeroSection.module.css';
 
 const FEATURED_WORKER = {
   name: 'Safal Varadhan',
@@ -31,7 +31,7 @@ export const HeroSection: React.FC = () => {
         </h1>
         <p className={styles.heroSubtitle}>
           Find trusted electricians, plumbers, carpenters, and technicians across Himachal
-          & Tricity with transparent rates and zero intermediary fees.
+          &amp; Tricity with transparent rates and zero intermediary fees.
         </p>
         <div className={styles.heroActions}>
           <Button size='lg' onClick={() => navigate('/search')}>

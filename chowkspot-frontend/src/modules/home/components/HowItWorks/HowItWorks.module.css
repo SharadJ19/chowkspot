@@ -1,0 +1,131 @@
+.howItWorksSection {
+  background-color: var(--color-bg-surface);
+  border-top: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+  padding: var(--spacing-2xl) 0;
+}
+
+.sectionBlock {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xl);
+}
+
+.sectionHeader {
+  text-align: center;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.sectionTitle {
+  font-size: var(--font-size-2xl);
+  font-weight: 700;
+  color: var(--color-slate-900);
+}
+
+.sectionSubtitle {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  margin-top: var(--spacing-3xs);
+}
+
+.stepsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--spacing-md);
+}
+
+.stepCard {
+  position: relative;
+  padding: var(--spacing-lg);
+  background-color: var(--color-bg-app);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  gap: var(--spacing-xs);
+  transition: var(--transition-fast);
+}
+
+.stepCard:hover {
+  border-color: var(--color-primary-300);
+  background-color: var(--color-bg-surface);
+  box-shadow: var(--shadow-sm);
+  transform: translateY(-2px);
+}
+
+.stepNumberBadge {
+  position: absolute;
+  top: var(--spacing-md);
+  right: var(--spacing-md);
+  font-size: var(--font-size-xs);
+  font-weight: 800;
+  color: var(--color-slate-400);
+  background: var(--color-slate-100);
+  padding: 0.15rem 0.5rem;
+  border-radius: var(--radius-full);
+}
+
+.stepIconWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  background-color: var(--color-primary-100);
+  color: var(--color-primary-700);
+  border-radius: var(--radius-lg);
+  margin-bottom: var(--spacing-3xs);
+}
+
+.stepTitle {
+  font-size: var(--font-size-base);
+  font-weight: 700;
+  color: var(--color-slate-900);
+}
+
+.stepDescription {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  line-height: var(--line-height-relaxed);
+}
+
+.valueGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--spacing-md);
+  margin-top: var(--spacing-md);
+  padding-top: var(--spacing-lg);
+  border-top: 1px dashed var(--color-border-strong);
+}
+
+.valueCard {
+  padding: var(--spacing-md);
+  border-radius: var(--radius-lg);
+  background-color: var(--color-primary-50);
+  border: 1px solid var(--color-primary-200);
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-sm);
+}
+
+.valueIcon {
+  color: var(--color-primary-600);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.valueTitle {
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+  color: var(--color-slate-900);
+}
+
+.valueDesc {
+  font-size: var(--font-size-xs);
+  color: var(--color-slate-600);
+  line-height: var(--line-height-normal);
+  margin-top: 2px;
+}

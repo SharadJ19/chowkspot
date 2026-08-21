@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router';
 import { UserPlus } from 'lucide-react';
 import { Button } from '@/components/ui/Button/Button';
-import styles from '@/pages/Pages.module.css';
+import styles from './CtaBanner.module.css';
 
 export const CtaBanner: React.FC = () => {
   const navigate = useNavigate();
