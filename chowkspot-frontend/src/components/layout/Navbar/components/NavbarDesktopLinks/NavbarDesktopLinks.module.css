@@ -1,0 +1,34 @@
+.navLinks {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-slate-600);
+  padding: 0.5rem 0.875rem;
+  border-radius: var(--radius-md);
+  transition: var(--transition-fast);
+  text-decoration: none;
+}
+
+.link:hover {
+  color: var(--color-primary-700);
+  background-color: var(--color-bg-surface-hover);
+}
+
+.activeLink {
+  color: var(--color-primary-700);
+  background-color: var(--color-primary-50);
+  font-weight: var(--font-weight-semibold);
+}
+
+.adminLink {
+  color: var(--color-error) !important;
+  font-weight: var(--font-weight-bold);
+}

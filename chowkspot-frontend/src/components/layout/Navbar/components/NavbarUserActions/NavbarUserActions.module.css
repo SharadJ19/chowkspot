@@ -1,0 +1,43 @@
+.authGroup {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.userMenu {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--radius-lg);
+  transition: var(--transition-fast);
+  text-decoration: none;
+  background-color: var(--color-slate-50);
+  border: 1px solid var(--color-border);
+}
+
+.userMenu:hover {
+  background-color: var(--color-bg-surface-hover);
+  border-color: var(--color-primary-200);
+}
+
+.userInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.userName {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-slate-900);
+  line-height: 1.2;
+}
+
+.userRole {
+  font-size: 0.62rem;
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-primary-700);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
