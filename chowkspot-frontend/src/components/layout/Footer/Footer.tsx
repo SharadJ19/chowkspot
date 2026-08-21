@@ -1,13 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router';
-import {
-  Mail,
-  Phone,
-  MapPin,
-  HelpCircle,
-  FileText,
-  Lock,
-} from 'lucide-react';
+import { Mail, Phone, MapPin, HelpCircle, FileText, Lock } from 'lucide-react';
 import { Logo } from '@/components/ui/Logo/Logo';
 import { APP_CONSTANTS } from '@/config/constants';
 import styles from './Footer.module.css';
@@ -138,4 +131,3 @@ export const Footer: React.FC = () => {
     </footer>
   );
 };
-
