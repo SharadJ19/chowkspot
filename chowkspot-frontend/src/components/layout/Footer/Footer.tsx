@@ -10,7 +10,7 @@ import {
 } from 'lucide-react';
 import { Logo } from '@/components/ui/Logo/Logo';
 import { APP_CONSTANTS } from '@/config/constants';
-import styles from './footer.module.css';
+import styles from './Footer.module.css';
 
 export const Footer: React.FC = () => {
   return (
