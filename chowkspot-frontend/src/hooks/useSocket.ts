@@ -1,5 +1,5 @@
 import { useContext, useEffect } from 'react';
-import { SocketContext } from '@/context/socketContext';
+import { SocketContext } from '@/context/socket.context';
 
 export const useSocket = (eventName?: string, callback?: (data: unknown) => void) => {
   const context = useContext(SocketContext);

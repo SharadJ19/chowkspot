@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import type { AuthUser, LoginInput, RegisterInput } from '@/types';
 import { fetchClient, setAccessToken } from '@/lib/fetchClient';
 import { initializeSocket, disconnectSocket } from '@/lib/socket';
-import { AuthContext } from './authContext';
+import { AuthContext } from './auth.context';
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<AuthUser | null>(null);

@@ -4,7 +4,7 @@ import { toast } from 'sonner';
 import { useQueryClient } from '@tanstack/react-query'; // 👈 Import useQueryClient
 import { getSocket } from '@/lib/socket';
 import { useAuth } from '@/hooks/useAuth';
-import { SocketContext } from './socketContext';
+import { SocketContext } from './socket.context';
 import { BOOKINGS_QUERY_KEY } from '@/modules/bookings/hooks/useBookingQueries';
 
 export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
