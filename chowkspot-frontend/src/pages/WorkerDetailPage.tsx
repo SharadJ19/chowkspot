@@ -8,9 +8,10 @@ import { ReviewList } from '@/modules/reviews/components/ReviewList/ReviewList';
 import { Avatar } from '@/components/ui/Avatar/Avatar';
 import { Badge } from '@/components/ui/Badge/Badge';
 import { RatingStars } from '@/components/ui/RatingStars/RatingStars';
-import { Spinner } from '@/components/ui/Spinner/Spinner';
 import { Button } from '@/components/ui/Button/Button';
 import { formatCurrency } from '@/utils/formatCurrency';
+import { WorkerDetailPageSkeleton } from './WorkerDetailPageSkeleton';
+import skeletonStyles from '@/modules/workers/components/WorkerCard/WorkerCardSkeleton.module.css';
 import styles from './WorkerDetailPage.module.css';
 
 export const WorkerDetailPage: React.FC = () => {
@@ -21,11 +22,7 @@ export const WorkerDetailPage: React.FC = () => {
   const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
 
   if (isLoading) {
-    return (
-      <div className={styles.centerLoading}>
-        <Spinner size='lg' />
-      </div>
-    );
+    return <WorkerDetailPageSkeleton />;
   }
 
   if (!worker) {
@@ -124,7 +121,52 @@ export const WorkerDetailPage: React.FC = () => {
       <div className={styles.contentSection}>
         <h3 className={styles.sectionHeading}>Verified Customer Reviews</h3>
         {reviewsQuery.isLoading ? (
-          <Spinner />
+          <div
+            style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-sm)' }}
+          >
+            {Array.from({ length: 2 }).map((_, idx) => (
+              <div
+                key={`inline-skel-${idx}`}
+                style={{
+                  padding: 'var(--spacing-sm)',
+                  backgroundColor: 'var(--color-bg-surface)',
+                  border: '1px solid var(--color-border)',
+                  borderRadius: 'var(--radius-md)',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '8px',
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <div
+                    className={skeletonStyles.shimmer}
+                    style={{
+                      width: '2rem',
+                      height: '2rem',
+                      borderRadius: 'var(--radius-full)',
+                      flexShrink: 0,
+                    }}
+                  />
+                  <div
+                    className={skeletonStyles.shimmer}
+                    style={{
+                      width: '110px',
+                      height: '14px',
+                      borderRadius: 'var(--radius-sm)',
+                    }}
+                  />
+                </div>
+                <div
+                  className={skeletonStyles.shimmer}
+                  style={{
+                    width: '90%',
+                    height: '12px',
+                    borderRadius: 'var(--radius-sm)',
+                  }}
+                />
+              </div>
+            ))}
+          </div>
         ) : (
           <ReviewList reviews={reviewsQuery.data || []} />
         )}

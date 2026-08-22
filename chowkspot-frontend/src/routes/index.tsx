@@ -4,6 +4,11 @@ import { MainLayout } from '@/components/layout/MainLayout';
 import { RouteGuard } from '@/components/guards/RouteGuard';
 import { Spinner } from '@/components/ui/Spinner/Spinner';
 
+// Skeleton Loading
+import { SearchPageSkeleton } from '@/pages/SearchPageSkeleton';
+import { ProfilePageSkeleton } from '@/pages/ProfilePageSkeleton';
+import { WorkerDetailPageSkeleton } from '@/pages/WorkerDetailPageSkeleton';
+
 // Route-level code-split components
 const HomePage = lazy(() =>
   import('@/pages/HomePage').then((m) => ({ default: m.HomePage })),
@@ -42,7 +47,7 @@ const NotFoundPage = lazy(() =>
   import('@/pages/NotFoundPage').then((m) => ({ default: m.NotFoundPage })),
 );
 
-const RouteLoadingFallback = () => (
+const GenericFallback = () => (
   <div
     style={{
       display: 'flex',
@@ -57,38 +62,120 @@ const RouteLoadingFallback = () => (
 
 export const AppRouter = () => {
   return (
-    <Suspense fallback={<RouteLoadingFallback />}>
-      <Routes>
-        <Route element={<MainLayout />}>
-          {/* Public Routes */}
-          <Route path='/' element={<HomePage />} />
-          <Route path='/search' element={<SearchPage />} />
-          <Route path='/worker/:id' element={<WorkerDetailPage />} />
-          <Route path='/login' element={<LoginPage />} />
-          <Route path='/register' element={<RegisterPage />} />
-          <Route path='/verify-email' element={<VerifyEmailPage />} />
-          <Route path='/forgot-password' element={<ForgotPasswordPage />} />
-          <Route path='/reset-password' element={<ResetPasswordPage />} />
+    <Routes>
+      <Route element={<MainLayout />}>
+        {/* Public Routes */}
+        <Route
+          path='/'
+          element={
+            <Suspense fallback={<GenericFallback />}>
+              <HomePage />
+            </Suspense>
+          }
+        />
+        <Route
+          path='/search'
+          element={
+            <Suspense fallback={<SearchPageSkeleton />}>
+              <SearchPage />
+            </Suspense>
+          }
+        />
+        <Route
+          path='/worker/:id'
+          element={
+            <Suspense fallback={<WorkerDetailPageSkeleton />}>
+              <WorkerDetailPage />
+            </Suspense>
+          }
+        />
+        <Route
+          path='/login'
+          element={
+            <Suspense fallback={<GenericFallback />}>
+              <LoginPage />
+            </Suspense>
+          }
+        />
+        <Route
+          path='/register'
+          element={
+            <Suspense fallback={<GenericFallback />}>
+              <RegisterPage />
+            </Suspense>
+          }
+        />
+        <Route
+          path='/verify-email'
+          element={
+            <Suspense fallback={<GenericFallback />}>
+              <VerifyEmailPage />
+            </Suspense>
+          }
+        />
+        <Route
+          path='/forgot-password'
+          element={
+            <Suspense fallback={<GenericFallback />}>
+              <ForgotPasswordPage />
+            </Suspense>
+          }
+        />
+        <Route
+          path='/reset-password'
+          element={
+            <Suspense fallback={<GenericFallback />}>
+              <ResetPasswordPage />
+            </Suspense>
+          }
+        />
 
-          {/* Customer & Worker Booking Management Route */}
-          <Route element={<RouteGuard allowedRoles={['USER', 'WORKER']} />}>
-            <Route path='/bookings' element={<BookingsPage />} />
-          </Route>
-
-          {/* General Authenticated Profile Management */}
-          <Route element={<RouteGuard />}>
-            <Route path='/profile' element={<ProfilePage />} />
-          </Route>
-
-          {/* Admin Role-Guarded Route */}
-          <Route element={<RouteGuard allowedRoles={['ADMIN']} />}>
-            <Route path='/admin' element={<AdminPage />} />
-          </Route>
-
-          {/* 404 Fallback */}
-          <Route path='*' element={<NotFoundPage />} />
+        {/* Customer & Worker Booking Management Route */}
+        <Route element={<RouteGuard allowedRoles={['USER', 'WORKER']} />}>
+          <Route
+            path='/bookings'
+            element={
+              <Suspense fallback={<GenericFallback />}>
+                <BookingsPage />
+              </Suspense>
+            }
+          />
         </Route>
-      </Routes>
-    </Suspense>
+
+        {/* General Authenticated Profile Management */}
+        <Route element={<RouteGuard />}>
+          <Route
+            path='/profile'
+            element={
+              <Suspense fallback={<ProfilePageSkeleton />}>
+                <ProfilePage />
+              </Suspense>
+            }
+          />
+        </Route>
+
+        {/* Admin Role-Guarded Route */}
+        <Route element={<RouteGuard allowedRoles={['ADMIN']} />}>
+          <Route
+            path='/admin'
+            element={
+              <Suspense fallback={<GenericFallback />}>
+                <AdminPage />
+              </Suspense>
+            }
+          />
+        </Route>
+
+        {/* 404 Fallback */}
+        <Route
+          path='*'
+          element={
+            <Suspense fallback={<GenericFallback />}>
+              <NotFoundPage />
+            </Suspense>
+          }
+        />
+      </Route>
+    </Routes>
   );
 };
