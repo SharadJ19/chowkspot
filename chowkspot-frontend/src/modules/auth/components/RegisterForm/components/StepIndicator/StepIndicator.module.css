@@ -67,3 +67,13 @@
   background-color: var(--color-slate-200);
   margin: 0 6px;
 }
+
+@media (max-width: 480px) {
+  .stepLabel {
+    display: none;
+  }
+
+  .stepConnector {
+    margin: 0 4px;
+  }
+}
