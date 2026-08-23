@@ -5,63 +5,73 @@ import { RouteGuard } from '@/components/guards/RouteGuard';
 import { Spinner } from '@/components/ui/Spinner/Spinner';
 
 // Route Skeletons
-import { SearchPageSkeleton } from '@/pages/SearchPageSkeleton';
-import { ProfilePageSkeleton } from '@/pages/ProfilePageSkeleton';
-import { WorkerDetailPageSkeleton } from '@/pages/WorkerDetailPageSkeleton';
+import { SearchPageSkeleton } from '@/pages/search/SearchPageSkeleton';
+import { ProfilePageSkeleton } from '@/pages/profile/ProfilePageSkeleton';
+import { WorkerDetailPageSkeleton } from '@/pages/workers/WorkerDetailPageSkeleton';
 
 // --- Public Marketplace & Discovery ---
 const HomePage = lazy(() =>
-  import('@/pages/HomePage').then((m) => ({ default: m.HomePage })),
+  import('@/pages/home/HomePage').then((m) => ({ default: m.HomePage })),
 );
 const SearchPage = lazy(() =>
-  import('@/pages/SearchPage').then((m) => ({ default: m.SearchPage })),
+  import('@/pages/search/SearchPage').then((m) => ({ default: m.SearchPage })),
 );
 const WorkerDetailPage = lazy(() =>
-  import('@/pages/WorkerDetailPage').then((m) => ({ default: m.WorkerDetailPage })),
+  import('@/pages/workers/WorkerDetailPage').then((m) => ({
+    default: m.WorkerDetailPage,
+  })),
 );
 
 // --- Public Authentication & Account Recovery ---
 const LoginPage = lazy(() =>
-  import('@/pages/LoginPage').then((m) => ({ default: m.LoginPage })),
+  import('@/pages/auth/LoginPage').then((m) => ({ default: m.LoginPage })),
 );
 const RegisterPage = lazy(() =>
-  import('@/pages/RegisterPage').then((m) => ({ default: m.RegisterPage })),
+  import('@/pages/auth/RegisterPage').then((m) => ({ default: m.RegisterPage })),
 );
 const VerifyEmailPage = lazy(() =>
-  import('@/pages/VerifyEmailPage').then((m) => ({ default: m.VerifyEmailPage })),
+  import('@/pages/auth/VerifyEmailPage').then((m) => ({ default: m.VerifyEmailPage })),
 );
 const ForgotPasswordPage = lazy(() =>
-  import('@/pages/ForgotPasswordPage').then((m) => ({ default: m.ForgotPasswordPage })),
+  import('@/pages/auth/ForgotPasswordPage').then((m) => ({
+    default: m.ForgotPasswordPage,
+  })),
 );
 const ResetPasswordPage = lazy(() =>
-  import('@/pages/ResetPasswordPage').then((m) => ({ default: m.ResetPasswordPage })),
+  import('@/pages/auth/ResetPasswordPage').then((m) => ({
+    default: m.ResetPasswordPage,
+  })),
 );
 
 // --- Public Legal & Support ---
 const TermsOfServicePage = lazy(() =>
-  import('@/pages/TermsOfServicePage').then((m) => ({ default: m.TermsOfServicePage })),
+  import('@/pages/static/TermsOfServicePage').then((m) => ({
+    default: m.TermsOfServicePage,
+  })),
 );
 const PrivacyPolicyPage = lazy(() =>
-  import('@/pages/PrivacyPolicyPage').then((m) => ({ default: m.PrivacyPolicyPage })),
+  import('@/pages/static/PrivacyPolicyPage').then((m) => ({
+    default: m.PrivacyPolicyPage,
+  })),
 );
 const HelpCenterPage = lazy(() =>
-  import('@/pages/HelpCenterPage').then((m) => ({ default: m.HelpCenterPage })),
+  import('@/pages/static/HelpCenterPage').then((m) => ({ default: m.HelpCenterPage })),
 );
 
 // --- Authenticated & Role-Guarded ---
 const BookingsPage = lazy(() =>
-  import('@/pages/BookingsPage').then((m) => ({ default: m.BookingsPage })),
+  import('@/pages/bookings/BookingsPage').then((m) => ({ default: m.BookingsPage })),
 );
 const ProfilePage = lazy(() =>
-  import('@/pages/ProfilePage').then((m) => ({ default: m.ProfilePage })),
+  import('@/pages/profile/ProfilePage').then((m) => ({ default: m.ProfilePage })),
 );
 const AdminPage = lazy(() =>
-  import('@/pages/AdminPage').then((m) => ({ default: m.AdminPage })),
+  import('@/pages/admin/AdminPage').then((m) => ({ default: m.AdminPage })),
 );
 
 // --- Fallback ---
 const NotFoundPage = lazy(() =>
-  import('@/pages/NotFoundPage').then((m) => ({ default: m.NotFoundPage })),
+  import('@/pages/not-found/NotFoundPage').then((m) => ({ default: m.NotFoundPage })),
 );
 
 const GenericFallback = () => (
