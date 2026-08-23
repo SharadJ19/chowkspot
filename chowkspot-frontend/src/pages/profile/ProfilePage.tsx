@@ -8,9 +8,9 @@ import { AvatarUploader } from '@/components/ui/AvatarUploader/AvatarUploader';
 import { Autocomplete } from '@/components/ui/Autocomplete/Autocomplete';
 import { APP_CONSTANTS } from '@/config/constants';
 
-import { ProfileAvailabilityCard } from './ProfilePage/components/ProfileAvailabilityCard/ProfileAvailabilityCard';
-import { ProfileWorkerTradeConfig } from './ProfilePage/components/ProfileWorkerTradeConfig/ProfileWorkerTradeConfig';
-import { ProfileAccountActions } from './ProfilePage/components/ProfileAccountActions/ProfileAccountActions';
+import { ProfileAvailabilityCard } from './components/ProfileAvailabilityCard/ProfileAvailabilityCard';
+import { ProfileWorkerTradeConfig } from './components/ProfileWorkerTradeConfig/ProfileWorkerTradeConfig';
+import { ProfileAccountActions } from './components/ProfileAccountActions/ProfileAccountActions';
 
 import styles from './ProfilePage.module.css';
 
