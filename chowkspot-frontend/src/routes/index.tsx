@@ -4,12 +4,12 @@ import { MainLayout } from '@/components/layout/MainLayout';
 import { RouteGuard } from '@/components/guards/RouteGuard';
 import { Spinner } from '@/components/ui/Spinner/Spinner';
 
-// Skeleton Loading
+// Route Skeletons
 import { SearchPageSkeleton } from '@/pages/SearchPageSkeleton';
 import { ProfilePageSkeleton } from '@/pages/ProfilePageSkeleton';
 import { WorkerDetailPageSkeleton } from '@/pages/WorkerDetailPageSkeleton';
 
-// Route-level code-split components
+// --- Public Marketplace & Discovery ---
 const HomePage = lazy(() =>
   import('@/pages/HomePage').then((m) => ({ default: m.HomePage })),
 );
@@ -19,15 +19,8 @@ const SearchPage = lazy(() =>
 const WorkerDetailPage = lazy(() =>
   import('@/pages/WorkerDetailPage').then((m) => ({ default: m.WorkerDetailPage })),
 );
-const BookingsPage = lazy(() =>
-  import('@/pages/BookingsPage').then((m) => ({ default: m.BookingsPage })),
-);
-const ProfilePage = lazy(() =>
-  import('@/pages/ProfilePage').then((m) => ({ default: m.ProfilePage })),
-);
-const AdminPage = lazy(() =>
-  import('@/pages/AdminPage').then((m) => ({ default: m.AdminPage })),
-);
+
+// --- Public Authentication & Account Recovery ---
 const LoginPage = lazy(() =>
   import('@/pages/LoginPage').then((m) => ({ default: m.LoginPage })),
 );
@@ -43,6 +36,30 @@ const ForgotPasswordPage = lazy(() =>
 const ResetPasswordPage = lazy(() =>
   import('@/pages/ResetPasswordPage').then((m) => ({ default: m.ResetPasswordPage })),
 );
+
+// --- Public Legal & Support ---
+const TermsOfServicePage = lazy(() =>
+  import('@/pages/TermsOfServicePage').then((m) => ({ default: m.TermsOfServicePage })),
+);
+const PrivacyPolicyPage = lazy(() =>
+  import('@/pages/PrivacyPolicyPage').then((m) => ({ default: m.PrivacyPolicyPage })),
+);
+const HelpCenterPage = lazy(() =>
+  import('@/pages/HelpCenterPage').then((m) => ({ default: m.HelpCenterPage })),
+);
+
+// --- Authenticated & Role-Guarded ---
+const BookingsPage = lazy(() =>
+  import('@/pages/BookingsPage').then((m) => ({ default: m.BookingsPage })),
+);
+const ProfilePage = lazy(() =>
+  import('@/pages/ProfilePage').then((m) => ({ default: m.ProfilePage })),
+);
+const AdminPage = lazy(() =>
+  import('@/pages/AdminPage').then((m) => ({ default: m.AdminPage })),
+);
+
+// --- Fallback ---
 const NotFoundPage = lazy(() =>
   import('@/pages/NotFoundPage').then((m) => ({ default: m.NotFoundPage })),
 );
@@ -64,7 +81,7 @@ export const AppRouter = () => {
   return (
     <Routes>
       <Route element={<MainLayout />}>
-        {/* Public Routes */}
+        {/* 1. Public Discovery & Marketplace */}
         <Route
           path='/'
           element={
@@ -89,6 +106,8 @@ export const AppRouter = () => {
             </Suspense>
           }
         />
+
+        {/* 2. Public Authentication & Recovery */}
         <Route
           path='/login'
           element={
@@ -130,7 +149,33 @@ export const AppRouter = () => {
           }
         />
 
-        {/* Customer & Worker Booking Management Route */}
+        {/* 3. Public Legal, Policies & Help */}
+        <Route
+          path='/terms'
+          element={
+            <Suspense fallback={<GenericFallback />}>
+              <TermsOfServicePage />
+            </Suspense>
+          }
+        />
+        <Route
+          path='/privacy'
+          element={
+            <Suspense fallback={<GenericFallback />}>
+              <PrivacyPolicyPage />
+            </Suspense>
+          }
+        />
+        <Route
+          path='/help'
+          element={
+            <Suspense fallback={<GenericFallback />}>
+              <HelpCenterPage />
+            </Suspense>
+          }
+        />
+
+        {/* 4. Customer & Worker Service Bookings */}
         <Route element={<RouteGuard allowedRoles={['USER', 'WORKER']} />}>
           <Route
             path='/bookings'
@@ -142,7 +187,7 @@ export const AppRouter = () => {
           />
         </Route>
 
-        {/* General Authenticated Profile Management */}
+        {/* 5. General Profile Management */}
         <Route element={<RouteGuard />}>
           <Route
             path='/profile'
@@ -154,7 +199,7 @@ export const AppRouter = () => {
           />
         </Route>
 
-        {/* Admin Role-Guarded Route */}
+        {/* 6. Admin Panel */}
         <Route element={<RouteGuard allowedRoles={['ADMIN']} />}>
           <Route
             path='/admin'
@@ -166,7 +211,7 @@ export const AppRouter = () => {
           />
         </Route>
 
-        {/* 404 Fallback */}
+        {/* 7. 404 Catch-All */}
         <Route
           path='*'
           element={

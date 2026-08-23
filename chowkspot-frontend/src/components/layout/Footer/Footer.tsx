@@ -113,18 +113,18 @@ export const Footer: React.FC = () => {
           </p>
 
           <div className={styles.legalLinks}>
-            <span className={styles.legalItem}>
+            <Link to='/terms' className={styles.legalItem}>
               <FileText size={12} />
               <span>Terms of Service</span>
-            </span>
-            <span className={styles.legalItem}>
+            </Link>
+            <Link to='/privacy' className={styles.legalItem}>
               <Lock size={12} />
               <span>Privacy Policy</span>
-            </span>
-            <span className={styles.legalItem}>
+            </Link>
+            <Link to='/help' className={styles.legalItem}>
               <HelpCircle size={12} />
               <span>Help Center</span>
-            </span>
+            </Link>
           </div>
         </div>
       </div>
