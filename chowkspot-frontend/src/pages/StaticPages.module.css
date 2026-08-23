@@ -1,0 +1,166 @@
+.staticPageContainer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xl);
+  max-width: 840px;
+  margin: var(--spacing-2xl) auto;
+  padding: 0 var(--spacing-md);
+}
+
+.headerCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-xl);
+  background-color: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-sm);
+}
+
+.badgePill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  width: fit-content;
+  font-size: var(--font-size-xs);
+  font-weight: 700;
+  color: var(--color-primary-700);
+  background-color: var(--color-primary-50);
+  border: 1px solid var(--color-primary-200);
+  border-radius: var(--radius-full);
+  padding: 0.25rem 0.75rem;
+}
+
+.pageTitle {
+  font-size: var(--font-size-3xl);
+  font-weight: 800;
+  color: var(--color-slate-900);
+  letter-spacing: -0.02em;
+}
+
+.pageSubtitle {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  line-height: var(--line-height-relaxed);
+}
+
+.contentCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xl);
+  padding: var(--spacing-2xl);
+  background-color: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-sm);
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.sectionTitle {
+  font-size: var(--font-size-base);
+  font-weight: 700;
+  color: var(--color-slate-900);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.paragraph {
+  font-size: var(--font-size-xs);
+  color: var(--color-slate-700);
+  line-height: var(--line-height-relaxed);
+}
+
+.bulletList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.bulletItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: var(--font-size-xs);
+  color: var(--color-slate-700);
+  line-height: var(--line-height-normal);
+}
+
+.bulletDot {
+  width: 6px;
+  height: 6px;
+  background-color: var(--color-primary-600);
+  border-radius: var(--radius-full);
+  margin-top: 6px;
+  flex-shrink: 0;
+}
+
+/* FAQ Item Accordion (Help Center) */
+.faqItem {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  background-color: var(--color-bg-surface);
+  transition: var(--transition-fast);
+}
+
+.faqItem:hover {
+  border-color: var(--color-primary-300);
+}
+
+.faqTrigger {
+  width: 100%;
+  padding: var(--spacing-md);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  text-align: left;
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+  color: var(--color-slate-900);
+  cursor: pointer;
+  background: transparent;
+  border: none;
+}
+
+.faqContent {
+  padding: 0 var(--spacing-md) var(--spacing-md);
+  font-size: var(--font-size-xs);
+  color: var(--color-slate-600);
+  line-height: var(--line-height-relaxed);
+}
+
+.contactGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--spacing-md);
+  margin-top: var(--spacing-md);
+}
+
+.contactCard {
+  padding: var(--spacing-md);
+  background-color: var(--color-slate-50);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.contactCardTitle {
+  font-size: var(--font-size-xs);
+  font-weight: 700;
+  color: var(--color-slate-900);
+}
+
+.contactCardText {
+  font-size: var(--font-size-xs);
+  color: var(--color-slate-600);
+}
