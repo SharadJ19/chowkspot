@@ -9,7 +9,6 @@ import {
 import { adminApi } from '../api/admin.api';
 import { useDebounce } from '@/hooks/useDebounce';
 import { toast } from 'sonner';
-import { Spinner } from '@/components/ui/Spinner/Spinner';
 import { Badge } from '@/components/ui/Badge/Badge';
 import { Button } from '@/components/ui/Button/Button';
 import { Input } from '@/components/ui/Input/Input';
@@ -18,6 +17,7 @@ import { Pagination } from '@/components/ui/Pagination/Pagination';
 import { AdminStatsGrid } from './AdminStatsGrid/AdminStatsGrid';
 import { AdminUserTable } from './AdminUserTable/AdminUserTable';
 import { AdminDeleteModal } from './AdminDeleteModal/AdminDeleteModal';
+import { AdminDashboardSkeleton } from './AdminDashboardSkeleton';
 
 import type { AuthUser } from '@/types';
 import styles from './AdminDashboard.module.css';
@@ -96,11 +96,7 @@ export const AdminDashboard: React.FC = () => {
   };
 
   if (statsLoading) {
-    return (
-      <div className={styles.centerLoading}>
-        <Spinner size='lg' />
-      </div>
-    );
+    return <AdminDashboardSkeleton />;
   }
 
   return (
@@ -173,7 +169,7 @@ export const AdminDashboard: React.FC = () => {
 
       <AdminDeleteModal
         userToDelete={userToDelete}
-        isOpen={!!userToDelete}
+        isOpen={Boolean(userToDelete)}
         isPending={deleteUserMutation.isPending}
         onClose={() => setUserToDelete(null)}
         onConfirm={(userId) => deleteUserMutation.mutate(userId)}
