@@ -2,6 +2,8 @@ import React, { useState, useEffect, useCallback } from 'react';
 import type { AuthUser, LoginInput, RegisterInput } from '@/types';
 import { fetchClient, setAccessToken } from '@/lib/fetchClient';
 import { initializeSocket, disconnectSocket } from '@/lib/socket';
+import { queryClient } from '@/lib/queryClient';
+import { BOOKINGS_QUERY_KEY } from '@/modules/bookings/hooks/useBookingQueries';
 import { AuthContext } from './auth.context';
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -69,9 +71,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     );
 
     if (res.success && res.data) {
+      // Clear any previous session query cache before loading new user data
+      queryClient.clear();
       setAccessToken(res.data.accessToken);
       setUser(res.data.user);
       initializeSocket(res.data.accessToken);
+      void queryClient.invalidateQueries({ queryKey: [BOOKINGS_QUERY_KEY] });
     }
   };
 
@@ -86,9 +91,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     );
 
     if (res.success && res.data) {
+      queryClient.clear();
       setAccessToken(res.data.accessToken);
       setUser(res.data.user);
       initializeSocket(res.data.accessToken);
+      void queryClient.invalidateQueries({ queryKey: [BOOKINGS_QUERY_KEY] });
     }
   };
 
@@ -101,6 +108,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setAccessToken(null);
       setUser(null);
       disconnectSocket();
+      // Wipe the query cache so next logged-in user starts with empty state
+      queryClient.clear();
     }
   };
 

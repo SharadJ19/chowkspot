@@ -10,7 +10,7 @@ export interface UpiQrModalProps {
   onClose: () => void;
   upiId: string;
   payeeName: string;
-  amount?: number;
+  amount?: number | undefined;
   upiUri: string;
 }
 
@@ -50,7 +50,9 @@ export const UpiQrModal: React.FC<UpiQrModalProps> = ({
           <span className={styles.upiIdText}>VPA: {upiId}</span>
         </div>
 
-        {amount && <span className={styles.amountText}>Amount to Pay: ₹{amount}</span>}
+        {amount !== undefined && (
+          <span className={styles.amountText}>Amount to Pay: ₹{amount}</span>
+        )}
 
         <div className={styles.buttonRow}>
           <a href={upiUri} className={styles.appLink}>
