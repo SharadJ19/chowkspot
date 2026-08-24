@@ -5,9 +5,9 @@
 ### Direct, Zero-Commission Local Service Marketplace
 
 [![Project Status: Active Development](https://img.shields.io/badge/Status-Active_Development-059669?style=for-the-badge&logo=git&logoColor=white)](#)
-[![TypeScript](https://img.shields.io/badge/TypeScript-7.0.2-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](#)
-[![React](https://img.shields.io/badge/React-19.0-61DAFB?style=for-the-badge&logo=react&logoColor=black)](#)
-[![Node.js](https://img.shields.io/badge/Node.js-Express-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)](#)
+[![TypeScript](https://img.shields.io/badge/TypeScript-7.0-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](#)
+[![React](https://img.shields.io/badge/React-19.2-61DAFB?style=for-the-badge&logo=react&logoColor=black)](#)
+[![Node.js](https://img.shields.io/badge/Node.js-Express_5.2-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)](#)
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Drizzle_ORM-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)](#)
 
 _An open, peer-to-peer platform connecting residents directly with local skilled professionals—eliminating middleman platform fees, delays, and discovery friction._
@@ -18,7 +18,7 @@ _An open, peer-to-peer platform connecting residents directly with local skilled
 
 <br/>
 
-[The Backstory](#-the-personal-story) • [Core Problem](#-the-problem) • [The Solution](#-the-solution) • [Demo Accounts](#-demo-accounts-pre-verified--ready-to-test) • [Tech Stack](#-tech-stack) • [Deep-Dive Documentation](#-deep-dive-documentation)
+[The Backstory](#-the-personal-story) • [Core Problem](#-the-problem) • [The Solution](#-the-solution) • [Demo Accounts](#-demo-accounts-pre-verified--ready-to-test) • [Tech Stack](#-tech-stack-matrix) • [Deep-Dive Documentation](#-deep-dive-documentation)
 
 </div>
 
@@ -26,82 +26,61 @@ _An open, peer-to-peer platform connecting residents directly with local skilled
 
 > _"It was Diwali week last year. My parents were trying to get our home ready—the living room needed fresh paint, a leaking tap in the kitchen was getting worse, and we couldn't even find a reliable milkman or a carpenter to fix a jammed door."_
 
-I watched my mom and dad spend days calling relatives, asking neighbors, and pacing down to the local marketplace (_chowk_) to find available workers. The commercial apps either charged heavy commissions, required subscription fees that independent local tradesmen couldn't afford, or simply didn't serve our town effectively.
+I watched my mom and dad spend days calling relatives, asking neighbors, and pacing down to the local marketplace (_chowk_) to find available workers. Commercial platforms either charged 20–30% commissions, required recurring subscriptions that independent tradespeople could not afford, or simply did not cover our town.
 
-The skilled workers were out there, and families needed them—but there was no direct, friction-free way to connect. That’s when the idea for **ChowkSpot** was born: a digital _chowk_ where residents and local pros meet directly with **0% platform cuts and zero middleman interference**.
+The skilled workers were available, and families needed them—but there was no direct, friction-free way to connect. **ChowkSpot** was created to act as a digital _chowk_ where residents and local pros connect with **0% platform cuts and zero middleman interference**.
 
 ## 🛑 The Problem
 
-1. **Discovery Friction**: New residents or families during peak seasonal rushes struggle to find trusted local tradespeople without word-of-mouth contacts.
-2. **Heavy Middleman Commissions**: Existing aggregate apps charge up to 20–30% commissions, forcing independent tradesmen off the platforms or inflating prices for customers.
-3. **Opaque Scheduling & Pricing**: Lack of direct real-time communication leads to endless phone tag, missed time slots, and unnegotiated rates.
+1. **Discovery Friction**: New residents and families during seasonal peaks struggle to find trustworthy tradespeople without word-of-mouth networks.
+2. **Aggregator Commission Inflation**: Intermediary apps take substantial cuts, squeezing worker earnings and increasing client bills.
+3. **Opaque Scheduling & Pricing**: Phone tag and informal agreements lead to missed appointments, unnegotiated rates, and broken accountability loops.
 
 ## ✨ The Solution
 
-**ChowkSpot** operates as a free, open, public utility:
+**ChowkSpot** operates as an open, public utility:
 
-- 🤝 **Direct P2P Settlement**: 100% direct payments via deep-linked UPI URIs or cash. Zero escrow holds, zero platform cuts.
-- ⚡ **Real-Time Booking State Machine**: Transactional scheduling workflow (Pending → Accepted → In-Progress → Completed) with real-time Socket.io updates and counter-offer time negotiations.
-- 🔍 **Fuzzy Local Discovery**: High-performance PostgreSQL trigram search (`pg_trgm`) matching worker categories and multi-city service belts, even with typos.
-- 🛡️ **Verified Review Loop**: Ratings can only be posted for verified, completed booking records, triggering atomic score updates.
+- 🤝 **Direct P2P Settlement**: Zero platform fees. Customers pay workers directly via deep-linked `upi://pay` URIs, dynamically rendered QR codes, or cash.
+- ⚡ **Transactional Booking State Machine**: Deterministic scheduling flow (`PENDING` → `ACCEPTED` / `REJECTED` / `COUNTER_PROPOSED` → `IN_PROGRESS` → `COMPLETED` / `CANCELLED`) protected by PostgreSQL `FOR UPDATE` row locks and WebSocket updates.
+- 🔍 **Fuzzy Regional Search**: Trigram indexing (`pg_trgm`) and array containment matching across 85+ regional hubs in North India, accommodating typos and local queries.
+- 🛡️ **Verified Review Loop**: Ratings (1–5) and feedback can only be published against confirmed `COMPLETED` booking records, atomically recalculating worker averages.
 
 ## 🔑 Demo Accounts (Pre-Verified & Ready to Test)
 
-To explore and evaluate all core marketplace features instantly without being blocked by email verification, you can log in using any of these pre-verified accounts manually configured in the database:
+The database seed provides pre-verified accounts across all three user roles:
 
 - **👑 Administrator Account**
   - **Email**: `sharad@admin.com`
   - **Password**: `Password123!`
-  - **Role**: `ADMIN` (Full access to Platform Command Center, user directory moderation, and platform metrics)
+  - **Role**: `ADMIN` (Access to Platform Command Center, user directory moderation, and platform metrics)
 
 - **🛠️ Skilled Worker Account**
   - **Email**: `smarth.sharda@chowkspot.com`
   - **Password**: `Password123!`
-  - **Role**: `WORKER` (Electrician profile, active in Tricity/Parwanoo, receives real-time job requests and handles booking state changes)
+  - **Role**: `WORKER` (Electrician profile with active regional hubs, real-time incoming job alerts, and state management)
 
 - **👤 Customer Account**
   - **Email**: `user@test.com`
   - **Password**: `Password123!`
-  - **Role**: `USER` (Customer profile capable of discovering workers, submitting booking requests, making direct UPI payments, and leaving verified reviews)
+  - **Role**: `USER` (Customer profile to discover workers, submit booking requests, initiate UPI settlements, and leave verified reviews)
 
 ## 🛠️ Tech Stack Matrix
 
-| Area            | Technology                   | Highlights                                                    |
-| :-------------- | :--------------------------- | :------------------------------------------------------------ |
-| **Frontend**    | React 19, TypeScript, Vite   | CSS Modules, Custom Design Tokens, TanStack Query v5          |
-| **Backend**     | Node.js, Express, TypeScript | Modular Monolith Architecture, Zod Validation, Argon2         |
-| **Database**    | PostgreSQL, Drizzle ORM      | Pessimistic Locking (`FOR UPDATE`), GIN Trigram Indexing      |
-| **Real-Time**   | Socket.io                    | JWT-Authenticated WebSockets, Isolated Channels (`user:<id>`) |
-| **Media & Pay** | Cloudinary, Deep-Linked UPI  | Stateless direct browser uploads, `upi://pay` URI engine      |
+| Layer             | Technology                     | Highlights                                                           |
+| :---------------- | :----------------------------- | :------------------------------------------------------------------- |
+| **Frontend**      | React 19, TypeScript, Vite 8   | CSS Modules, Custom Design Tokens, TanStack Query v5, Sonner         |
+| **Backend**       | Node.js, Express 5, TypeScript | Modular Architecture, Zod 4 Validation, Argon2 Password Hashing      |
+| **Database**      | PostgreSQL, Drizzle ORM        | Pessimistic Locking (`FOR UPDATE`), GIN Trigram Indexing (`pg_trgm`) |
+| **Real-Time**     | Socket.io 4                    | JWT-Authenticated Handshakes, Isolated Channels (`user:<userId>`)    |
+| **Storage & Pay** | Cloudinary, Deep-Linked UPI    | Stateless direct browser media uploads, `upi://pay` URI engine       |
 
 ## 📚 Deep-Dive Documentation
 
-For technical recruiters, engineering managers, and contributors reviewing the architecture:
-
 - 🎨 [**Frontend Architecture Guide (`docs/FRONTEND.md`)**](./docs/FRONTEND.md)
-  - _CSS Modules Design System, TanStack Query strategy, Form handling, and Component Structure._
 - ⚙️ [**Backend Architecture Guide (`docs/BACKEND.md`)**](./docs/BACKEND.md)
-  - _Modular Monolith boundaries, Controllers, Services, Zod validation, and Argon2 Auth pipelines._
 - 🗄️ [**Database & Concurrency Guide (`docs/DATABASE.md`)**](./docs/DATABASE.md)
-  - _Drizzle Schemas, Trigram Search Indexing, Deterministic State Machine, and `FOR UPDATE` locking._
-- 🚀 [**Roadmap & Future Expansion (`docs/ROADMAP.md`)**](./docs/ROADMAP.md)
-  - _Active development tasks, planned WebRTC calling, In-App Chat, PostGIS maps, and KYC pipelines._
-
-## 🚦 Project Status
-
-> ⚠️ **Notice**: **ChowkSpot** is currently under **Active Development**.
-> Core authentication, worker discovery, state machine booking lifecycles, and real-time Socket.io triggers are fully implemented. New features, tests, and UI enhancements are continuously being deployed.
-
-```text
-chowkspot/
-├── src/                    # Express Backend Engine
-│   ├── modules/            # Domain-Bounded Controllers & Services
-│   ├── db/                 # Drizzle Schemas & Migration Engine
-│   └── sockets/            # Socket.io Event Handlers
-└── frontend/               # React 19 SPA
-    ├── src/modules/        # Feature Domain Modules
-    └── src/styles/         # CSS Tokens & Global Resets
-```
+- 🚀 [**Roadmap & Expansions (`docs/ROADMAP.md`)**](./docs/ROADMAP.md)
+- 💻 [**Local Setup Guide (`docs/SETUP.md`)**](./docs/SETUP.md)
 
 <div align="center">
   <sub>Built with ❤️ to empower independent local tradesmen and simplify everyday life.</sub>

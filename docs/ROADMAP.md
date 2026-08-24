@@ -2,7 +2,7 @@
 
 [← Back to Main README](../README.md)
 
-This document tracks active development tasks, planned architectural expansions, and upcoming features as **ChowkSpot** evolves.
+This document tracks active development tasks, completed milestones, and upcoming feature work for the **ChowkSpot** platform.
 
 ## 📌 Development Status Checklist
 
@@ -10,32 +10,37 @@ This document tracks active development tasks, planned architectural expansions,
 
 - [x] Dual-Token Authentication Subsystem (Bearer Access Token + httpOnly Refresh Cookie)
 - [x] Argon2 Password Hashing & Refresh Token Revocation
-- [x] Role-Based Access Control (USER, WORKER, ADMIN)
+- [x] Role-Based Access Control (`USER`, `WORKER`, `ADMIN`)
 - [x] Zod Input Schema Pipeline & XSS Sanitization
+- [x] Email Verification & Password Reset Flows via Nodemailer
 
 ### Phase 2: Worker Marketplace & Discovery
 
-- [x] Multi-city regional worker indexing (80+ Tricity & Himachal Pradesh locations)
-- [x] Flat category structure across 80+ skilled service domains
+- [x] Multi-city regional indexing (85+ North India & Tricity locations)
+- [x] Broad category coverage across 80+ skilled service domains
 - [x] GIN Trigram fuzzy category search (`pg_trgm`)
 - [x] Live Worker Availability Toggle (`isAvailable`)
+- [x] Search filter debouncing, range sliders & mobile drawers
 
 ### Phase 3: Booking State Machine & Real-Time
 
-- [x] Deterministic Booking State Machine (Pending → Accepted → In-Progress → Completed)
+- [x] Deterministic Booking State Machine (`PENDING` → `ACCEPTED` / `REJECTED` / `COUNTER_PROPOSED` → `IN_PROGRESS` → `COMPLETED` / `CANCELLED`)
 - [x] Pessimistic Row Locking (`FOR UPDATE`) during state mutations
-- [x] Socket.io Private Channel Event Notifications
-- [x] Direct Peer-to-Peer UPI Deep-Linking Engine (`upi://pay`)
-- [x] Verified Customer Review Engine with atomic rating score recalculation
+- [x] Socket.io Private Channel Event Notifications (`user:<userId>`)
+- [x] Direct Peer-to-Peer UPI Deep-Linking Engine (`upi://pay`) & Dynamic QR Generation
+- [x] Verified Customer Review Engine with atomic score recalculation
+- [x] Platform Command Center & Admin Directory Moderation
 
 ## 🔮 Planned Architectural Expansions
 
 ```
-                            [ PLANNED ROADMAP ]
-                                     │
- ┌───────────────────┬───────────────┴───────────────┬───────────────────┐
- ▼                   ▼                               ▼                   ▼
 
+                           [ PLANNED ROADMAP ]
+                                    │
+                                    │
+                                    │
+┌───────────────────┬───────────────┴───────────────┬───────────────────┐
+▼                   ▼                               ▼                   ▼
 ┌─────────┐     ┌──────────────────┐           ┌──────────────────┐    ┌───────────┐
 │ PostGIS │     │ In-App Messaging │           │ WebRTC Calling   │    │ Worker    │
 │ Mapping │     │ (Socket.io Chat) │           │ (In-App Voice)   │    │ KYC Engine│
@@ -43,33 +48,27 @@ This document tracks active development tasks, planned architectural expansions,
 
 ```
 
-### 1. 🗺️ PostGIS Geospatial Distance Matching
+### 1. 🗺️ PostGIS Geospatial Radius Matching
 
-- **Goal**: Replace array-based city searching with exact lat/long radius matching using the PostgreSQL `PostGIS` extension.
-- **Impact**: Allows customers to view nearby active workers within a 5km–10km radius on an interactive map.
+- **Goal**: Augment array-based city matching with precise coordinate radius calculations using the PostgreSQL `PostGIS` extension.
+- **Impact**: Enables interactive map views showing available workers within a 5–10 km radius.
 
-### 2. 💬 In-App Direct Chat & Attachment Sharing
+### 2. 💬 In-App Direct Chat & Media Attachments
 
-- **Goal**: Add real-time text chat using Socket.io room channels (`booking:<id>`).
-- **Impact**: Allows users to share photos of work sites or leaking pipes before booking acceptance without revealing personal phone numbers immediately.
+- **Goal**: Implement real-time text chat over Socket.io channels scoped to `booking:<id>`.
+- **Impact**: Allows customers and workers to share diagnostic site photos without exposing phone numbers upfront.
 
-### 3. 📞 In-App WebRTC Voice Audio Calling
+### 3. 📞 In-App WebRTC Audio Calling
 
-- **Goal**: Embed WebRTC peer-to-peer audio calling between consumers and workers.
-- **Impact**: Eliminates telephone call charges and preserves contact privacy during initial task consultations.
+- **Goal**: Integrate WebRTC peer-to-peer audio calling between consumers and workers.
+- **Impact**: Provides free, private voice consultations directly inside the browser.
 
 ### 4. 🪪 Worker Identity KYC & Verification Badges
 
-- **Goal**: Add a `worker_kyc_docs` schema table supporting document submission (Govt ID / Aadhaar verification).
-- **Impact**: Displays "Verified Pro" trust badges on worker cards to elevate consumer confidence.
+- **Goal**: Add administrative document review flows for official identification verification.
+- **Impact**: Surfaces "Verified Pro" trust badges on worker profile cards.
 
-### 5. 🔔 Web Push Notifications (PWA Integration)
+### 5. 🔔 Web Push Notifications (Service Workers)
 
-- **Goal**: Integrate Web Push API (Service Workers) for native mobile background alerts.
-- **Impact**: Ensures workers receive instant audio alerts for incoming job requests even when the browser tab is closed.
-
-## 🐛 Bug Fixes & Refinements Backlog
-
-- [ ] Add unit test coverage for booking state machine edge cases using Vitest.
-- [ ] Implement virtualized list scrolling (`react-window`) for marketplace search results with 500+ workers.
-- [ ] Add automated rate-limit retry handling on frontend `fetchClient`.
+- **Goal**: Integrate the Web Push API for background device notifications.
+- **Impact**: Delivers instant alerts for incoming booking requests when the browser tab is closed.

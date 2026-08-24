@@ -4,32 +4,30 @@
 
 ## 📌 Engine Overview
 
-**ChowkSpot** utilizes **PostgreSQL** paired with **Drizzle ORM** for type-safe queries, explicit schema migrations, and zero-overhead SQL performance.
+**ChowkSpot** runs on **PostgreSQL** configured via **Drizzle ORM** for type-safe schema definitions, deterministic migrations, and explicit transaction control.
 
-## 📊 Entity Relationship & Schema Layout
+## 📊 Entity Relationship Diagram
 
-```
-
-┌─────────────────┐       1:1       ┌─────────────────────┐
-│      users      │ ───────────────►│   worker_profiles   │
-└────────┬────────┘                 └──────────┬──────────┘
-│                                     │
-│ 1:N                                 │ 1:N
-▼                                     ▼
-┌─────────────────────────────────────────────────────────┐
-│                        bookings                         │
-└────────────────────────────┬────────────────────────────┘
-│ 1:1 (Where Status = COMPLETED)
-▼
-┌─────────────────┐
-│     reviews     │
-└─────────────────┘
-
+```plaintext
+┌──────────────────┐        1:1        ┌──────────────────────┐
+│      users       │ ─────────────────►│   worker_profiles    │
+└────────┬─────────┘                   └──────────┬───────────┘
+         │                                        │
+         │ 1:N                                    │ 1:N
+         ▼                                        ▼
+┌─────────────────────────────────────────────────────────────┐
+│                          bookings                           │
+└─────────────────────────────┬───────────────────────────────┘
+                              │ 1:1 (Where status = COMPLETED)
+                              ▼
+┌─────────────────────────────────────────────────────────────┐
+│                          reviews                            │
+└─────────────────────────────────────────────────────────────┘
 ```
 
 ## ⚡ Indexing & Search Optimization
 
-To handle multi-city filter queries and fuzzy service searches efficiently across growing datasets:
+To ensure sub-millisecond searches across 85+ regional cities:
 
 ```ts
 export const workerProfiles = pgTable(
@@ -43,10 +41,14 @@ export const workerProfiles = pgTable(
     category: text('category').notNull(),
     serviceCities: text('service_cities').array().notNull(),
     isAvailable: boolean('is_available').default(true).notNull(),
-    // ...
+    baseRate: decimal('base_rate', { precision: 10, scale: 2 }).notNull(),
+    avgRating: decimal('avg_rating', { precision: 3, scale: 2 })
+      .default('0.00')
+      .notNull(),
+    totalReviews: integer('total_reviews').default(0).notNull(),
   },
   (table) => [
-    // Composite B-Tree index for filtered marketplace queries
+    // Composite B-Tree index for filtered marketplace discovery
     index('worker_category_avail_idx').on(table.category, table.isAvailable),
 
     // GIN Trigram index for fuzzy text category matching ("electrcian" -> "Electrician")
@@ -57,7 +59,7 @@ export const workerProfiles = pgTable(
 
 ## 🔄 Booking Deterministic State Machine
 
-Bookings follow a strict state transition matrix to prevent illegal state jumps:
+Bookings follow a strict transition matrix:
 
 ```
                ┌──────────┐
@@ -70,8 +72,8 @@ Bookings follow a strict state transition matrix to prevent illegal state jumps:
 │ ACCEPTED │  │ REJECTED │  │COUNTER_PROPOSED│  │ CANCELLED │
 └────┬─────┘  └──────────┘  └───────┬────────┘  └───────────┘
      │                              │
-     │      ┌───────────────────────┘
-     ▼      ▼
+     │     ┌────────────────────────┘
+     ▼     ▼
 ┌──────────────┐
 │ IN_PROGRESS  │
 └──────┬───────┘
@@ -84,7 +86,7 @@ Bookings follow a strict state transition matrix to prevent illegal state jumps:
 
 ### Concurrency Protection & Row Locking
 
-State updates execute within PostgreSQL transactions using pessimistic row locking (`FOR UPDATE`) to prevent race conditions during concurrent counter-offers or cancellations:
+State modifications run inside PostgreSQL transactions using pessimistic locking (`FOR UPDATE`) to prevent race conditions during concurrent counter-proposals or cancellations:
 
 ```ts
 return await db.transaction(async (tx) => {
@@ -92,10 +94,18 @@ return await db.transaction(async (tx) => {
     .select()
     .from(bookings)
     .where(eq(bookings.id, bookingId))
-    .for('update'); // Locks row during state verification
+    .for('update');
 
-  if (!allowedTransitions[existingBooking.status].includes(newStatus)) {
-    throw new ApiError(400, 'Invalid state transition');
+  if (!existingBooking) {
+    throw new ApiError(404, 'Booking record not found');
+  }
+
+  const validNextStates = this.allowedTransitions[existingBooking.status];
+  if (!validNextStates || !validNextStates.includes(input.status)) {
+    throw new ApiError(
+      400,
+      `Invalid state transition: Cannot move from ${existingBooking.status} to ${input.status}`,
+    );
   }
 
   // Update status safely...
@@ -104,7 +114,7 @@ return await db.transaction(async (tx) => {
 
 ## ⭐ Atomic Review & Score Calculation
 
-When a customer submits a review for a completed job, average rating scores are recalculated atomically inside a transaction:
+Customer reviews require a `COMPLETED` booking status. Average ratings and review counts are updated atomically in the same database transaction:
 
 ```ts
 await tx
