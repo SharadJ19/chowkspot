@@ -73,10 +73,15 @@ export const AppRouter = () => {
     <Routes>
       <Route element={<MainLayout />}>
         {/* 1. Public Discovery & Marketplace */}
+        // src/routes/index.tsx
         <Route
           path='/'
           element={
-            <Suspense fallback={<SearchPageSkeleton />}>
+            <Suspense
+              fallback={
+                <div style={{ minHeight: 'calc(100vh - var(--navbar-height))' }} />
+              }
+            >
               <HomePage />
             </Suspense>
           }
@@ -97,7 +102,6 @@ export const AppRouter = () => {
             </Suspense>
           }
         />
-
         {/* 2. Public Authentication & Recovery */}
         <Route
           path='/login'
@@ -139,7 +143,6 @@ export const AppRouter = () => {
             </Suspense>
           }
         />
-
         {/* 3. Static Pages */}
         <Route
           path='/terms'
@@ -165,7 +168,6 @@ export const AppRouter = () => {
             </Suspense>
           }
         />
-
         {/* 4. Protected Customer & Worker Bookings */}
         <Route element={<RouteGuard allowedRoles={['USER', 'WORKER']} />}>
           <Route
@@ -177,7 +179,6 @@ export const AppRouter = () => {
             }
           />
         </Route>
-
         {/* 5. Protected User & Worker Profile */}
         <Route element={<RouteGuard />}>
           <Route
@@ -189,7 +190,6 @@ export const AppRouter = () => {
             }
           />
         </Route>
-
         {/* 6. Protected Admin Panel */}
         <Route element={<RouteGuard allowedRoles={['ADMIN']} />}>
           <Route
@@ -201,7 +201,6 @@ export const AppRouter = () => {
             }
           />
         </Route>
-
         {/* 7. Fallback */}
         <Route
           path='*'
