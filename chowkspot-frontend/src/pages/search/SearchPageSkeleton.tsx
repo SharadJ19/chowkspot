@@ -1,5 +1,6 @@
 import React from 'react';
 import { WorkerCardSkeleton } from '@/modules/workers/components/WorkerCard/WorkerCardSkeleton';
+import { WorkerSidebarFiltersSkeleton } from '@/modules/workers/components/WorkerSidebarFilters/WorkerSidebarFiltersSkeleton';
 import styles from './SearchPage.module.css';
 
 const SKELETON_COUNT = 6;
@@ -19,20 +20,10 @@ export const SearchPageSkeleton: React.FC = () => {
       </div>
 
       <div className={styles.searchLayoutGrid}>
-        {/* Skeleton for desktop filter sidebar */}
-        <div
-          style={{
-            width: '300px',
-            minWidth: '300px',
-            height: '520px',
-            backgroundColor: 'var(--color-bg-surface)',
-            border: '1px solid var(--color-border)',
-            borderRadius: 'var(--radius-2xl)',
-            boxShadow: 'var(--shadow-xs)',
-          }}
-        />
+        {/* Sidebar filter skeleton */}
+        <WorkerSidebarFiltersSkeleton />
 
-        {/* Shimmer Worker Cards Grid */}
+        {/* Worker Cards Grid Skeleton */}
         <div className='grid-auto-fit'>
           {Array.from({ length: SKELETON_COUNT }).map((_, index) => (
             <WorkerCardSkeleton key={`route-skeleton-${index}`} />

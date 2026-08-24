@@ -1,0 +1,112 @@
+.sidebarSkeleton {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  width: 300px;
+  min-width: 300px;
+  background-color: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-2xl);
+  padding: var(--spacing-lg);
+  box-shadow: var(--shadow-xs);
+  height: fit-content;
+}
+
+.shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--color-slate-100) 25%,
+    var(--color-slate-200) 50%,
+    var(--color-slate-100) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmerAnimation 1.5s infinite;
+  border-radius: var(--radius-md);
+}
+
+@keyframes shimmerAnimation {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+.headerRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--color-border);
+  padding-bottom: var(--spacing-sm);
+}
+
+.titleSkel {
+  width: 140px;
+  height: 20px;
+}
+
+.btnSkel {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-md);
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.labelSkel {
+  width: 110px;
+  height: 14px;
+}
+
+.inputSkel {
+  width: 100%;
+  height: 40px;
+  border-radius: var(--radius-md);
+}
+
+.sliderSkel {
+  width: 100%;
+  height: 10px;
+  border-radius: var(--radius-full);
+  margin: 4px 0;
+}
+
+.sliderLabelsRow {
+  display: flex;
+  justify-content: space-between;
+}
+
+.sliderLabelSkel {
+  width: 40px;
+  height: 12px;
+}
+
+.checkboxRow {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: 4px 0;
+}
+
+.checkboxSkel {
+  width: 18px;
+  height: 18px;
+  border-radius: var(--radius-sm);
+  flex-shrink: 0;
+}
+
+.checkboxTextSkel {
+  width: 160px;
+  height: 14px;
+}
+
+.footerSkel {
+  width: 80%;
+  height: 14px;
+  margin: 4px auto 0 auto;
+}
