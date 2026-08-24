@@ -2,15 +2,16 @@ import { lazy, Suspense } from 'react';
 import { Routes, Route } from 'react-router';
 import { MainLayout } from '@/components/layout/MainLayout';
 import { RouteGuard } from '@/components/guards/RouteGuard';
-import { Spinner } from '@/components/ui/Spinner/Spinner';
 
-// Route Skeletons
+// Direct Skeleton Imports
 import { SearchPageSkeleton } from '@/pages/search/SearchPageSkeleton';
 import { ProfilePageSkeleton } from '@/pages/profile/ProfilePageSkeleton';
 import { WorkerDetailPageSkeleton } from '@/pages/workers/WorkerDetailPageSkeleton';
 import { BookingsPageSkeleton } from '@/pages/bookings/BookingsPageSkeleton';
+import { AuthLayoutSkeleton } from '@/modules/auth/components/AuthLayout/AuthLayoutSkeleton';
+import { AdminDashboardSkeleton } from '@/modules/admin/components/AdminDashboardSkeleton';
 
-// --- Public Marketplace & Discovery ---
+// Lazy Pages
 const HomePage = lazy(() =>
   import('@/pages/home/HomePage').then((m) => ({ default: m.HomePage })),
 );
@@ -22,8 +23,6 @@ const WorkerDetailPage = lazy(() =>
     default: m.WorkerDetailPage,
   })),
 );
-
-// --- Public Authentication & Account Recovery ---
 const LoginPage = lazy(() =>
   import('@/pages/auth/LoginPage').then((m) => ({ default: m.LoginPage })),
 );
@@ -43,8 +42,6 @@ const ResetPasswordPage = lazy(() =>
     default: m.ResetPasswordPage,
   })),
 );
-
-// --- Public Legal & Support ---
 const TermsOfServicePage = lazy(() =>
   import('@/pages/static/TermsOfServicePage').then((m) => ({
     default: m.TermsOfServicePage,
@@ -58,8 +55,6 @@ const PrivacyPolicyPage = lazy(() =>
 const HelpCenterPage = lazy(() =>
   import('@/pages/static/HelpCenterPage').then((m) => ({ default: m.HelpCenterPage })),
 );
-
-// --- Authenticated & Role-Guarded ---
 const BookingsPage = lazy(() =>
   import('@/pages/bookings/BookingsPage').then((m) => ({ default: m.BookingsPage })),
 );
@@ -69,23 +64,8 @@ const ProfilePage = lazy(() =>
 const AdminPage = lazy(() =>
   import('@/pages/admin/AdminPage').then((m) => ({ default: m.AdminPage })),
 );
-
-// --- Fallback ---
 const NotFoundPage = lazy(() =>
   import('@/pages/not-found/NotFoundPage').then((m) => ({ default: m.NotFoundPage })),
-);
-
-const GenericFallback = () => (
-  <div
-    style={{
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      minHeight: '60vh',
-    }}
-  >
-    <Spinner size='lg' />
-  </div>
 );
 
 export const AppRouter = () => {
@@ -96,7 +76,7 @@ export const AppRouter = () => {
         <Route
           path='/'
           element={
-            <Suspense fallback={<GenericFallback />}>
+            <Suspense fallback={<SearchPageSkeleton />}>
               <HomePage />
             </Suspense>
           }
@@ -122,7 +102,7 @@ export const AppRouter = () => {
         <Route
           path='/login'
           element={
-            <Suspense fallback={<GenericFallback />}>
+            <Suspense fallback={<AuthLayoutSkeleton />}>
               <LoginPage />
             </Suspense>
           }
@@ -130,7 +110,7 @@ export const AppRouter = () => {
         <Route
           path='/register'
           element={
-            <Suspense fallback={<GenericFallback />}>
+            <Suspense fallback={<AuthLayoutSkeleton />}>
               <RegisterPage />
             </Suspense>
           }
@@ -138,7 +118,7 @@ export const AppRouter = () => {
         <Route
           path='/verify-email'
           element={
-            <Suspense fallback={<GenericFallback />}>
+            <Suspense fallback={<AuthLayoutSkeleton />}>
               <VerifyEmailPage />
             </Suspense>
           }
@@ -146,7 +126,7 @@ export const AppRouter = () => {
         <Route
           path='/forgot-password'
           element={
-            <Suspense fallback={<GenericFallback />}>
+            <Suspense fallback={<AuthLayoutSkeleton />}>
               <ForgotPasswordPage />
             </Suspense>
           }
@@ -154,17 +134,17 @@ export const AppRouter = () => {
         <Route
           path='/reset-password'
           element={
-            <Suspense fallback={<GenericFallback />}>
+            <Suspense fallback={<AuthLayoutSkeleton />}>
               <ResetPasswordPage />
             </Suspense>
           }
         />
 
-        {/* 3. Public Legal, Policies & Help */}
+        {/* 3. Static Pages */}
         <Route
           path='/terms'
           element={
-            <Suspense fallback={<GenericFallback />}>
+            <Suspense fallback={<div style={{ minHeight: '60vh' }} />}>
               <TermsOfServicePage />
             </Suspense>
           }
@@ -172,7 +152,7 @@ export const AppRouter = () => {
         <Route
           path='/privacy'
           element={
-            <Suspense fallback={<GenericFallback />}>
+            <Suspense fallback={<div style={{ minHeight: '60vh' }} />}>
               <PrivacyPolicyPage />
             </Suspense>
           }
@@ -180,13 +160,13 @@ export const AppRouter = () => {
         <Route
           path='/help'
           element={
-            <Suspense fallback={<GenericFallback />}>
+            <Suspense fallback={<div style={{ minHeight: '60vh' }} />}>
               <HelpCenterPage />
             </Suspense>
           }
         />
 
-        {/* 4. Customer & Worker Service Bookings */}
+        {/* 4. Protected Customer & Worker Bookings */}
         <Route element={<RouteGuard allowedRoles={['USER', 'WORKER']} />}>
           <Route
             path='/bookings'
@@ -198,7 +178,7 @@ export const AppRouter = () => {
           />
         </Route>
 
-        {/* 5. General Profile Management */}
+        {/* 5. Protected User & Worker Profile */}
         <Route element={<RouteGuard />}>
           <Route
             path='/profile'
@@ -210,23 +190,23 @@ export const AppRouter = () => {
           />
         </Route>
 
-        {/* 6. Admin Panel */}
+        {/* 6. Protected Admin Panel */}
         <Route element={<RouteGuard allowedRoles={['ADMIN']} />}>
           <Route
             path='/admin'
             element={
-              <Suspense fallback={<GenericFallback />}>
+              <Suspense fallback={<AdminDashboardSkeleton />}>
                 <AdminPage />
               </Suspense>
             }
           />
         </Route>
 
-        {/* 7. 404 Catch-All */}
+        {/* 7. Fallback */}
         <Route
           path='*'
           element={
-            <Suspense fallback={<GenericFallback />}>
+            <Suspense fallback={<div style={{ minHeight: '60vh' }} />}>
               <NotFoundPage />
             </Suspense>
           }

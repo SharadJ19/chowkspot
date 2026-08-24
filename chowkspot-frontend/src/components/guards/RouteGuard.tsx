@@ -1,9 +1,7 @@
 import React from 'react';
 import { Navigate, Outlet } from 'react-router';
 import { useAuth } from '@/hooks/useAuth';
-import { Spinner } from '@/components/ui/Spinner/Spinner';
 import type { Role } from '@/types';
-import styles from './RouteGuard.module.css';
 
 export interface RouteGuardProps {
   allowedRoles?: Role[];
@@ -16,12 +14,9 @@ export const RouteGuard: React.FC<RouteGuardProps> = ({
 }) => {
   const { user, isAuthenticated, isLoading } = useAuth();
 
+  // If initial auth refresh request is still in-flight, let the Outlet/Suspense skeleton handle view presentation
   if (isLoading) {
-    return (
-      <div className={styles.loadingContainer}>
-        <Spinner size='lg' />
-      </div>
-    );
+    return <Outlet />;
   }
 
   if (!isAuthenticated || !user) {
