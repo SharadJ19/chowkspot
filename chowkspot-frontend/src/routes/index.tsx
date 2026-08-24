@@ -8,6 +8,7 @@ import { Spinner } from '@/components/ui/Spinner/Spinner';
 import { SearchPageSkeleton } from '@/pages/search/SearchPageSkeleton';
 import { ProfilePageSkeleton } from '@/pages/profile/ProfilePageSkeleton';
 import { WorkerDetailPageSkeleton } from '@/pages/workers/WorkerDetailPageSkeleton';
+import { BookingsPageSkeleton } from '@/pages/bookings/BookingsPageSkeleton';
 
 // --- Public Marketplace & Discovery ---
 const HomePage = lazy(() =>
@@ -190,7 +191,7 @@ export const AppRouter = () => {
           <Route
             path='/bookings'
             element={
-              <Suspense fallback={<GenericFallback />}>
+              <Suspense fallback={<BookingsPageSkeleton />}>
                 <BookingsPage />
               </Suspense>
             }

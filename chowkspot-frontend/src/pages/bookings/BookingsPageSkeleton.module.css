@@ -1,0 +1,220 @@
+.shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--color-slate-100) 25%,
+    var(--color-slate-200) 50%,
+    var(--color-slate-100) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmerAnimation 1.5s infinite;
+  border-radius: var(--radius-md);
+}
+
+@keyframes shimmerAnimation {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Header Skeleton */
+.headerSkeleton {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-md) var(--spacing-lg);
+  background-color: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-2xl);
+}
+
+.headerLeft {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.headerIconSkel {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-xl);
+  flex-shrink: 0;
+}
+
+.headerTitleSkel {
+  width: 180px;
+  height: 20px;
+}
+
+.headerSubSkel {
+  width: 260px;
+  height: 12px;
+  margin-top: 6px;
+}
+
+.headerBadgeSkel {
+  width: 190px;
+  height: 28px;
+  border-radius: var(--radius-full);
+}
+
+/* Filter Tabs Skeleton */
+.tabsSkeleton {
+  display: flex;
+  gap: 6px;
+  padding: 3px;
+  background-color: var(--color-slate-100);
+  border-radius: var(--radius-full);
+  width: fit-content;
+  max-width: 100%;
+}
+
+.tabPillSkel {
+  width: 75px;
+  height: 28px;
+  border-radius: var(--radius-full);
+}
+
+/* Master Pane Skeleton (Left) */
+.masterPaneSkeleton {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  background-color: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-2xl);
+  padding: var(--spacing-sm);
+}
+
+.searchBarSkel {
+  width: 100%;
+  height: 40px;
+  border-radius: var(--radius-md);
+  margin-bottom: var(--spacing-xs);
+}
+
+.feedItemSkel {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: var(--spacing-sm);
+  background-color: var(--color-bg-app);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--color-border);
+}
+
+.feedItemTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.feedAvatarSkel {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-full);
+  flex-shrink: 0;
+}
+
+.feedNameSkel {
+  width: 100px;
+  height: 14px;
+}
+
+.feedStatusBadgeSkel {
+  width: 70px;
+  height: 20px;
+  border-radius: var(--radius-full);
+}
+
+.feedItemBottom {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 4px;
+  border-top: 1px dashed var(--color-border);
+}
+
+.feedDateSkel {
+  width: 65px;
+  height: 10px;
+}
+
+.feedAddrSkel {
+  width: 110px;
+  height: 10px;
+}
+
+/* Detail Canvas Skeleton (Right) */
+.detailCanvasSkeleton {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  background-color: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-2xl);
+  padding: var(--spacing-xl);
+  min-height: 520px;
+}
+
+.canvasHeaderSkel {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  padding-bottom: var(--spacing-md);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.canvasAvatarSkel {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-full);
+  flex-shrink: 0;
+}
+
+.canvasTitleSkel {
+  width: 140px;
+  height: 22px;
+}
+
+.canvasSubSkel {
+  width: 190px;
+  height: 12px;
+  margin-top: 6px;
+}
+
+.stepperBoxSkel {
+  width: 100%;
+  height: 64px;
+  border-radius: var(--radius-xl);
+}
+
+.infoGridSkel {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: var(--spacing-xs);
+}
+
+.infoCardSkel {
+  height: 60px;
+  border-radius: var(--radius-lg);
+}
+
+.notesCardSkel {
+  width: 100%;
+  height: 68px;
+  border-radius: var(--radius-lg);
+}
+
+.settlementBannerSkel {
+  width: 100%;
+  height: 72px;
+  border-radius: var(--radius-2xl);
+}
+
+.reviewBoxSkel {
+  width: 100%;
+  height: 140px;
+  border-radius: var(--radius-xl);
+}

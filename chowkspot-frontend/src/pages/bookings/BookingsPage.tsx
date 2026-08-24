@@ -5,7 +5,7 @@ import { BookingFilterTabs } from '@/modules/bookings/components/BookingFilterTa
 import { BookingMasterFeed } from '@/modules/bookings/components/BookingMasterFeed/BookingMasterFeed';
 import { BookingDetailCanvas } from '@/modules/bookings/components/BookingDetailCanvas/BookingDetailCanvas';
 import { UpiQrModal } from '@/modules/payments/components/UpiQrModal/UpiQrModal';
-import { Spinner } from '@/components/ui/Spinner/Spinner';
+import { BookingsPageSkeleton } from './BookingsPageSkeleton';
 import styles from './BookingsPage.module.css';
 
 export const BookingsPage: React.FC = () => {
@@ -65,18 +65,7 @@ export const BookingsPage: React.FC = () => {
   }, [filteredFeed, selectedBookingId]);
 
   if (isLoading) {
-    return (
-      <div
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          minHeight: '60vh',
-        }}
-      >
-        <Spinner size='lg' />
-      </div>
-    );
+    return <BookingsPageSkeleton />;
   }
 
   const showFeedOnMobile = !selectedBookingId || !isMobileScreen;
