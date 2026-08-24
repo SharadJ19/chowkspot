@@ -3,15 +3,14 @@ import { Routes, Route } from 'react-router';
 import { MainLayout } from '@/components/layout/MainLayout';
 import { RouteGuard } from '@/components/guards/RouteGuard';
 
-// Direct Skeleton Imports
+// Data-Fetching Page Skeletons
 import { SearchPageSkeleton } from '@/pages/search/SearchPageSkeleton';
 import { ProfilePageSkeleton } from '@/pages/profile/ProfilePageSkeleton';
 import { WorkerDetailPageSkeleton } from '@/pages/workers/WorkerDetailPageSkeleton';
 import { BookingsPageSkeleton } from '@/pages/bookings/BookingsPageSkeleton';
-import { AuthLayoutSkeleton } from '@/modules/auth/components/AuthLayout/AuthLayoutSkeleton';
 import { AdminDashboardSkeleton } from '@/modules/admin/components/AdminDashboardSkeleton';
 
-// Lazy Pages
+// Lazy-Loaded Page Chunks
 const HomePage = lazy(() =>
   import('@/pages/home/HomePage').then((m) => ({ default: m.HomePage })),
 );
@@ -68,20 +67,25 @@ const NotFoundPage = lazy(() =>
   import('@/pages/not-found/NotFoundPage').then((m) => ({ default: m.NotFoundPage })),
 );
 
+// Zero-Shift Static Layout Fallback Container
+const StaticLayoutFallback = () => (
+  <div
+    style={{
+      minHeight: 'calc(100vh - var(--navbar-height))',
+      backgroundColor: 'var(--color-bg-app)',
+    }}
+  />
+);
+
 export const AppRouter = () => {
   return (
     <Routes>
       <Route element={<MainLayout />}>
         {/* 1. Public Discovery & Marketplace */}
-        // src/routes/index.tsx
         <Route
           path='/'
           element={
-            <Suspense
-              fallback={
-                <div style={{ minHeight: 'calc(100vh - var(--navbar-height))' }} />
-              }
-            >
+            <Suspense fallback={<StaticLayoutFallback />}>
               <HomePage />
             </Suspense>
           }
@@ -102,11 +106,12 @@ export const AppRouter = () => {
             </Suspense>
           }
         />
-        {/* 2. Public Authentication & Recovery */}
+
+        {/* 2. Public Authentication & Account Recovery (Zero-Flicker Layout Fallback) */}
         <Route
           path='/login'
           element={
-            <Suspense fallback={<AuthLayoutSkeleton />}>
+            <Suspense fallback={<StaticLayoutFallback />}>
               <LoginPage />
             </Suspense>
           }
@@ -114,7 +119,7 @@ export const AppRouter = () => {
         <Route
           path='/register'
           element={
-            <Suspense fallback={<AuthLayoutSkeleton />}>
+            <Suspense fallback={<StaticLayoutFallback />}>
               <RegisterPage />
             </Suspense>
           }
@@ -122,7 +127,7 @@ export const AppRouter = () => {
         <Route
           path='/verify-email'
           element={
-            <Suspense fallback={<AuthLayoutSkeleton />}>
+            <Suspense fallback={<StaticLayoutFallback />}>
               <VerifyEmailPage />
             </Suspense>
           }
@@ -130,7 +135,7 @@ export const AppRouter = () => {
         <Route
           path='/forgot-password'
           element={
-            <Suspense fallback={<AuthLayoutSkeleton />}>
+            <Suspense fallback={<StaticLayoutFallback />}>
               <ForgotPasswordPage />
             </Suspense>
           }
@@ -138,16 +143,17 @@ export const AppRouter = () => {
         <Route
           path='/reset-password'
           element={
-            <Suspense fallback={<AuthLayoutSkeleton />}>
+            <Suspense fallback={<StaticLayoutFallback />}>
               <ResetPasswordPage />
             </Suspense>
           }
         />
-        {/* 3. Static Pages */}
+
+        {/* 3. Static Support & Legal Routes */}
         <Route
           path='/terms'
           element={
-            <Suspense fallback={<div style={{ minHeight: '60vh' }} />}>
+            <Suspense fallback={<StaticLayoutFallback />}>
               <TermsOfServicePage />
             </Suspense>
           }
@@ -155,7 +161,7 @@ export const AppRouter = () => {
         <Route
           path='/privacy'
           element={
-            <Suspense fallback={<div style={{ minHeight: '60vh' }} />}>
+            <Suspense fallback={<StaticLayoutFallback />}>
               <PrivacyPolicyPage />
             </Suspense>
           }
@@ -163,12 +169,13 @@ export const AppRouter = () => {
         <Route
           path='/help'
           element={
-            <Suspense fallback={<div style={{ minHeight: '60vh' }} />}>
+            <Suspense fallback={<StaticLayoutFallback />}>
               <HelpCenterPage />
             </Suspense>
           }
         />
-        {/* 4. Protected Customer & Worker Bookings */}
+
+        {/* 4. Protected Customer & Worker Bookings (Master-Detail Skeleton) */}
         <Route element={<RouteGuard allowedRoles={['USER', 'WORKER']} />}>
           <Route
             path='/bookings'
@@ -179,7 +186,8 @@ export const AppRouter = () => {
             }
           />
         </Route>
-        {/* 5. Protected User & Worker Profile */}
+
+        {/* 5. Protected Profile Management (Profile Form Skeleton) */}
         <Route element={<RouteGuard />}>
           <Route
             path='/profile'
@@ -190,7 +198,8 @@ export const AppRouter = () => {
             }
           />
         </Route>
-        {/* 6. Protected Admin Panel */}
+
+        {/* 6. Protected Admin Command Center (Admin Dashboard Skeleton) */}
         <Route element={<RouteGuard allowedRoles={['ADMIN']} />}>
           <Route
             path='/admin'
@@ -201,11 +210,12 @@ export const AppRouter = () => {
             }
           />
         </Route>
-        {/* 7. Fallback */}
+
+        {/* 7. Catch-All 404 Route */}
         <Route
           path='*'
           element={
-            <Suspense fallback={<div style={{ minHeight: '60vh' }} />}>
+            <Suspense fallback={<StaticLayoutFallback />}>
               <NotFoundPage />
             </Suspense>
           }
