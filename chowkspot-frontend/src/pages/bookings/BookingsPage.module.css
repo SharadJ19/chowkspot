@@ -1,119 +1,103 @@
-.pageContainer {
+.consoleContainer {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-2xl);
+  gap: var(--spacing-md);
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-sm);
+  width: 100%;
 }
 
-.centerLoading {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 50vh;
-}
-
-.emptyMessage {
-  text-align: center;
-  padding: var(--spacing-3xl);
-  color: var(--color-text-muted);
-}
-
-.headerRow {
+.topBar {
   display: flex;
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
-  gap: var(--spacing-md);
+  gap: var(--spacing-sm);
+  padding: var(--spacing-md);
+  background-color: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
 }
 
-.sectionTitle {
-  font-size: var(--font-size-2xl);
-  font-weight: 700;
+.titleArea {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.titleIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-lg);
+  background: var(--color-primary-50);
+  color: var(--color-primary-600);
+  border: 1px solid var(--color-primary-200);
+}
+
+.mainHeading {
+  font-size: var(--font-size-base);
+  font-weight: 800;
   color: var(--color-slate-900);
 }
 
-.sectionSubtitle {
-  font-size: var(--font-size-xs);
+.subHeading {
+  font-size: 0.68rem;
   color: var(--color-text-muted);
-  margin-top: var(--spacing-3xs);
 }
 
-.tabsContainer {
+.filterTabs {
   display: flex;
-  gap: var(--spacing-xs);
+  align-items: center;
+  gap: 3px;
+  background-color: var(--color-slate-100);
+  padding: 3px;
+  border-radius: var(--radius-full);
   overflow-x: auto;
-  padding-bottom: var(--spacing-xs);
-  border-bottom: 1px solid var(--color-border);
-  margin-bottom: var(--spacing-sm);
+  max-width: 100%;
+  -webkit-overflow-scrolling: touch;
 }
 
-.cardsList {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-lg);
-}
-
-/* Modal Form Styles */
-.reviewModalContent {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-md);
-}
-
-.ratingCenterBox {
-  display: flex;
-  flex-direction: column;
+.tabBtn {
+  display: inline-flex;
   align-items: center;
-  gap: var(--spacing-xs);
-}
-
-.formLabel {
-  font-size: var(--font-size-xs);
-  font-weight: 600;
-  color: var(--color-slate-700);
-}
-
-.textareaInput {
-  width: 100%;
-  padding: 0.625rem 0.875rem;
-  border-radius: var(--radius-md);
-  border: 1px solid var(--color-border-strong);
-  font-family: var(--font-sans);
-  font-size: var(--font-size-sm);
-  color: var(--color-text-main);
-  background-color: var(--color-bg-surface);
-  transition: var(--transition-fast);
-}
-
-.textareaInput:focus {
-  outline: none;
-  border-color: var(--color-primary-500);
-  box-shadow: 0 0 0 3px var(--color-primary-100);
-}
-
-.detailModalContent {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-md);
-}
-
-.detailHeaderRow {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.detailSubText {
+  gap: 4px;
+  padding: 0.3rem 0.6rem;
+  border-radius: var(--radius-full);
+  font-size: 0.68rem;
+  font-weight: 700;
   color: var(--color-slate-600);
-  font-size: var(--font-size-sm);
-  margin-top: var(--spacing-3xs);
+  cursor: pointer;
+  white-space: nowrap;
 }
 
-.detailDivider {
-  padding-top: var(--spacing-sm);
-  border-top: 1px solid var(--color-border);
+.tabBtnActive {
+  background-color: #ffffff;
+  color: var(--color-slate-950) !important;
+  box-shadow: var(--shadow-xs);
 }
 
-.detailIdText {
-  font-size: var(--font-size-xs);
-  color: var(--color-text-muted);
+.tabCount {
+  font-size: 0.6rem;
+  padding: 0 4px;
+  border-radius: var(--radius-full);
+  background: rgba(0, 0, 0, 0.06);
+}
+
+.splitLayout {
+  display: grid;
+  grid-template-columns: 360px 1fr;
+  gap: var(--spacing-md);
+  align-items: start;
+}
+
+/* Specific Mobile View Breakpoint (393px width support) */
+@media (max-width: 960px) {
+  .splitLayout {
+    display: flex;
+    flex-direction: column;
+  }
 }

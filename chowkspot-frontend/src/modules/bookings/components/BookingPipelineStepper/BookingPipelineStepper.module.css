@@ -1,0 +1,59 @@
+.pipelineStepper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: var(--color-slate-50);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  margin: var(--spacing-xs) 0;
+  gap: 4px;
+}
+
+.stepNode {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  flex: 1;
+  position: relative;
+}
+
+.stepDot {
+  width: 26px;
+  height: 26px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-slate-200);
+  color: var(--color-slate-500);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.68rem;
+  font-weight: 800;
+  transition: var(--transition-normal);
+}
+
+.stepDotActive {
+  background-color: var(--color-primary-600);
+  color: #ffffff;
+  box-shadow: 0 0 0 3px var(--color-primary-100);
+}
+
+.stepDotCompleted {
+  background-color: var(--color-success);
+  color: #ffffff;
+}
+
+.stepText {
+  font-size: 0.62rem;
+  font-weight: 700;
+  color: var(--color-slate-500);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  text-align: center;
+}
+
+.stepTextActive {
+  color: var(--color-slate-900);
+}

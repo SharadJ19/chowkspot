@@ -1,0 +1,103 @@
+.canvas {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  background-color: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-2xl);
+  padding: var(--spacing-lg);
+  box-shadow: var(--shadow-xs);
+  min-height: 480px;
+}
+
+.canvasHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+  border-bottom: 1px solid var(--color-border);
+  padding-bottom: var(--spacing-md);
+  flex-wrap: wrap;
+}
+
+.targetProfileHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.targetTitle {
+  font-size: var(--font-size-lg);
+  font-weight: 800;
+  color: var(--color-slate-900);
+  letter-spacing: -0.01em;
+}
+
+.targetSubtitle {
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  color: var(--color-primary-700);
+  text-transform: uppercase;
+}
+
+.actionButtonCluster {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  flex-wrap: wrap;
+}
+
+.infoGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: var(--spacing-xs);
+}
+
+.infoCard {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: var(--spacing-sm);
+  background-color: var(--color-bg-app);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+}
+
+.infoLabel {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: var(--color-slate-500);
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.infoValue {
+  font-size: var(--font-size-xs);
+  font-weight: 700;
+  color: var(--color-slate-900);
+}
+
+.settlementPanel {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md);
+  background: linear-gradient(135deg, var(--color-slate-900) 0%, #1e293b 100%);
+  color: var(--color-text-inverse);
+  border-radius: var(--radius-xl);
+  flex-wrap: wrap;
+}
+
+.mobileBackButton {
+  display: none;
+}
+
+@media (max-width: 960px) {
+  .mobileBackButton {
+    display: inline-flex;
+    margin-bottom: var(--spacing-xs);
+  }
+}

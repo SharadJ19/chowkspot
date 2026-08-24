@@ -1,15 +1,11 @@
-import React from 'react';
-import { Wrench, Calendar as CalendarIcon } from 'lucide-react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useBookingsPageLogic } from '@/modules/bookings/hooks/useBookingsPageLogic';
-import { BookingCard } from '@/modules/bookings/components/BookingCard/BookingCard';
-import { Spinner } from '@/components/ui/Spinner/Spinner';
+import { BookingHeaderBar } from '@/modules/bookings/components/BookingHeaderBar/BookingHeaderBar';
+import { BookingFilterTabs } from '@/modules/bookings/components/BookingFilterTabs/BookingFilterTabs';
+import { BookingMasterFeed } from '@/modules/bookings/components/BookingMasterFeed/BookingMasterFeed';
+import { BookingDetailCanvas } from '@/modules/bookings/components/BookingDetailCanvas/BookingDetailCanvas';
 import { UpiQrModal } from '@/modules/payments/components/UpiQrModal/UpiQrModal';
-import { Modal } from '@/components/ui/Modal/Modal';
-import { Pagination } from '@/components/ui/Pagination/Pagination';
-import { RatingStars } from '@/components/ui/RatingStars/RatingStars';
-import { Button } from '@/components/ui/Button/Button';
-import { Badge } from '@/components/ui/Badge/Badge';
-import { formatDate } from '@/utils/formatDate';
+import { Spinner } from '@/components/ui/Spinner/Spinner';
 import styles from './BookingsPage.module.css';
 
 export const BookingsPage: React.FC = () => {
@@ -18,200 +14,124 @@ export const BookingsPage: React.FC = () => {
     isLoading,
     items,
     activeTab,
-    currentPage,
-    paginatedItems,
-    totalPages,
     activePayment,
-    reviewBookingId,
-    selectedDetailItem,
     rating,
     comment,
     isReviewPending,
     handleTabChange,
-    setCurrentPage,
     handleStatusChange,
     initiatePayment,
     clearPayment,
-    setReviewBookingId,
-    setSelectedDetailItem,
     setRating,
     setComment,
     handleReviewSubmit,
   } = useBookingsPageLogic();
 
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedBookingId, setSelectedBookingId] = useState<string | null>(null);
+  const [isMobileScreen, setIsMobileScreen] = useState<boolean>(
+    typeof window !== 'undefined' ? window.innerWidth <= 960 : false,
+  );
+
+  useEffect(() => {
+    const handleResize = () => setIsMobileScreen(window.innerWidth <= 960);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const filteredFeed = useMemo(() => {
+    return items.filter((item) => {
+      const matchesTab = activeTab === 'ALL' || item.booking.status === activeTab;
+
+      // Safely extract name depending on actual object shape
+      const customerName = 'user' in item ? item.user?.name : undefined;
+      const workerCategory =
+        'workerProfile' in item ? item.workerProfile?.category : undefined;
+      const targetName = customerName || workerCategory || '';
+
+      const matchesSearch =
+        targetName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        (item.booking.address || '').toLowerCase().includes(searchQuery.toLowerCase());
+
+      return matchesTab && matchesSearch;
+    });
+  }, [items, activeTab, searchQuery]);
+
+  const activeItem = useMemo(() => {
+    if (!filteredFeed.length) return null;
+    return (
+      filteredFeed.find((i) => i.booking.id === selectedBookingId) || filteredFeed[0]
+    );
+  }, [filteredFeed, selectedBookingId]);
+
   if (isLoading) {
     return (
-      <div className={styles.centerLoading}>
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          minHeight: '60vh',
+        }}
+      >
         <Spinner size='lg' />
       </div>
     );
   }
 
-  return (
-    <div className={`container ${styles.pageContainer}`}>
-      <div className={styles.headerRow}>
-        <div
-          style={{ display: 'flex', alignItems: 'flex-start', gap: 'var(--spacing-md)' }}
-        >
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              width: '48px',
-              height: '48px',
-              backgroundColor: 'var(--color-primary-50)',
-              color: 'var(--color-primary-600)',
-              borderRadius: 'var(--radius-xl)',
-              border: '1px solid var(--color-primary-200)',
-              flexShrink: 0,
-            }}
-          >
-            {isWorkerRole ? <Wrench size={24} /> : <CalendarIcon size={24} />}
-          </div>
-          <div>
-            <h1 className={styles.sectionTitle}>
-              {isWorkerRole
-                ? 'Incoming Job Requests Command Center'
-                : 'My Service Bookings'}
-            </h1>
-            <p className={styles.sectionSubtitle}>
-              {isWorkerRole
-                ? 'Accept customer service requests, manage active job lifecycles, and coordinate with clients'
-                : 'Track active repair requests, settle direct UPI payments with 0% commission, and review completed jobs'}
-            </p>
-          </div>
-        </div>
-        <Badge variant={isWorkerRole ? 'primary' : 'secondary'}>
-          <span>
-            {isWorkerRole ? 'Worker Mode Active' : 'Customer Mode Active'} •{' '}
-            {items.length} Records
-          </span>
-        </Badge>
-      </div>
+  const showFeedOnMobile = !selectedBookingId || !isMobileScreen;
+  const showDetailOnMobile =
+    (Boolean(selectedBookingId) || !isMobileScreen) && Boolean(activeItem);
 
-      <div className={styles.tabsContainer}>
-        {['ALL', 'PENDING', 'ACCEPTED', 'IN_PROGRESS', 'COMPLETED', 'CANCELLED'].map(
-          (tab) => {
-            const count =
-              tab === 'ALL'
-                ? items.length
-                : items.filter((i) => i.booking.status === tab).length;
-            return (
-              <Button
-                key={tab}
-                size='sm'
-                variant={activeTab === tab ? 'primary' : 'outline'}
-                onClick={() => handleTabChange(tab)}
-              >
-                {tab.replace('_', ' ')} ({count})
-              </Button>
-            );
-          },
+  return (
+    <div className={styles.consoleContainer}>
+      <BookingHeaderBar isWorkerRole={isWorkerRole} totalCount={items.length} />
+
+      <BookingFilterTabs
+        activeTab={activeTab}
+        items={items}
+        onTabChange={handleTabChange}
+      />
+
+      <div className={styles.splitLayout}>
+        {showFeedOnMobile && (
+          <BookingMasterFeed
+            feed={filteredFeed}
+            selectedId={activeItem ? activeItem.booking.id : null}
+            searchQuery={searchQuery}
+            isWorkerRole={isWorkerRole}
+            onSearchChange={setSearchQuery}
+            onSelect={(id) => setSelectedBookingId(id)}
+          />
+        )}
+
+        {showDetailOnMobile && activeItem && (
+          <BookingDetailCanvas
+            item={activeItem}
+            isWorkerRole={isWorkerRole}
+            rating={rating}
+            comment={comment}
+            isReviewPending={isReviewPending}
+            onStatusChange={handleStatusChange}
+            onInitiatePayment={initiatePayment}
+            onRatingChange={setRating}
+            onCommentChange={setComment}
+            onReviewSubmit={handleReviewSubmit}
+            onBackToFeed={isMobileScreen ? () => setSelectedBookingId(null) : undefined}
+          />
         )}
       </div>
-
-      {paginatedItems.length === 0 ? (
-        <p className={styles.emptyMessage}>
-          {isWorkerRole
-            ? 'No incoming job requests match this filter right now.'
-            : 'You have no service bookings under this filter category.'}
-        </p>
-      ) : (
-        <div className={styles.cardsList}>
-          {paginatedItems.map((item) => (
-            <BookingCard
-              key={item.booking.id}
-              item={item}
-              isWorkerRole={isWorkerRole}
-              onStatusChange={handleStatusChange}
-              onPayClick={(upiId, payeeName) => initiatePayment(upiId, payeeName)}
-              onReviewClick={(id) => setReviewBookingId(id)}
-              onViewDetails={(it) => setSelectedDetailItem(it)}
-            />
-          ))}
-        </div>
-      )}
-
-      <Pagination
-        currentPage={currentPage}
-        totalPages={totalPages}
-        onPageChange={(p) => setCurrentPage(p)}
-      />
 
       {activePayment && (
         <UpiQrModal
-          isOpen={!!activePayment}
+          isOpen={Boolean(activePayment)}
           onClose={clearPayment}
           upiId={activePayment.upiId}
           payeeName={activePayment.payeeName}
+          amount={activePayment.amount}
           upiUri={activePayment.uri}
         />
       )}
-
-      <Modal
-        isOpen={!!reviewBookingId}
-        onClose={() => setReviewBookingId(null)}
-        title='Leave a Verified Review'
-      >
-        <div className={styles.reviewModalContent}>
-          <div className={styles.ratingCenterBox}>
-            <span className={styles.formLabel}>Rating (1 to 5 Stars)</span>
-            <RatingStars rating={rating} interactive onChange={(r) => setRating(r)} />
-          </div>
-
-          <div className={styles.reviewModalContent}>
-            <label className={styles.formLabel}>Written Review (Verified Booking)</label>
-            <textarea
-              rows={3}
-              value={comment}
-              onChange={(e) => setComment(e.target.value)}
-              placeholder='Share how the service went...'
-              className={styles.textareaInput}
-            />
-          </div>
-
-          <Button onClick={handleReviewSubmit} isLoading={isReviewPending} fullWidth>
-            Submit Verified Review
-          </Button>
-        </div>
-      </Modal>
-
-      <Modal
-        isOpen={!!selectedDetailItem}
-        onClose={() => setSelectedDetailItem(null)}
-        title='Booking Full Summary & Audit'
-      >
-        {selectedDetailItem && (
-          <div className={styles.detailModalContent}>
-            <div className={styles.detailHeaderRow}>
-              <strong>Current Status:</strong>
-              <Badge variant='success'>{selectedDetailItem.booking.status}</Badge>
-            </div>
-            <div>
-              <strong>Service Address:</strong>
-              <p className={styles.detailSubText}>{selectedDetailItem.booking.address}</p>
-            </div>
-            <div>
-              <strong>Requested Slot Timestamp:</strong>
-              <p className={styles.detailSubText}>
-                {formatDate(selectedDetailItem.booking.requestedDate, 'datetime')}
-              </p>
-            </div>
-            {selectedDetailItem.booking.notes && (
-              <div>
-                <strong>Task Instructions / Notes:</strong>
-                <p className={styles.detailSubText}>{selectedDetailItem.booking.notes}</p>
-              </div>
-            )}
-            <div className={styles.detailDivider}>
-              <span className={styles.detailIdText}>
-                Booking ID: {selectedDetailItem.booking.id}
-              </span>
-            </div>
-          </div>
-        )}
-      </Modal>
     </div>
   );
 };

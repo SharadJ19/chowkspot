@@ -1,0 +1,82 @@
+.masterPane {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  background-color: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-2xl);
+  padding: var(--spacing-sm);
+  max-height: calc(100vh - var(--navbar-height) - 120px);
+  overflow-y: auto;
+  box-shadow: var(--shadow-xs);
+}
+
+.searchBox {
+  padding: 2px 2px var(--spacing-xs);
+}
+
+.feedList {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.bookingRowItem {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: var(--spacing-sm);
+  border-radius: var(--radius-xl);
+  border: 1px solid transparent;
+  background-color: var(--color-bg-app);
+  cursor: pointer;
+  transition: var(--transition-fast);
+  text-align: left;
+}
+
+.bookingRowItem:hover {
+  background-color: var(--color-slate-100);
+  border-color: var(--color-border);
+}
+
+.bookingRowItemActive {
+  background-color: var(--color-primary-50) !important;
+  border-color: var(--color-primary-300) !important;
+  box-shadow: 0 0 0 1px var(--color-primary-500);
+}
+
+.rowHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-xs);
+}
+
+.rowParticipant {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.rowName {
+  font-size: var(--font-size-xs);
+  font-weight: 800;
+  color: var(--color-slate-900);
+}
+
+.rowCategory {
+  font-size: 0.65rem;
+  color: var(--color-primary-700);
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.rowFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.68rem;
+  color: var(--color-slate-500);
+  padding-top: 4px;
+  border-top: 1px dashed var(--color-border);
+}
