@@ -1,10 +1,10 @@
 {
   "compilerOptions": {
     /* Base Engine & Module System */
-    "target": "ES2022",
+    "target": "ES2024",
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
-    "lib": ["ES2022"],
+    "lib": ["ES2024"],
     "outDir": "./dist",
     "rootDir": "./src",
 
@@ -37,7 +37,7 @@
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true,
 
-    /* Clean Path Aliases (No baseUrl needed in modern TS) */
+    /* Path Aliases */
     "paths": {
       "@/*": ["./src/*"],
     },
