@@ -36,8 +36,8 @@ EXCLUDED_FILES = {
     "bun.lockb",
     "copy_project.py",
     ".env",
-    ".env.production",
-    ".env.local",
+    ".env.example",
+    ".env.test",
     ".DS_Store",
     "Thumbs.db",
 }
