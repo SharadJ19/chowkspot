@@ -1,0 +1,16 @@
+# Allow all standard search engine crawlers
+User-agent: *
+Allow: /
+Allow: /search
+Allow: /worker/
+Allow: /terms
+Allow: /privacy
+Allow: /help
+
+# Disallow private user/worker dashboards and admin command centers from indexing
+Disallow: /bookings
+Disallow: /profile
+Disallow: /admin
+
+# Sitemap Location
+Sitemap: https://chowkspot.vercel.app/sitemap.xml
