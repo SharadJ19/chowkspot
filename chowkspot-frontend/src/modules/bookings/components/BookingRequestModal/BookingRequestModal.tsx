@@ -97,9 +97,6 @@ export const BookingRequestModal: React.FC<BookingRequestModalProps> = ({
             professionals or test customer flows, please sign in with a standard{' '}
             <strong>USER</strong> customer account.
           </p>
-          <Button variant='outline' onClick={handleClose} style={{ marginTop: '8px' }}>
-            Close
-          </Button>
         </div>
       ) : !user?.isVerified ? (
         <div className={styles.verificationBox}>
