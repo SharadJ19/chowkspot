@@ -9,6 +9,7 @@
 [![React](https://img.shields.io/badge/React-19.2-61DAFB?style=for-the-badge&logo=react&logoColor=black)](#)
 [![Node.js](https://img.shields.io/badge/Node.js-Express_5.2-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)](#)
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Drizzle_ORM-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)](#)
+[![Views](https://img.shields.io/endpoint?url=https%3A%2F%2Fhits.dwyl.com%2FSharadJ19%2Fchowkspot.json&style=for-the-badge&label=VIEWS&color=3178C6)](https://hits.dwyl.com/SharadJ19/chowkspot)
 
 _An open, peer-to-peer platform connecting residents directly with local skilled professionals—eliminating middleman platform fees, delays, and discovery friction._
 
