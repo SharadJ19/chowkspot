@@ -1,0 +1,435 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1420 960" width="100%" height="100%">
+  <defs>
+    <style><![CDATA[
+      .bg { fill: #f8fafc; }
+      .grid-line { stroke: #e2e8f0; stroke-width: 0.75; stroke-opacity: 0.8; }
+      
+      /* Card Typography & Styling */
+      .card-bg { fill: #ffffff; stroke: #cbd5e1; stroke-width: 1.5; rx: 12px; filter: drop-shadow(0 4px 6px rgba(15, 23, 42, 0.05)); }
+      .card-header-users { fill: #0d9488; }
+      .card-header-workers { fill: #059669; }
+      .card-header-bookings { fill: #2563eb; }
+      .card-header-reviews { fill: #d97706; }
+      .card-header-enums { fill: #475569; }
+      
+      .table-title { font-family: 'JetBrains Mono', 'Segoe UI', monospace; font-size: 14px; font-weight: 700; fill: #ffffff; letter-spacing: 0.5px; }
+      .table-subtitle { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 11px; fill: #f1f5f9; font-weight: 500; }
+      
+      .col-pk { font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 800; fill: #b45309; }
+      .col-fk { font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 800; fill: #0284c7; }
+      .col-name { font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 600; fill: #0f172a; }
+      .col-type { font-family: 'JetBrains Mono', monospace; font-size: 11px; fill: #64748b; font-weight: 500; }
+      
+      .divider { stroke: #e2e8f0; stroke-width: 1; }
+      .sidebar-box { fill: #f1f5f9; stroke: #e2e8f0; stroke-width: 1; rx: 8px; }
+      
+      /* Relationship Connectors */
+      .rel-line { fill: none; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+      .rel-users-worker { stroke: #059669; stroke-dasharray: 4,4; }
+      .rel-users-booking { stroke: #0284c7; }
+      .rel-worker-booking { stroke: #2563eb; }
+      .rel-booking-review { stroke: #d97706; }
+      
+      .cardinality { font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 800; fill: #0f172a; }
+      .cardinality-bg { fill: #ffffff; rx: 4px; stroke: #cbd5e1; stroke-width: 1; }
+      
+      /* Title and Meta */
+      .canvas-title { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 22px; font-weight: 800; fill: #0f172a; letter-spacing: -0.5px; }
+      .canvas-subtitle { font-family: -apple-system, sans-serif; font-size: 12px; fill: #64748b; font-weight: 500; }
+    ]]></style>
+    
+    <!-- Light Mode Marker Indicators -->
+    <marker id="dot-green" markerWidth="8" markerHeight="8" refX="4" refY="4">
+      <circle cx="4" cy="4" r="3" fill="#059669" />
+    </marker>
+    <marker id="dot-blue" markerWidth="8" markerHeight="8" refX="4" refY="4">
+      <circle cx="4" cy="4" r="3" fill="#0284c7" />
+    </marker>
+    <marker id="dot-amber" markerWidth="8" markerHeight="8" refX="4" refY="4">
+      <circle cx="4" cy="4" r="3" fill="#d97706" />
+    </marker>
+  </defs>
+
+  <!-- Clean White Background -->
+  <rect width="1420" height="960" class="bg" />
+  
+  <!-- Subtle Grey Grid -->
+  <g class="grid-line">
+    <path d="M 0 80 L 1420 80 M 0 160 L 1420 160 M 0 240 L 1420 240 M 0 320 L 1420 320 M 0 400 L 1420 400 M 0 480 L 1420 480 M 0 560 L 1420 560 M 0 640 L 1420 640 M 0 720 L 1420 720 M 0 800 L 1420 800 M 0 880 L 1420 880" />
+    <path d="M 80 0 L 80 960 M 160 0 L 160 960 M 240 0 L 240 960 M 320 0 L 320 960 M 400 0 L 400 960 M 480 0 L 480 960 M 560 0 L 560 960 M 640 0 L 640 960 M 720 0 L 720 960 M 800 0 L 800 960 M 880 0 L 880 960 M 960 0 L 960 960 M 1040 0 L 1040 960 M 1120 0 L 1120 960 M 1200 0 L 1200 960 M 1280 0 L 1280 960 M 1360 0 L 1360 960" />
+  </g>
+
+  <!-- Header Text -->
+  <g transform="translate(40, 30)">
+    <text x="0" y="20" class="canvas-title">ChowkSpot Core Database Architecture</text>
+    <text x="0" y="38" class="canvas-subtitle">Relational Schema, Foreign Key Constraints, and State Integrity [Drizzle ORM / PostgreSQL]</text>
+  </g>
+
+  <!-- ========================================================================= -->
+  <!-- RELATIONSHIP PATHS (Underlay Layer)                                       -->
+  <!-- ========================================================================= -->
+  
+  <!-- USERS (1:1) -> WORKER_PROFILES -->
+  <path d="M 390 190 L 510 190" class="rel-line rel-users-worker" marker-start="url(#dot-green)" marker-end="url(#dot-green)" />
+  <rect x="418" y="168" width="64" height="20" class="cardinality-bg" />
+  <text x="424" y="182" class="cardinality" fill="#059669">1 : 0..1</text>
+  
+  <!-- USERS (1:N) -> BOOKINGS (Customer FK) -->
+  <path d="M 215 530 L 215 660" class="rel-line rel-users-booking" marker-start="url(#dot-blue)" marker-end="url(#dot-blue)" />
+  <rect x="194" y="582" width="42" height="20" class="cardinality-bg" />
+  <text x="200" y="596" class="cardinality" fill="#0284c7">1 : N</text>
+
+  <!-- WORKER_PROFILES (1:N) -> BOOKINGS (Worker FK) -->
+  <path d="M 685 490 L 685 710 L 410 710" class="rel-line rel-worker-booking" marker-start="url(#dot-blue)" marker-end="url(#dot-blue)" />
+  <rect x="580" y="698" width="42" height="20" class="cardinality-bg" />
+  <text x="586" y="712" class="cardinality" fill="#2563eb">1 : N</text>
+
+  <!-- BOOKINGS (1:1) -> REVIEWS (Verified Review Lock) -->
+  <path d="M 410 780 L 510 780" class="rel-line rel-booking-review" marker-start="url(#dot-amber)" marker-end="url(#dot-amber)" />
+  <rect x="415" y="768" width="90" height="20" class="cardinality-bg" />
+  <text x="420" y="782" class="cardinality" fill="#b45309">1 : 0..1 (UK)</text>
+
+  <!-- ========================================================================= -->
+  <!-- TABLE 1: USERS                                                            -->
+  <!-- ========================================================================= -->
+  <g transform="translate(40, 90)">
+    <rect width="350" height="440" class="card-bg" />
+    <path d="M 0 12 Q 0 0 12 0 L 338 0 Q 350 0 350 12 L 350 42 L 0 42 Z" class="card-header-users" />
+    <text x="16" y="26" class="table-title">users</text>
+    <text x="250" y="26" class="table-subtitle">Identity Domain</text>
+
+    <!-- Column Rows -->
+    <g transform="translate(16, 60)">
+      <!-- id (PK) -->
+      <text x="0" y="0" class="col-pk">PK</text>
+      <text x="35" y="0" class="col-name">id</text>
+      <text x="220" y="0" class="col-type">uuid [gen_random]</text>
+
+      <!-- name -->
+      <text x="35" y="24" class="col-name">name</text>
+      <text x="220" y="24" class="col-type">text</text>
+
+      <!-- email (UK) -->
+      <text x="0" y="48" class="col-pk">UK</text>
+      <text x="35" y="48" class="col-name">email</text>
+      <text x="220" y="48" class="col-type">text [unique]</text>
+
+      <!-- password_hash -->
+      <text x="35" y="72" class="col-name">password_hash</text>
+      <text x="220" y="72" class="col-type">text [argon2]</text>
+
+      <!-- phone -->
+      <text x="35" y="96" class="col-name">phone</text>
+      <text x="220" y="96" class="col-type">text</text>
+
+      <!-- role -->
+      <text x="35" y="120" class="col-name">role</text>
+      <text x="220" y="120" class="col-type">role_enum</text>
+
+      <!-- city -->
+      <text x="35" y="144" class="col-name">city</text>
+      <text x="220" y="144" class="col-type">text</text>
+
+      <!-- avatar_url -->
+      <text x="35" y="168" class="col-name">avatar_url</text>
+      <text x="220" y="168" class="col-type">text [nullable]</text>
+
+      <!-- is_verified -->
+      <text x="35" y="192" class="col-name">is_verified</text>
+      <text x="220" y="192" class="col-type">boolean [false]</text>
+
+      <!-- email_verify_token_hash -->
+      <text x="35" y="216" class="col-name">email_verify_token_hash</text>
+      <text x="220" y="216" class="col-type">text [nullable]</text>
+
+      <!-- email_verify_expires_at -->
+      <text x="35" y="240" class="col-name">email_verify_expires_at</text>
+      <text x="220" y="240" class="col-type">timestamptz</text>
+
+      <!-- password_reset_token_hash -->
+      <text x="35" y="264" class="col-name">password_reset_token_hash</text>
+      <text x="220" y="264" class="col-type">text [nullable]</text>
+
+      <!-- password_reset_expires_at -->
+      <text x="35" y="288" class="col-name">password_reset_expires_at</text>
+      <text x="220" y="288" class="col-type">timestamptz</text>
+
+      <!-- refresh_token_hash -->
+      <text x="35" y="312" class="col-name">refresh_token_hash</text>
+      <text x="220" y="312" class="col-type">text [revocation]</text>
+
+      <!-- created_at -->
+      <text x="35" y="336" class="col-name">created_at</text>
+      <text x="220" y="336" class="col-type">timestamptz [now]</text>
+
+      <!-- updated_at -->
+      <text x="35" y="360" class="col-name">updated_at</text>
+      <text x="220" y="360" class="col-type">timestamptz [now]</text>
+    </g>
+  </g>
+
+  <!-- ========================================================================= -->
+  <!-- TABLE 2: WORKER_PROFILES                                                  -->
+  <!-- ========================================================================= -->
+  <g transform="translate(510, 90)">
+    <rect width="350" height="400" class="card-bg" />
+    <path d="M 0 12 Q 0 0 12 0 L 338 0 Q 350 0 350 12 L 350 42 L 0 42 Z" class="card-header-workers" />
+    <text x="16" y="26" class="table-title">worker_profiles</text>
+    <text x="240" y="26" class="table-subtitle">Service Provider</text>
+
+    <!-- Column Rows -->
+    <g transform="translate(16, 60)">
+      <!-- id (PK) -->
+      <text x="0" y="0" class="col-pk">PK</text>
+      <text x="35" y="0" class="col-name">id</text>
+      <text x="220" y="0" class="col-type">uuid [gen_random]</text>
+
+      <!-- user_id (FK, UK) -->
+      <text x="0" y="24" class="col-fk">FK</text>
+      <text x="35" y="24" class="col-name">user_id</text>
+      <text x="220" y="24" class="col-type">uuid [UK, CASCADE]</text>
+
+      <!-- category -->
+      <text x="35" y="48" class="col-name">category</text>
+      <text x="220" y="48" class="col-type">text [trgm_idx]</text>
+
+      <!-- bio -->
+      <text x="35" y="72" class="col-name">bio</text>
+      <text x="220" y="72" class="col-type">text [nullable]</text>
+
+      <!-- experience_years -->
+      <text x="35" y="96" class="col-name">experience_years</text>
+      <text x="220" y="96" class="col-type">integer [0]</text>
+
+      <!-- rate_type -->
+      <text x="35" y="120" class="col-name">rate_type</text>
+      <text x="220" y="120" class="col-type">rate_type_enum</text>
+
+      <!-- base_rate -->
+      <text x="35" y="144" class="col-name">base_rate</text>
+      <text x="220" y="144" class="col-type">numeric(10,2)</text>
+
+      <!-- is_available -->
+      <text x="35" y="168" class="col-name">is_available</text>
+      <text x="220" y="168" class="col-type">boolean [true]</text>
+
+      <!-- service_cities -->
+      <text x="35" y="192" class="col-name">service_cities</text>
+      <text x="220" y="192" class="col-type">text[] [GIN/Array]</text>
+
+      <!-- payment_identifier -->
+      <text x="35" y="216" class="col-name">payment_identifier</text>
+      <text x="220" y="216" class="col-type">text [UPI VPA]</text>
+
+      <!-- avg_rating -->
+      <text x="35" y="240" class="col-name">avg_rating</text>
+      <text x="220" y="240" class="col-type">numeric(3,2) [0.00]</text>
+
+      <!-- total_reviews -->
+      <text x="35" y="264" class="col-name">total_reviews</text>
+      <text x="220" y="264" class="col-type">integer [0]</text>
+
+      <!-- created_at -->
+      <text x="35" y="288" class="col-name">created_at</text>
+      <text x="220" y="288" class="col-type">timestamptz [now]</text>
+
+      <!-- updated_at -->
+      <text x="35" y="312" class="col-name">updated_at</text>
+      <text x="220" y="312" class="col-type">timestamptz [now]</text>
+    </g>
+  </g>
+
+  <!-- ========================================================================= -->
+  <!-- TABLE 3: BOOKINGS                                                         -->
+  <!-- ========================================================================= -->
+  <g transform="translate(40, 660)">
+    <rect width="370" height="260" class="card-bg" />
+    <path d="M 0 12 Q 0 0 12 0 L 358 0 Q 370 0 370 12 L 370 42 L 0 42 Z" class="card-header-bookings" />
+    <text x="16" y="26" class="table-title">bookings</text>
+    <text x="235" y="26" class="table-subtitle">State Lifecycle Engine</text>
+
+    <!-- Column Rows -->
+    <g transform="translate(16, 60)">
+      <!-- id (PK) -->
+      <text x="0" y="0" class="col-pk">PK</text>
+      <text x="35" y="0" class="col-name">id</text>
+      <text x="220" y="0" class="col-type">uuid [gen_random]</text>
+
+      <!-- user_id (FK) -->
+      <text x="0" y="24" class="col-fk">FK</text>
+      <text x="35" y="24" class="col-name">user_id</text>
+      <text x="220" y="24" class="col-type">uuid [users.id]</text>
+
+      <!-- worker_id (FK) -->
+      <text x="0" y="48" class="col-fk">FK</text>
+      <text x="35" y="48" class="col-name">worker_id</text>
+      <text x="220" y="48" class="col-type">uuid [workers.id]</text>
+
+      <!-- status -->
+      <text x="35" y="72" class="col-name">status</text>
+      <text x="220" y="72" class="col-type">booking_status</text>
+
+      <!-- requested_date -->
+      <text x="35" y="96" class="col-name">requested_date</text>
+      <text x="220" y="96" class="col-type">timestamptz</text>
+
+      <!-- counter_date -->
+      <text x="35" y="120" class="col-name">counter_date</text>
+      <text x="220" y="120" class="col-type">timestamptz [nullable]</text>
+
+      <!-- address -->
+      <text x="35" y="144" class="col-name">address</text>
+      <text x="220" y="144" class="col-type">text</text>
+
+      <!-- notes -->
+      <text x="35" y="168" class="col-name">notes</text>
+      <text x="220" y="168" class="col-type">text [nullable]</text>
+
+      <!-- timestamps -->
+      <text x="35" y="192" class="col-name">created_at / updated_at</text>
+      <text x="220" y="192" class="col-type">timestamptz</text>
+    </g>
+  </g>
+
+  <!-- ========================================================================= -->
+  <!-- TABLE 4: REVIEWS                                                          -->
+  <!-- ========================================================================= -->
+  <g transform="translate(510, 660)">
+    <rect width="350" height="260" class="card-bg" />
+    <path d="M 0 12 Q 0 0 12 0 L 338 0 Q 350 0 350 12 L 350 42 L 0 42 Z" class="card-header-reviews" />
+    <text x="16" y="26" class="table-title">reviews</text>
+    <text x="235" y="26" class="table-subtitle">Verified Rating Guard</text>
+
+    <!-- Column Rows -->
+    <g transform="translate(16, 60)">
+      <!-- id (PK) -->
+      <text x="0" y="0" class="col-pk">PK</text>
+      <text x="35" y="0" class="col-name">id</text>
+      <text x="220" y="0" class="col-type">uuid [gen_random]</text>
+
+      <!-- booking_id (FK, UK) -->
+      <text x="0" y="24" class="col-fk">FK</text>
+      <text x="35" y="24" class="col-name">booking_id</text>
+      <text x="220" y="24" class="col-type">uuid [UK, 1-per-job]</text>
+
+      <!-- user_id (FK) -->
+      <text x="0" y="48" class="col-fk">FK</text>
+      <text x="35" y="48" class="col-name">user_id</text>
+      <text x="220" y="48" class="col-type">uuid [users.id]</text>
+
+      <!-- worker_id (FK) -->
+      <text x="0" y="72" class="col-fk">FK</text>
+      <text x="35" y="72" class="col-name">worker_id</text>
+      <text x="220" y="72" class="col-type">uuid [workers.id]</text>
+
+      <!-- rating -->
+      <text x="35" y="96" class="col-name">rating</text>
+      <text x="220" y="96" class="col-type">integer (1..5)</text>
+
+      <!-- comment -->
+      <text x="35" y="120" class="col-name">comment</text>
+      <text x="220" y="120" class="col-type">text [nullable]</text>
+
+      <!-- created_at -->
+      <text x="35" y="144" class="col-name">created_at</text>
+      <text x="220" y="144" class="col-type">timestamptz [now]</text>
+    </g>
+  </g>
+
+  <!-- ========================================================================= -->
+  <!-- SIDEBAR: ENUMS & DOMAIN CONSTANTS                                         -->
+  <!-- ========================================================================= -->
+  <g transform="translate(900, 90)">
+    <rect width="480" height="830" class="card-bg" />
+    <path d="M 0 12 Q 0 0 12 0 L 468 0 Q 480 0 480 12 L 480 42 L 0 42 Z" class="card-header-enums" />
+    <text x="16" y="26" class="table-title">PostgreSQL Enum Types &amp; Invariants</text>
+
+    <!-- role_enum -->
+    <g transform="translate(20, 65)">
+      <rect width="440" height="95" class="sidebar-box" />
+      <text x="16" y="24" class="table-title" fill="#0284c7">TYPE: role_enum</text>
+      <text x="16" y="48" class="col-name">• 'USER'</text>
+      <text x="140" y="48" class="col-type">- Consumer requesting service</text>
+      <text x="16" y="68" class="col-name">• 'WORKER'</text>
+      <text x="140" y="68" class="col-type">- Service professional profile</text>
+      <text x="16" y="88" class="col-name">• 'ADMIN'</text>
+      <text x="140" y="88" class="col-type">- Platform command center operator</text>
+    </g>
+
+    <!-- rate_type_enum -->
+    <g transform="translate(20, 175)">
+      <rect width="440" height="95" class="sidebar-box" />
+      <text x="16" y="24" class="table-title" fill="#059669">TYPE: rate_type_enum</text>
+      <text x="16" y="48" class="col-name">• 'FIXED'</text>
+      <text x="180" y="48" class="col-type">- Flat quote per job delivery</text>
+      <text x="16" y="68" class="col-name">• 'HOURLY'</text>
+      <text x="180" y="68" class="col-type">- Standard billing per hour</text>
+      <text x="16" y="88" class="col-name">• 'INSPECTION_FIRST'</text>
+      <text x="180" y="88" class="col-type">- Estimate upon on-site visit</text>
+    </g>
+
+    <!-- booking_status_enum (Finite State Machine) -->
+    <g transform="translate(20, 285)">
+      <rect width="440" height="235" class="sidebar-box" />
+      <text x="16" y="24" class="table-title" fill="#b45309">TYPE: booking_status_enum (FSM)</text>
+      
+      <text x="16" y="52" class="col-name" fill="#b45309">• 'PENDING'</text>
+      <text x="170" y="52" class="col-type">Initial customer booking submission</text>
+      
+      <text x="16" y="76" class="col-name" fill="#7c3aed">• 'COUNTER_PROPOSED'</text>
+      <text x="170" y="76" class="col-type">Worker proposed another time slot</text>
+      
+      <text x="16" y="100" class="col-name" fill="#2563eb">• 'ACCEPTED'</text>
+      <text x="170" y="100" class="col-type">Job confirmed by target professional</text>
+      
+      <text x="16" y="124" class="col-name" fill="#0284c7">• 'IN_PROGRESS'</text>
+      <text x="170" y="124" class="col-type">Professional on-site working</text>
+      
+      <text x="16" y="148" class="col-name" fill="#16a34a">• 'COMPLETED'</text>
+      <text x="170" y="148" class="col-type">Finalized (Enables Review + UPI Pay)</text>
+      
+      <text x="16" y="172" class="col-name" fill="#dc2626">• 'REJECTED'</text>
+      <text x="170" y="172" class="col-type">Declined by service professional</text>
+      
+      <text x="16" y="196" class="col-name" fill="#64748b">• 'CANCELLED'</text>
+      <text x="170" y="196" class="col-type">Terminated by customer or actor</text>
+
+      <path d="M 16 215 L 424 215" stroke="#cbd5e1" stroke-width="1" />
+      <text x="16" y="228" class="col-type" fill="#475569">Transitions guarded via PostgreSQL Pessimistic Lock (FOR UPDATE)</text>
+    </g>
+
+    <!-- PostgreSQL Specific Indexes Box -->
+    <g transform="translate(20, 535)">
+      <rect width="440" height="270" class="sidebar-box" />
+      <text x="16" y="24" class="table-title" fill="#be185d">Indexes &amp; Search Optimizations</text>
+
+      <text x="16" y="50" class="col-name" fill="#e11d48">1. users_email_idx</text>
+      <text x="200" y="50" class="col-type">B-Tree ON (email)</text>
+
+      <text x="16" y="74" class="col-name" fill="#e11d48">2. users_city_idx</text>
+      <text x="200" y="74" class="col-type">B-Tree ON (city)</text>
+
+      <text x="16" y="98" class="col-name" fill="#e11d48">3. worker_category_avail_idx</text>
+      <text x="240" y="98" class="col-type">B-Tree ON (category, is_available)</text>
+
+      <text x="16" y="122" class="col-name" fill="#e11d48">4. worker_category_trgm_idx</text>
+      <text x="240" y="122" class="col-type">GIN ON (category gin_trgm_ops)</text>
+
+      <text x="16" y="146" class="col-name" fill="#e11d48">5. bookings_user_id_idx</text>
+      <text x="200" y="146" class="col-type">B-Tree ON (user_id)</text>
+
+      <text x="16" y="170" class="col-name" fill="#e11d48">6. bookings_worker_id_idx</text>
+      <text x="200" y="170" class="col-type">B-Tree ON (worker_id)</text>
+
+      <text x="16" y="194" class="col-name" fill="#e11d48">7. bookings_status_idx</text>
+      <text x="200" y="194" class="col-type">B-Tree ON (status)</text>
+
+      <text x="16" y="218" class="col-name" fill="#e11d48">8. reviews_worker_id_idx</text>
+      <text x="200" y="218" class="col-type">B-Tree ON (worker_id)</text>
+
+      <path d="M 16 235 L 424 235" stroke="#cbd5e1" stroke-width="1" />
+      <text x="16" y="254" class="col-type" fill="#475569">Enables Sub-10ms Fuzzy Marketplace &amp; Hub Geo-Filtering</text>
+    </g>
+  </g>
+
+</svg>

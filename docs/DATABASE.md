@@ -8,22 +8,10 @@
 
 ## 📊 Entity Relationship Diagram
 
-```plaintext
-┌──────────────────┐        1:1        ┌──────────────────────┐
-│      users       │ ─────────────────►│   worker_profiles    │
-└────────┬─────────┘                   └──────────┬───────────┘
-         │                                        │
-         │ 1:N                                    │ 1:N
-         ▼                                        ▼
-┌─────────────────────────────────────────────────────────────┐
-│                          bookings                           │
-└─────────────────────────────┬───────────────────────────────┘
-                              │ 1:1 (Where status = COMPLETED)
-                              ▼
-┌─────────────────────────────────────────────────────────────┐
-│                          reviews                            │
-└─────────────────────────────────────────────────────────────┘
-```
+<p align="center">
+  <img src="./assets/chowkspot-db-er-diagram.svg" alt="ChowkSpot Entity Relationship Diagram" width="100%" />
+</p>
+<p align="center"><i>Figure 1: PostgreSQL relational schema model showing 1:1 worker extensions, booking lifecycle transitions, and unique review guards.</i></p>
 
 ## ⚡ Indexing & Search Optimization
 
