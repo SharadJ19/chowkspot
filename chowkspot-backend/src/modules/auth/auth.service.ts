@@ -3,7 +3,7 @@ import { users } from '@/db/schema/index.js';
 import { eq } from 'drizzle-orm';
 import { hashPassword, verifyPassword } from '@/utils/password.js';
 import crypto from 'crypto';
-import { sendVerificationEmail, sendPasswordResetEmail } from '@/utils/mailer.js';
+import { sendPasswordResetEmail } from '@/utils/mailer.js';
 
 import {
   generateAccessToken,
@@ -34,7 +34,7 @@ export class AuthService {
       );
     }
 
-    // 2. Hash Password & Create User (isVerified defaults to false)
+    // 2. Hash Password & Create User (Auto-verified: true)
     const passwordHash = await hashPassword(input.password);
 
     const [newUser] = await db
@@ -47,7 +47,7 @@ export class AuthService {
         city: input.city,
         role: input.role,
         avatarUrl: input.avatarUrl,
-        isVerified: input.role === 'ADMIN',
+        isVerified: true, // 👈 Auto-verify all newly registered accounts
       })
       .returning();
 
@@ -59,31 +59,20 @@ export class AuthService {
       );
     }
 
-    // 3. Generate Email Verification Token & Expiry (24 hours)
-    const rawVerifyToken = crypto.randomBytes(32).toString('hex');
-    const emailVerifyTokenHash = await hashPassword(rawVerifyToken);
-    const emailVerifyExpiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000);
-
-    // 4. Tokens
+    // 3. Tokens
     const accessToken = generateAccessToken({ userId: newUser.id, role: newUser.role });
     const refreshToken = generateRefreshToken({ userId: newUser.id, role: newUser.role });
 
-    // 5. Store hashed refresh token and email verification hash in DB
+    // 4. Store hashed refresh token in DB
     const refreshTokenHash = await hashPassword(refreshToken);
     await db
       .update(users)
       .set({
         refreshTokenHash,
-        emailVerifyTokenHash,
-        emailVerifyExpiresAt,
+        emailVerifyTokenHash: null,
+        emailVerifyExpiresAt: null,
       })
       .where(eq(users.id, newUser.id));
-
-    // 6. Asynchronously dispatch verification email via Nodemailer
-    if (newUser.role !== 'ADMIN') {
-      // 👈 2. WRAP THIS IN AN IF BLOCK (Don't send email to ADMIN)
-      void sendVerificationEmail(newUser.email, rawVerifyToken, newUser.name);
-    }
 
     const {
       passwordHash: _,
@@ -93,11 +82,12 @@ export class AuthService {
     } = newUser;
 
     return {
-      user: { ...userWithoutSecrets, isVerified: false },
+      user: { ...userWithoutSecrets, isVerified: true },
       accessToken,
       refreshToken,
     };
   }
+
   static async login(input: LoginInput) {
     // 1. Find User
     const [user] = await db.select().from(users).where(eq(users.email, input.email));
@@ -230,7 +220,7 @@ export class AuthService {
         passwordHash,
         passwordResetTokenHash: null,
         passwordResetExpiresAt: null,
-        refreshTokenHash: null, // Revoke all existing sessions for security
+        refreshTokenHash: null,
       })
       .where(eq(users.id, user.id));
 
