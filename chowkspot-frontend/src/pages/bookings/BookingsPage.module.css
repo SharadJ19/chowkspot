@@ -1,10 +1,10 @@
 .consoleContainer {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-md);
-  max-width: 1300px;
-  margin: 0 auto;
-  padding: 0 var(--spacing-sm);
+  gap: var(--spacing-xl);
+  max-width: var(--container-max-width);
+  margin: var(--spacing-xl) auto;
+  padding: 0 var(--spacing-md);
   width: 100%;
 }
 
@@ -89,15 +89,15 @@
 
 .splitLayout {
   display: grid;
-  grid-template-columns: 360px 1fr;
-  gap: var(--spacing-md);
+  grid-template-columns: 400px 1fr;
+  gap: var(--spacing-xl);
   align-items: start;
 }
 
-/* Specific Mobile View Breakpoint (393px width support) */
 @media (max-width: 960px) {
   .splitLayout {
     display: flex;
     flex-direction: column;
+    gap: var(--spacing-md);
   }
 }
