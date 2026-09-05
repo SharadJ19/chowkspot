@@ -1,5 +1,7 @@
 import { lazy, Suspense } from 'react';
 import { Routes, Route } from 'react-router';
+
+// Layouts & Route Guards
 import { MainLayout } from '@/components/layout/MainLayout';
 import { RouteGuard } from '@/components/guards/RouteGuard';
 
@@ -8,9 +10,10 @@ import { SearchPageSkeleton } from '@/pages/search/SearchPageSkeleton';
 import { ProfilePageSkeleton } from '@/pages/profile/ProfilePageSkeleton';
 import { WorkerDetailPageSkeleton } from '@/pages/workers/WorkerDetailPageSkeleton';
 import { BookingsPageSkeleton } from '@/pages/bookings/BookingsPageSkeleton';
+import { CreateBookingPageSkeleton } from '@/pages/bookings/CreateBookingPageSkeleton';
 import { AdminDashboardSkeleton } from '@/modules/admin/components/AdminDashboardSkeleton';
 
-// Lazy-Loaded Page Chunks
+// Lazy-Loaded Page Chunks: Public Discovery
 const HomePage = lazy(() =>
   import('@/pages/home/HomePage').then((m) => ({ default: m.HomePage })),
 );
@@ -22,6 +25,8 @@ const WorkerDetailPage = lazy(() =>
     default: m.WorkerDetailPage,
   })),
 );
+
+// Lazy-Loaded Page Chunks: Authentication & Account Recovery
 const LoginPage = lazy(() =>
   import('@/pages/auth/LoginPage').then((m) => ({ default: m.LoginPage })),
 );
@@ -41,6 +46,8 @@ const ResetPasswordPage = lazy(() =>
     default: m.ResetPasswordPage,
   })),
 );
+
+// Lazy-Loaded Page Chunks: Static & Legal Support
 const TermsOfServicePage = lazy(() =>
   import('@/pages/static/TermsOfServicePage').then((m) => ({
     default: m.TermsOfServicePage,
@@ -54,12 +61,21 @@ const PrivacyPolicyPage = lazy(() =>
 const HelpCenterPage = lazy(() =>
   import('@/pages/static/HelpCenterPage').then((m) => ({ default: m.HelpCenterPage })),
 );
+
+// Lazy-Loaded Page Chunks: Protected User & Worker Workspaces
+const CreateBookingPage = lazy(() =>
+  import('@/pages/bookings/CreateBookingPage').then((m) => ({
+    default: m.CreateBookingPage,
+  })),
+);
 const BookingsPage = lazy(() =>
   import('@/pages/bookings/BookingsPage').then((m) => ({ default: m.BookingsPage })),
 );
 const ProfilePage = lazy(() =>
   import('@/pages/profile/ProfilePage').then((m) => ({ default: m.ProfilePage })),
 );
+
+// Lazy-Loaded Page Chunks: Protected Admin & Fallback
 const AdminPage = lazy(() =>
   import('@/pages/admin/AdminPage').then((m) => ({ default: m.AdminPage })),
 );
@@ -81,7 +97,7 @@ export const AppRouter = () => {
   return (
     <Routes>
       <Route element={<MainLayout />}>
-        {/* 1. Public Discovery & Marketplace */}
+        {/* 1. Public Discovery & Marketplace Routes */}
         <Route
           path='/'
           element={
@@ -107,7 +123,7 @@ export const AppRouter = () => {
           }
         />
 
-        {/* 2. Public Authentication & Account Recovery (Zero-Flicker Layout Fallback) */}
+        {/* 2. Public Authentication & Account Recovery Routes */}
         <Route
           path='/login'
           element={
@@ -175,7 +191,7 @@ export const AppRouter = () => {
           }
         />
 
-        {/* 4. Protected Customer & Worker Bookings (Master-Detail Skeleton) */}
+        {/* 4. Protected Customer & Worker Bookings Workspace */}
         <Route element={<RouteGuard allowedRoles={['USER', 'WORKER']} />}>
           <Route
             path='/bookings'
@@ -185,9 +201,17 @@ export const AppRouter = () => {
               </Suspense>
             }
           />
+          <Route
+            path='/worker/:id/book'
+            element={
+              <Suspense fallback={<CreateBookingPageSkeleton />}>
+                <CreateBookingPage />
+              </Suspense>
+            }
+          />
         </Route>
 
-        {/* 5. Protected Profile Management (Profile Form Skeleton) */}
+        {/* 5. Protected User Profile Management */}
         <Route element={<RouteGuard />}>
           <Route
             path='/profile'
@@ -199,7 +223,7 @@ export const AppRouter = () => {
           />
         </Route>
 
-        {/* 6. Protected Admin Command Center (Admin Dashboard Skeleton) */}
+        {/* 6. Protected Admin Command Center */}
         <Route element={<RouteGuard allowedRoles={['ADMIN']} />}>
           <Route
             path='/admin'

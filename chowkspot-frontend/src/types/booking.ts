@@ -36,10 +36,23 @@ export interface CreateBookingInput {
   workerId: string;
   requestedDate: string;
   address: string;
+  city?: string | undefined;
+  addressLabel?: string | undefined;
   notes?: string | undefined;
 }
 
 export interface UpdateBookingStatusInput {
   status: BookingStatus;
   counterDate?: string | undefined; // Added explicit | undefined
+}
+
+export interface UserAddress {
+  id: string;
+  userId: string;
+  label: string;
+  addressLine: string;
+  city: string;
+  isDefault: boolean;
+  createdAt: string;
+  updatedAt: string;
 }
