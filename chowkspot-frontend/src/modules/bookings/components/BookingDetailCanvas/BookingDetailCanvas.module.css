@@ -1,13 +1,13 @@
 .canvas {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-md);
+  gap: var(--spacing-lg);
   background-color: var(--color-bg-surface);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-2xl);
-  padding: var(--spacing-lg);
-  box-shadow: var(--shadow-xs);
-  min-height: 480px;
+  padding: var(--spacing-2xl);
+  box-shadow: var(--shadow-sm);
+  min-height: 640px;
 }
 
 .canvasHeader {
@@ -49,18 +49,18 @@
 
 .infoGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: var(--spacing-xs);
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--spacing-sm);
 }
 
 .infoCard {
   display: flex;
   flex-direction: column;
-  gap: 2px;
-  padding: var(--spacing-sm);
+  gap: 4px;
+  padding: var(--spacing-md);
   background-color: var(--color-bg-app);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-xl);
 }
 
 .infoLabel {
@@ -96,6 +96,10 @@
 }
 
 @media (max-width: 960px) {
+  .canvas {
+    padding: var(--spacing-lg);
+  }
+
   .mobileBackButton {
     display: inline-flex;
     margin-bottom: var(--spacing-xs);
