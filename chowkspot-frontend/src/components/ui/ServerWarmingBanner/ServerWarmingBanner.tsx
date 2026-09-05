@@ -1,14 +1,12 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useLocation } from 'react-router';
 import {
   Cpu,
-  Terminal,
   CheckCircle2,
   AlertTriangle,
   RefreshCw,
   ChevronDown,
   ChevronUp,
-  Clock,
   AlertCircle,
 } from 'lucide-react';
 import { Button } from '@/components/ui/Button/Button';
@@ -19,6 +17,7 @@ const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || '/api').replace(/\/ap
 const MAX_ATTEMPTS = 15;
 const SESSION_CACHE_KEY = 'chowkspot_server_warmed';
 const RENDER_IDLE_TIMEOUT_MS = 14 * 60 * 1000;
+const COLD_START_MIN_WAIT_SECONDS = 5;
 
 const STRICT_ROUTES = [
   '/search',
@@ -37,8 +36,7 @@ const isServerRecentlyWarmed = (): boolean => {
     const cachedTimestamp = sessionStorage.getItem(SESSION_CACHE_KEY);
     if (!cachedTimestamp) return false;
     const parsedTime = parseInt(cachedTimestamp, 10);
-    const now = Date.now();
-    return now - parsedTime < RENDER_IDLE_TIMEOUT_MS;
+    return Date.now() - parsedTime < RENDER_IDLE_TIMEOUT_MS;
   } catch {
     return false;
   }
@@ -56,8 +54,10 @@ export const ServerWarmingBanner: React.FC<{ children: React.ReactNode }> = ({
   const [showWelcome, setShowWelcome] = useState<boolean>(false);
   const [hasTimedOut, setHasTimedOut] = useState<boolean>(false);
   const [elapsedSeconds, setElapsedSeconds] = useState<number>(0);
-  const [requestCount, setRequestCount] = useState<number>(0);
   const [showTechDetails, setShowTechDetails] = useState<boolean>(false);
+
+  const mountTimestampRef = useRef<number | null>(null);
+  const attemptsRef = useRef<number>(0);
 
   const isStrictRoute = STRICT_ROUTES.some((route) =>
     location.pathname.startsWith(route),
@@ -66,8 +66,15 @@ export const ServerWarmingBanner: React.FC<{ children: React.ReactNode }> = ({
   useEffect(() => {
     if (isBypassed || isReady || hasTimedOut) return;
 
+    if (mountTimestampRef.current === null) {
+      mountTimestampRef.current = Date.now();
+    }
+
     const timer = window.setInterval(() => {
-      setElapsedSeconds((prev) => prev + 1);
+      if (mountTimestampRef.current !== null) {
+        const seconds = Math.floor((Date.now() - mountTimestampRef.current) / 1000);
+        setElapsedSeconds(seconds);
+      }
     }, 1000);
 
     return () => clearInterval(timer);
@@ -76,13 +83,11 @@ export const ServerWarmingBanner: React.FC<{ children: React.ReactNode }> = ({
   const pingServer = useCallback(async () => {
     if (isBypassed || isReady || hasTimedOut) return;
 
-    setRequestCount((prevCount) => {
-      const nextCount = prevCount + 1;
-      if (nextCount > MAX_ATTEMPTS) {
-        setHasTimedOut(true);
-      }
-      return nextCount;
-    });
+    attemptsRef.current += 1;
+    if (attemptsRef.current > MAX_ATTEMPTS) {
+      setHasTimedOut(true);
+      return;
+    }
 
     try {
       const response = await fetch(`${API_BASE_URL}/health`, {
@@ -93,8 +98,13 @@ export const ServerWarmingBanner: React.FC<{ children: React.ReactNode }> = ({
       const data: HealthCheckResponse = await response.json();
 
       if (response.ok && data?.status === 'healthy') {
+        const startTime = mountTimestampRef.current ?? Date.now();
+        const totalWaitTimeSeconds = (Date.now() - startTime) / 1000;
+        const hadColdStartWait = totalWaitTimeSeconds >= COLD_START_MIN_WAIT_SECONDS;
+
         setIsReady(true);
-        setShowWelcome(true);
+        setShowWelcome(hadColdStartWait);
+
         try {
           sessionStorage.setItem(SESSION_CACHE_KEY, Date.now().toString());
         } catch {
@@ -102,18 +112,29 @@ export const ServerWarmingBanner: React.FC<{ children: React.ReactNode }> = ({
         }
       }
     } catch {
-      // Silently catch
+      // Silently catch network drops during boot
     }
   }, [isBypassed, isReady, hasTimedOut]);
 
   useEffect(() => {
     if (isBypassed || isReady || hasTimedOut) return;
 
+    if (mountTimestampRef.current === null) {
+      mountTimestampRef.current = Date.now();
+    }
+
+    const initialTimer = window.setTimeout(() => {
+      void pingServer();
+    }, 0);
+
     const pollInterval = window.setInterval(() => {
       void pingServer();
     }, 4000);
 
-    return () => clearInterval(pollInterval);
+    return () => {
+      clearTimeout(initialTimer);
+      clearInterval(pollInterval);
+    };
   }, [isBypassed, isReady, hasTimedOut, pingServer]);
 
   useEffect(() => {
@@ -267,23 +288,6 @@ export const ServerWarmingBanner: React.FC<{ children: React.ReactNode }> = ({
                 className={styles.progressBarFill}
                 style={{ width: `${progressPercent}%` }}
               />
-            </div>
-          </div>
-
-          <div className={styles.diagnosticGrid}>
-            <div className={styles.diagnosticBox}>
-              <span className={styles.diagnosticLabel}>Elapsed Time</span>
-              <span className={styles.diagnosticValue}>
-                <Clock size={14} style={{ color: 'var(--color-warning)' }} />
-                {elapsedSeconds}s elapsed
-              </span>
-            </div>
-            <div className={styles.diagnosticBox}>
-              <span className={styles.diagnosticLabel}>Request Count</span>
-              <span className={styles.diagnosticValue}>
-                <Terminal size={14} />
-                Attempt #{requestCount}
-              </span>
             </div>
           </div>
 
