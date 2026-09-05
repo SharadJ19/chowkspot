@@ -10,6 +10,7 @@ const router = Router();
 router.use(authenticate);
 
 router.get('/me', UserController.getMe);
+router.get('/addresses', UserController.getAddresses);
 router.patch('/me', validateRequest(updateProfileSchema), UserController.updateMe);
 router.delete('/me', UserController.deleteMe);
 

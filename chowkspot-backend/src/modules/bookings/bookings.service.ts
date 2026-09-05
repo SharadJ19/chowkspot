@@ -1,6 +1,7 @@
 import { db } from '@/db/index.js';
 import { bookings, workerProfiles, users } from '@/db/schema/index.js';
-import { eq } from 'drizzle-orm';
+import { userAddresses } from '@/db/schema/addresses.js';
+import { eq, and, ilike } from 'drizzle-orm';
 import { ApiError } from '@/utils/ApiError.js';
 import { CONSTANTS, BookingStatus } from '@/config/constants.js';
 import {
@@ -36,7 +37,7 @@ export class BookingService {
   static async createBooking(userId: string, input: CreateBookingInput) {
     // 1. Verify user exists and block ADMIN accounts from booking
     const [requestingUser] = await db
-      .select({ role: users.role })
+      .select({ role: users.role, city: users.city })
       .from(users)
       .where(eq(users.id, userId));
 
@@ -69,6 +70,28 @@ export class BookingService {
       );
     }
 
+    // 3. Auto-save address if not previously registered
+    const normalizedAddress = input.address.trim();
+    const [existingAddress] = await db
+      .select({ id: userAddresses.id })
+      .from(userAddresses)
+      .where(
+        and(
+          eq(userAddresses.userId, userId),
+          ilike(userAddresses.addressLine, normalizedAddress),
+        ),
+      );
+
+    if (!existingAddress) {
+      await db.insert(userAddresses).values({
+        userId,
+        addressLine: normalizedAddress,
+        city: input.city || requestingUser.city || 'Chandigarh',
+        label: input.addressLabel?.trim() || 'Saved Location',
+        isDefault: false,
+      });
+    }
+
     // 4. Create booking
     const [newBooking] = await db
       .insert(bookings)
@@ -76,7 +99,7 @@ export class BookingService {
         userId,
         workerId: input.workerId,
         requestedDate: new Date(input.requestedDate),
-        address: input.address,
+        address: normalizedAddress,
         notes: input.notes,
         status: CONSTANTS.BOOKING_STATUS.PENDING,
       })

@@ -1,5 +1,11 @@
 import { db } from '@/config/database.js';
-import { users, workerProfiles, bookings, reviews } from '@/db/schema/index.js';
+import {
+  users,
+  workerProfiles,
+  bookings,
+  reviews,
+  userAddresses,
+} from '@/db/schema/index.js';
 import { hashPassword } from '@/utils/password.js';
 import { logger } from '@/utils/logger.js';
 import { SEED_USERS } from '@/db/seeds/data.js';
@@ -15,11 +21,13 @@ async function seed() {
       // 1. Clear existing records in cascade order
       await tx.delete(reviews);
       await tx.delete(bookings);
+      await tx.delete(userAddresses);
       await tx.delete(workerProfiles);
       await tx.delete(users);
 
       const mockCustomerIds: string[] = [];
       const createdWorkerMap = new Map<string, string>();
+      let testUserId: string | null = null;
 
       // 2. Insert Users and Worker Profiles cleanly in one loop
       for (const userData of SEED_USERS) {
@@ -41,6 +49,9 @@ async function seed() {
         if (insertedUser) {
           if (userData.role === 'USER') {
             mockCustomerIds.push(insertedUser.id);
+            if (userData.email === 'user@test.com') {
+              testUserId = insertedUser.id;
+            }
           } else if (userData.role === 'WORKER' && 'category' in userData) {
             // Insert corresponding worker profile immediately
             const [insertedProfile] = await tx
@@ -69,7 +80,30 @@ async function seed() {
         throw new Error('Mock customer users missing from seed config.');
       }
 
-      // 3. Populate Exactly 5 Unique, Detailed Long Reviews for Each Worker
+      // 3. Insert Pre-saved Addresses specifically for user@test.com
+      if (testUserId) {
+        await tx.insert(userAddresses).values([
+          {
+            userId: testUserId,
+            label: 'Home',
+            addressLine: 'House #42, Sector 17-E, Chandigarh',
+            city: 'Chandigarh',
+            isDefault: true,
+          },
+          {
+            userId: testUserId,
+            label: 'Work',
+            addressLine: 'Tech Enclave, Phase 8, Industrial Area, Mohali',
+            city: 'Mohali',
+            isDefault: false,
+          },
+        ]);
+        logger.info(
+          '[DB_SEED]: Pre-saved addresses seeded successfully for user@test.com',
+        );
+      }
+
+      // 4. Populate Exactly 5 Unique, Detailed Long Reviews for Each Worker
       for (const [email, workerProfileId] of createdWorkerMap.entries()) {
         const workerUserRecord = SEED_USERS.find((u) => u.email === email);
         const workerName = workerUserRecord ? workerUserRecord.name : 'The professional';
