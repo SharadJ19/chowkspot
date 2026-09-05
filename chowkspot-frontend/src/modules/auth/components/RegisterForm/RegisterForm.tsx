@@ -48,7 +48,7 @@ export const RegisterForm: React.FC = () => {
     email: '',
     password: '',
     phone: '',
-    city: APP_CONSTANTS.CITIES[0] || 'Parwanoo',
+    city: 'Chandigarh',
     role: initialRole,
   });
 

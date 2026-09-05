@@ -42,7 +42,7 @@ export const StepProfileInfo: React.FC<StepProfileInfoProps> = ({
 
       <Input
         label='Phone Number'
-        placeholder='+919876543210'
+        placeholder='+917590889608'
         value={phone}
         onChange={(e) => onChange({ phone: e.target.value })}
         error={fieldErrors.phone}
