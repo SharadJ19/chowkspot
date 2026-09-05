@@ -7,8 +7,6 @@ import { WorkerCardSkeleton } from '@/modules/workers/components/WorkerCard/Work
 import { WorkerSidebarFilters } from '@/modules/workers/components/WorkerSidebarFilters/WorkerSidebarFilters';
 import { Pagination } from '@/components/ui/Pagination/Pagination';
 import { Button } from '@/components/ui/Button/Button';
-import { BookingRequestModal } from '@/modules/bookings/components/BookingRequestModal/BookingRequestModal';
-import type { WorkerSearchResult } from '@/types';
 import styles from './SearchPage.module.css';
 import sidebarStyles from '@/modules/workers/components/WorkerSidebarFilters/WorkerSidebarFilters.module.css';
 
@@ -37,8 +35,6 @@ export const SearchPage: React.FC = () => {
     page: filters.page,
     limit: 12,
   });
-
-  const [selectedWorker, setSelectedWorker] = useState<WorkerSearchResult | null>(null);
 
   const workers = searchWorkersQuery.data?.workers || [];
   const pagination = searchWorkersQuery.data?.pagination || {
@@ -129,11 +125,7 @@ export const SearchPage: React.FC = () => {
             <>
               <div className='grid-auto-fit'>
                 {workers.map((worker) => (
-                  <WorkerCard
-                    key={worker.id}
-                    worker={worker}
-                    onBookClick={(w) => setSelectedWorker(w)}
-                  />
+                  <WorkerCard key={worker.id} worker={worker} />
                 ))}
               </div>
               <Pagination
@@ -149,12 +141,6 @@ export const SearchPage: React.FC = () => {
           )}
         </div>
       </div>
-
-      <BookingRequestModal
-        worker={selectedWorker}
-        isOpen={!!selectedWorker}
-        onClose={() => setSelectedWorker(null)}
-      />
     </div>
   );
 };
