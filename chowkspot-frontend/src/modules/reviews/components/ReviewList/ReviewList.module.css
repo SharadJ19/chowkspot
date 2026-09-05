@@ -18,13 +18,30 @@
   margin-bottom: var(--spacing-2xs);
 }
 
+.userInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
 .userName {
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-bold);
   color: var(--color-text-main);
+  line-height: 1.2;
+}
+
+.reviewDate {
+  font-size: 0.68rem;
+  color: var(--color-text-muted);
+}
+
+.ratingWrapper {
+  margin-left: auto;
 }
 
 .comment {
   font-size: var(--font-size-xs);
   color: var(--color-slate-700);
+  line-height: var(--line-height-relaxed);
 }
