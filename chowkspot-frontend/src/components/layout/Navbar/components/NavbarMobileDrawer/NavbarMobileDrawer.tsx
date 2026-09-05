@@ -3,7 +3,6 @@ import { Link, useLocation } from 'react-router';
 import { Home, Search, Calendar, ShieldAlert, X } from 'lucide-react';
 import { Avatar } from '@/components/ui/Avatar/Avatar';
 import { Button } from '@/components/ui/Button/Button';
-import { Logo } from '@/components/ui/Logo/Logo';
 import type { AuthUser } from '@/types';
 import styles from './NavbarMobileDrawer.module.css';
 
@@ -31,8 +30,7 @@ export const NavbarMobileDrawer: React.FC<NavbarMobileDrawerProps> = ({
     <>
       <div className={styles.mobileDrawerOverlay} onClick={onClose} aria-hidden='true' />
       <div className={styles.mobileDrawer} role='dialog' aria-modal='true'>
-        <div className={styles.mobileDrawerHeader}>
-          <Logo variant='wordmark' size='sm' />
+        <div className={styles.mobileDrawerHeader} style={{ justifyContent: 'flex-end' }}>
           <button
             className={styles.closeButton}
             onClick={onClose}
@@ -97,28 +95,20 @@ export const NavbarMobileDrawer: React.FC<NavbarMobileDrawerProps> = ({
           )}
         </nav>
 
-        <div className={styles.mobileAuthSection}>
-          {isAuthenticated ? (
-            <Link to='/profile' onClick={onClose}>
+        {!isAuthenticated && (
+          <div className={styles.mobileAuthSection}>
+            <Link to='/login' onClick={onClose}>
               <Button variant='outline' fullWidth>
-                View Profile &amp; Settings
+                Log in
               </Button>
             </Link>
-          ) : (
-            <>
-              <Link to='/login' onClick={onClose}>
-                <Button variant='outline' fullWidth>
-                  Log in
-                </Button>
-              </Link>
-              <Link to='/register' onClick={onClose}>
-                <Button variant='primary' fullWidth>
-                  Get Started
-                </Button>
-              </Link>
-            </>
-          )}
-        </div>
+            <Link to='/register' onClick={onClose}>
+              <Button variant='primary' fullWidth>
+                Get Started
+              </Button>
+            </Link>
+          </div>
+        )}
       </div>
     </>
   );
